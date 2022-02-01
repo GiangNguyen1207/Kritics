@@ -1,12 +1,13 @@
 export const theme = {
   colors: {
-    primary: "#FF6600",
-    secondary: "#F98335",
-    appBackground: "#202020",
-    white: "#FFFFFF",
-    black: "#000000",
-    darkGrey: "#474747",
-    lightGrey: "#C4C4C4",
+    primary: '#FF6600',
+    secondary: '#F98335',
+    appBackground: '#202020',
+    white: '#FFFFFF',
+    black: '#000000',
+    darkGrey: '#474747',
+    lightGrey: '#C4C4C4',
+    textHint: 'A8A6A6',
   },
 
   spacings: {
