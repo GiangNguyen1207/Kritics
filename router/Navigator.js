@@ -8,13 +8,17 @@ import Home from '../views/Home';
 import PostMovieReview from '../views/PostMovieReview';
 import Favourite from '../views/Favourite';
 import Profile from '../views/Profile';
+import BottomNavBar from '../components/BottomNavBar';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const TabScreen = () => {
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
+    <Tab.Navigator
+      screenOptions={{ headerShown: false }}
+      tabBar={(props) => <BottomNavBar {...props} />}
+    >
       <Tab.Screen name={mainTab.home} component={Home} />
       <Tab.Screen name={mainTab.post} component={PostMovieReview} />
       <Tab.Screen name={mainTab.favourite} component={Favourite} />
