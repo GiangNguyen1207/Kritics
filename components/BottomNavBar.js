@@ -13,7 +13,7 @@ const BottomNavBar = ({ state, navigation }) => {
   const { bottom } = useSafeAreaInsets();
 
   const setIcons = (route) => {
-    let iconName = 'home';
+    let iconName;
     switch (route) {
       case mainTab.home:
         iconName = 'home';
