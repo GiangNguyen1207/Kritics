@@ -23,6 +23,9 @@ const Typography = ({ variant, color, fontWeight, text }) => {
       case 'h5':
         fontSize = 14;
         break;
+      case 'h6':
+        fontSize = 12;
+        break;
       default:
         return;
     }

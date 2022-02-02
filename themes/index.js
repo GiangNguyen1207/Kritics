@@ -11,6 +11,7 @@ export const theme = {
   },
 
   spacings: {
+    Xs: 5,
     xxxs: 8,
     xxs: 10,
     xs: 16,
