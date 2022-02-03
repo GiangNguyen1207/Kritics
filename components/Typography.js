@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Text } from 'react-native';
+import { Text, ViewPropTypes } from 'react-native';
 
 import { theme } from '../themes';
 
-const Typography = ({ variant, color, fontWeight, text }) => {
+const Typography = ({ variant, color, fontWeight, text, textStyle }) => {
   const getTextFontSize = (variant) => {
     let fontSize = 12;
     switch (variant) {
@@ -34,12 +34,15 @@ const Typography = ({ variant, color, fontWeight, text }) => {
 
   return (
     <Text
-      style={{
-        fontFamily: 'Avenir',
-        fontSize: getTextFontSize(variant),
-        color: color ?? theme.colors.white,
-        fontWeight: fontWeight ?? '400',
-      }}
+      style={[
+        {
+          fontFamily: 'Avenir',
+          fontSize: getTextFontSize(variant),
+          color: color ?? theme.colors.white,
+          fontWeight: fontWeight ?? '400',
+        },
+        textStyle,
+      ]}
     >
       {text}
     </Text>
@@ -51,6 +54,7 @@ Typography.propTypes = {
   text: PropTypes.string.isRequired,
   color: PropTypes.string,
   fontWeight: PropTypes.string,
+  textStyle: ViewPropTypes.style,
 };
 
 export default Typography;
