@@ -1,37 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import { ViewPropTypes, View, Pressable, StyleSheet } from 'react-native';
+import { ViewPropTypes, View, StyleSheet } from 'react-native';
 
-import { theme } from '../themes';
 import Typography from './Typography';
+import BackButton from './BackButton';
 
 const ContentLayout = ({ children, hasHeader, headerTitle, onPressBack }) => {
   return (
     <View style={styles.contentLayout}>
-      {hasHeader && (
-        <View style={styles.row}>
-          <Pressable style={{ flex: 1 }} onPress={onPressBack}>
-            <Icon name="arrow-back-ios" color={theme.colors.white} size={18} />
-          </Pressable>
-          <View style={{ flex: 2, alignItems: 'center' }}>
-            <Typography variant="h2" text={headerTitle} />
+      <View>
+        {hasHeader && (
+          <View style={styles.row}>
+            <View style={styles.flex}>
+              {onPressBack && <BackButton onPressBack={onPressBack} />}
+            </View>
+            <Typography variant="h2" text={headerTitle} style={styles.text} />
+            <View style={styles.flex} />
           </View>
-          <View style={{ flex: 1 }} />
-        </View>
-      )}
+        )}
+      </View>
       {children}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  contentLayout: {
+    flexGrow: 1,
+  },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  contentLayout: {
-    flexGrow: 1,
+  flex: {
+    flex: 1,
+  },
+  text: {
+    flex: 2,
+    alignItems: 'center',
   },
 });
 

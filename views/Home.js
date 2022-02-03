@@ -13,11 +13,7 @@ const Home = () => {
 
   return (
     <ScreenLayout style={{ paddingTop: top }}>
-      <ContentLayout
-        hasHeader
-        headerTitle={mainTab.home}
-        onPressBack={() => {}}
-      >
+      <ContentLayout hasHeader headerTitle={mainTab.home}>
         {/* this is just for testing  */}
         <Typography variant="h2" text="Home" color={theme.colors.primary} />
         <Button title="Primary Button" variant="primary" onPress={() => {}} />
