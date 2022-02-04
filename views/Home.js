@@ -1,10 +1,9 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import Typography from '../components/Typography';
 import Button from '../components/Button';
 import { theme } from '../themes';
-import Card from '../components/Card';
+import MovieCard from '../components/MovieCard';
 
 const Home = () => {
   return (
@@ -14,7 +13,11 @@ const Home = () => {
       <Button title="Primary Button" variant="primary" onPress={() => {}} />
       <Button title="Secondary Button" variant="secondary" onPress={() => {}} />
       <Button title="Normal Button" onPress={() => {}} />
-      <Card />
+      <MovieCard
+        isLoggedIn
+        imageUri="https://static.wikia.nocookie.net/ironman/images/d/da/P170620_v_v8_ba.jpg/revision/latest/scale-to-width-down/333?cb=20191202183622"
+        rating={3}
+      />
     </SafeAreaView>
   );
 };
