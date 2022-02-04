@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Typography from '../components/Typography';
 import Button from '../components/Button';
 import { theme } from '../themes';
+import Card from '../components/Card';
 
 const Home = () => {
   return (
@@ -13,6 +14,7 @@ const Home = () => {
       <Button title="Primary Button" variant="primary" onPress={() => {}} />
       <Button title="Secondary Button" variant="secondary" onPress={() => {}} />
       <Button title="Normal Button" onPress={() => {}} />
+      <Card />
     </SafeAreaView>
   );
 };

@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "@babel/eslint-parser": "^7.16.5",
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-native-fontawesome": "^0.2.7",
     "@react-navigation/bottom-tabs": "^6.1.0",
     "@react-navigation/native": "^6.0.7",
     "@react-navigation/native-stack": "^6.3.0",
@@ -20,8 +23,11 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
+    "react-native-ratings": "^8.1.0",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
+    "react-native-svg": "^12.1.1",
+    "react-native-svg-transformer": "^1.0.0",
     "react-native-vector-icons": "^9.0.0",
     "react-native-web": "0.17.1"
   },
