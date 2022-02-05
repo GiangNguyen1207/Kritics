@@ -1,14 +1,16 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Text } from 'react-native';
+import { MainProvider } from './context/MainContext';
 
 import Navigator from './router/Navigator';
 
 export default function App() {
   return (
     <>
-      <Navigator />
-      <StatusBar style="auto" />
+      <MainProvider>
+        <Navigator />
+        <StatusBar style="auto" />
+      </MainProvider>
     </>
   );
 }
