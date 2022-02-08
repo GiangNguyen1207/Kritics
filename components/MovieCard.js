@@ -1,21 +1,15 @@
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 import Typography from './Typography';
-import { theme } from '../themes';
-import StarRating from 'react-native-star-rating';
 import PropTypes from 'prop-types';
+import { theme } from '../themes';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import StarRating from 'react-native-star-rating';
 
-const MovieCard = ({ title, imageUri, rating, isLoggedIn }) => {
+const MovieCard = ({ title, imageUri, isLoggedIn, rating }) => {
   return (
-    <View style={styles.card}>
-      <Image
-        source={{
-          uri: imageUri,
-        }}
-        style={styles.image}
-      />
-
+    <TouchableOpacity style={styles.card}>
+      <Image source={{ uri: imageUri }} style={styles.image} />
       {isLoggedIn && (
         <View style={styles.box}>
           <Icon
@@ -26,8 +20,7 @@ const MovieCard = ({ title, imageUri, rating, isLoggedIn }) => {
           />
         </View>
       )}
-
-      <Typography variant="h5" text={title} style={styles.title} />
+      <Typography variant="h5" text={title} color={theme.colors.primary} />
       <StarRating
         disabled
         maxStars={5}
@@ -37,7 +30,7 @@ const MovieCard = ({ title, imageUri, rating, isLoggedIn }) => {
         emptyStarColor={theme.colors.white}
         fullStarColor={theme.colors.white}
       />
-    </View>
+    </TouchableOpacity>
   );
 };
 
