@@ -1,26 +1,50 @@
-import { View, StyleSheet, Image, Pressable } from 'react-native';
+import {
+  StyleSheet,
+  Image,
+  Pressable,
+  ViewPropTypes,
+  Dimensions,
+} from 'react-native';
 import React from 'react';
-import Typography from './Typography';
-import PropTypes from 'prop-types';
-import { theme } from '../themes';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import PropTypes from 'prop-types';
 import StarRating from 'react-native-star-rating';
 
-const MovieCard = ({ title, imageUri, isLoggedIn, rating }) => {
+import Typography from './Typography';
+import { theme } from '../themes';
+import { uploadsUrl } from '../utils/variables';
+
+const MovieCard = ({
+  item,
+  showTagIcon,
+  rating,
+  handleFavouritePress,
+  cardStyle,
+}) => {
   return (
-    <Pressable style={styles.card}>
-      <Image source={{ uri: imageUri }} style={styles.image} />
-      {isLoggedIn && (
-        <View style={styles.box}>
+    <Pressable style={[styles.card, cardStyle]}>
+      <Image
+        source={{ uri: uploadsUrl + item.thumbnails.w160 }}
+        style={styles.image}
+      />
+      {showTagIcon && (
+        <Pressable
+          style={styles.box}
+          onPress={() => handleFavouritePress(item.file_id, item.isFavourite)}
+        >
           <Icon
             name={'bookmark'}
             size={16}
-            style={styles.icon}
-            color={theme.colors.white}
+            color={item.isFavourite ? theme.colors.primary : theme.colors.white}
           />
-        </View>
+        </Pressable>
       )}
-      <Typography variant="h5" text={title} color={theme.colors.primary} />
+      <Typography
+        variant="h5"
+        text={item.title}
+        color={theme.colors.primary}
+        textStyle={styles.text}
+      />
       <StarRating
         disabled
         maxStars={5}
@@ -37,32 +61,29 @@ const MovieCard = ({ title, imageUri, isLoggedIn, rating }) => {
 const styles = StyleSheet.create({
   card: {
     height: 200,
-    width: 110,
+    width: Dimensions.get('window').width / 3 - theme.spacings.xs,
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1,
-    flexDirection: 'column',
-    margin: 5,
-  },
-  icon: {
-    color: 'white',
+    marginHorizontal: theme.spacings.xxxs,
   },
   box: {
     backgroundColor: 'black',
-    width: 20,
-    height: 25,
+    width: 30,
+    height: 30,
     position: 'absolute',
     top: 0,
     right: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    opacity: 0.7,
+    opacity: 0.8,
   },
   image: {
     width: '100%',
     flex: 1,
   },
-
+  text: {
+    marginVertical: theme.spacings.Xs,
+  },
   rating: {
     bottom: 10,
     left: 10,
@@ -70,9 +91,10 @@ const styles = StyleSheet.create({
 });
 
 MovieCard.propTypes = {
-  title: PropTypes.string.isRequired,
-  imageUri: PropTypes.string.isRequired,
+  item: PropTypes.object.isRequired,
   rating: PropTypes.number.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired,
+  showTagIcon: PropTypes.bool.isRequired,
+  handleFavouritePress: PropTypes.func,
+  cardStyle: ViewPropTypes.style,
 };
 export default MovieCard;

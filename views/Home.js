@@ -1,36 +1,73 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, FlatList, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Typography from '../components/Typography';
-import Button from '../components/Button';
+import ScreenLayout from '../components/ScreenLayout';
+import ContentLayout from '../components/ContentLayout';
+import { mainTab } from '../router/Maintab';
+import { useMedia } from '../hooks/useMedia';
+import MovieCard from '../components/MovieCard';
 import { theme } from '../themes';
-import List from '../components/List';
+import { useFavourite } from '../hooks/useFavourite';
 
 const Home = () => {
+  const { top } = useSafeAreaInsets();
+  const mediaArray = useMedia();
+  const [renderedMediaArray, setRenderedMediaArray] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+  const { addToFavourite, favouriteList, deleteFavourite } = useFavourite();
+
+  const handleFavourite = (fileId, isFavourite) => {
+    if (isFavourite) deleteFavourite(fileId);
+    else addToFavourite(fileId);
+  };
+
+  useEffect(() => {
+    if (mediaArray && favouriteList) {
+      const favouriteFileIdList = favouriteList.map(
+        (favourite) => favourite.file_id
+      );
+      for (const media of mediaArray) {
+        if (favouriteFileIdList.includes(media.file_id)) {
+          Object.assign(media, { isFavourite: true });
+        } else {
+          delete media.isFavourite;
+        }
+      }
+      setRenderedMediaArray(mediaArray);
+      setRefresh(!refresh);
+    }
+  }, [mediaArray, favouriteList]);
+
   return (
-    <SafeAreaView style={styles.container}>
-      {/* this is just for testing  */}
-      <Typography variant="h2" text="Home" color={theme.colors.primary} />
-      <Button title="Primary Button" variant="primary" onPress={() => {}} />
-      <Button title="Secondary Button" variant="secondary" onPress={() => {}} />
-      {/* <Button title="Normal Button" onPress={() => {}} />
-      {/* <MovieCard
-        isLoggedIn
-        imageUri="https://static.wikia.nocookie.net/ironman/images/d/da/P170620_v_v8_ba.jpg/revision/latest/scale-to-width-down/333?cb=20191202183622"
-        rating={3}
-      /> */}
-      <List />
-    </SafeAreaView>
+    <ScreenLayout style={{ paddingTop: top }}>
+      <ContentLayout hasHeader headerTitle={mainTab.home} />
+      <View style={styles.list}>
+        <FlatList
+          numColumns={3}
+          data={renderedMediaArray}
+          keyExtractor={(item) => item.file_id.toString()}
+          extraData={refresh}
+          renderItem={({ item }) => (
+            <MovieCard
+              showTagIcon
+              rating={4}
+              item={item}
+              handleFavouritePress={handleFavourite}
+              cardStyle={{ marginVertical: theme.spacings.xxs }}
+            />
+          )}
+        />
+      </View>
+    </ScreenLayout>
   );
 };
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: theme.colors.darkGrey,
-    paddingStart: 10,
-    paddingEnd: 10,
+  list: {
+    marginBottom: theme.spacings.l,
+    marginTop: theme.spacings.xs,
+    alignItems: 'center',
   },
 });
 export default Home;

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { baseUrl } from '../utils/variables';
 
-const useMedia = () => {
+export const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
 
-  const loadMedia = async (start = 0, limit = 10) => {
+  const loadMedia = async (start = 0, limit = 15) => {
     try {
       const response = await fetch(
         `${baseUrl}media?start=${start}&limit=${limit}`
@@ -20,17 +20,16 @@ const useMedia = () => {
           return mediaData;
         })
       );
+
       setMediaArray(media);
-      console.log(mediaArray);
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     loadMedia(0, 10);
   }, []);
 
-  return { mediaArray };
+  return mediaArray;
 };
-
-export { useMedia };

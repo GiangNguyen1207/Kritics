@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TouchableOpacity, StyleSheet } from 'react-native';
-
+import { TouchableOpacity, StyleSheet, ViewPropTypes } from 'react-native';
 import Typography from './Typography';
 import { theme } from '../themes';
 
-const Button = ({ title, variant, onPress }) => {
+const Button = ({ title, variant, onPress, buttonStyle }) => {
   const getButtonStyle = (variant) => {
     let style = {
       backgroundColor: 'transparent',
@@ -30,7 +29,9 @@ const Button = ({ title, variant, onPress }) => {
   };
 
   return (
-    <TouchableOpacity style={[styles.button, getButtonStyle(variant)]}>
+    <TouchableOpacity
+      style={[styles.button, getButtonStyle(variant), buttonStyle]}
+    >
       <Typography
         variant="h3"
         text={title}
@@ -56,6 +57,7 @@ Button.propTypes = {
   title: PropTypes.string.isRequired,
   variant: PropTypes.string,
   onPress: PropTypes.func.isRequired,
+  buttonStyle: ViewPropTypes.style,
 };
 
 export default Button;
