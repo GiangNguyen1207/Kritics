@@ -5,6 +5,7 @@ import {
   View,
   StyleSheet,
   Button,
+  Text,
 } from 'react-native';
 import Typography from '../components/Typography';
 import { theme } from '../themes';
@@ -12,8 +13,17 @@ import { Formik } from 'formik';
 import { useUser, useLogin } from '../hooks/ApiHooks';
 import { MainContext } from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as yup from 'yup';
+import PropTypes from 'prop-types';
+import { Link } from '@react-navigation/native';
+import typography from "../components/Typography";
 
-const Login = () => {
+const LoginSchema = yup.object({
+  username: yup.string().required('Username required'),
+  password: yup.string().required('Password required'),
+});
+
+const Login = ({ navigation }) => {
   const { getUserByToken } = useUser();
   const { setIsLoggedIn, setUser } = useContext(MainContext);
   const { postLogin } = useLogin();
@@ -53,12 +63,20 @@ const Login = () => {
       <View style={styles.loginContainer}>
         <Typography variant="h2" text="Login" color={theme.colors.primary} />
         <Formik
+          validationSchema={LoginSchema}
           initialValues={{ username: '', password: '' }}
           onSubmit={(values) => {
             onSubmit(values);
           }}
         >
-          {({ handleChange, handleBlur, handleSubmit, values }) => (
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
             <View>
               <TextInput
                 name="username"
@@ -68,6 +86,11 @@ const Login = () => {
                 value={values.username}
                 style={styles.textInput}
               />
+              {errors.username && touched.username && (
+                <Text style={{ fontSize: 10, color: 'red' }}>
+                  {errors.username}
+                </Text>
+              )}
               <TextInput
                 type="password"
                 name="password"
@@ -78,13 +101,26 @@ const Login = () => {
                 value={values.password}
                 style={styles.textInput}
               />
+              {errors.password && touched.password && (
+                <Text style={{ fontSize: 10, color: 'red' }}>
+                  {errors.password}
+                </Text>
+              )}
               <Button onPress={handleSubmit} title="Submit" />
             </View>
           )}
         </Formik>
+        <Text style={{color: '#ffffff', fontSize: 15, marginTop: 10}}>
+          Don't have an account yet?
+          <Link to={{ screen: 'Signup', params: {} }} style={{ fontSize: 15, color: theme.colors.primary }}> Signup</Link> now
+        </Text>
       </View>
     </SafeAreaView>
   );
+};
+
+Login.propTypes = {
+  navigation: PropTypes.object,
 };
 
 const styles = StyleSheet.create({

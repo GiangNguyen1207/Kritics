@@ -10,6 +10,7 @@ import Favourite from '../views/Favourite';
 import Profile from '../views/Profile';
 import BottomNavBar from '../components/BottomNavBar';
 import Login from '../views/Login';
+import Signup from '../views/Signup';
 import { MainContext } from '../context/MainContext';
 
 const Tab = createBottomTabNavigator();
@@ -43,7 +44,10 @@ const StackScreen = () => {
           />
         </>
       ) : (
-        <Stack.Screen name="Login" component={Login} />
+        <>
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Signup" component={Signup} />
+        </>
       )}
     </Stack.Navigator>
   );
