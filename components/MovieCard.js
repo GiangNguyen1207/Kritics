@@ -1,4 +1,4 @@
-import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, Pressable } from 'react-native';
 import React from 'react';
 import Typography from './Typography';
 import PropTypes from 'prop-types';
@@ -8,7 +8,7 @@ import StarRating from 'react-native-star-rating';
 
 const MovieCard = ({ title, imageUri, isLoggedIn, rating }) => {
   return (
-    <TouchableOpacity style={styles.card}>
+    <Pressable style={styles.card}>
       <Image source={{ uri: imageUri }} style={styles.image} />
       {isLoggedIn && (
         <View style={styles.box}>
@@ -30,7 +30,7 @@ const MovieCard = ({ title, imageUri, isLoggedIn, rating }) => {
         emptyStarColor={theme.colors.white}
         fullStarColor={theme.colors.white}
       />
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
@@ -38,6 +38,11 @@ const styles = StyleSheet.create({
   card: {
     height: 200,
     width: 110,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'column',
+    margin: 5,
   },
   icon: {
     color: 'white',

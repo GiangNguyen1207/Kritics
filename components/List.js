@@ -9,6 +9,7 @@ const List = () => {
 
   return (
     <FlatList
+      numColumns={3}
       data={mediaArray}
       keyExtractor={(item) => item.file_id.toString()}
       renderItem={({ item }) => (

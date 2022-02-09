@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { baseUrl } from '../utils/variables';
+
 const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
 
@@ -26,7 +27,7 @@ const useMedia = () => {
     }
   };
   useEffect(() => {
-    loadMedia(0, 5);
+    loadMedia(0, 10);
   }, []);
 
   return { mediaArray };
