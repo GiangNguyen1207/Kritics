@@ -72,19 +72,6 @@ const Signup = ({ navigation }) => {
     }
   };
 
-  const validateUsername = async (value) => {
-    try {
-      const available = await checkUsername(value);
-      if (available) {
-        return true;
-      } else {
-        return 'Username is already taken.';
-      }
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.signupContainer}>
