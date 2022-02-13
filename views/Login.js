@@ -16,7 +16,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as yup from 'yup';
 import PropTypes from 'prop-types';
 import { Link } from '@react-navigation/native';
-import typography from "../components/Typography";
 
 const LoginSchema = yup.object({
   username: yup.string().required('Username required'),
