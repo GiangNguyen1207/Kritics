@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import {
   TextInput,
   SafeAreaView,
@@ -11,12 +11,9 @@ import {
 import Typography from '../components/Typography';
 import { theme } from '../themes';
 import { Formik } from 'formik';
-import { useUser, useLogin } from '../hooks/ApiHooks';
-import { MainContext } from '../context/MainContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useUser } from '../hooks/ApiHooks';
 import * as yup from 'yup';
 import PropTypes from 'prop-types';
-import Login from './Login';
 
 const { postUser, checkUsername } = useUser();
 
