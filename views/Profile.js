@@ -1,23 +1,32 @@
 import React, { useContext } from 'react';
-import { Button, Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Button } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MainContext } from '../context/MainContext';
 
-const Profile = () => {
-  const { setIsLoggedIn, user } = useContext(MainContext);
+import ScreenLayout from '../components/ScreenLayout';
+import ContentLayout from '../components/ContentLayout';
+import { mainTab } from '../router/Maintab';
 
+const Profile = () => {
+  const { top } = useSafeAreaInsets();
+  const { setIsLoggedIn } = useContext(MainContext);
   return (
-    <SafeAreaView>
-      <Text>Profile page</Text>
-      <Button
-        title={'Logout'}
-        onPress={async () => {
-          await AsyncStorage.clear();
-          setIsLoggedIn(false);
-        }}
-      />
-    </SafeAreaView>
+    <ScreenLayout style={{ paddingTop: top }}>
+      <ContentLayout
+        hasHeader
+        headerTitle={mainTab.profile}
+        onPressBack={() => {}}
+      >
+        <Button
+          title={'Logout'}
+          onPress={async () => {
+            await AsyncStorage.clear();
+            setIsLoggedIn(false);
+          }}
+        />
+      </ContentLayout>
+    </ScreenLayout>
   );
 };
 
