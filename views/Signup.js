@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Button,
   Text,
+  Alert,
 } from 'react-native';
 import Typography from '../components/Typography';
 import { theme } from '../themes';
@@ -14,21 +15,76 @@ import { useUser, useLogin } from '../hooks/ApiHooks';
 import { MainContext } from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as yup from 'yup';
+import PropTypes from 'prop-types';
+import Login from './Login';
+
+const { postUser, checkUsername } = useUser();
 
 const SignupSchema = yup.object({
-  username: yup.string().required('Username required'),
-  password: yup.string().required('Password required'),
-  confirmPassword: yup.string().required('Password required'),
-  email: yup.string().required('Email required'),
-  full_name: yup.string().required('Full name required'),
+  username: yup
+    .string()
+    .required('Username required')
+    .min(3, ({ min }) => `Username must be at least ${min} characters`)
+    .test('unique-username', 'Username is already in use.', async (value) => {
+      try {
+        const available = await checkUsername(value);
+        return !!available;
+      } catch (error) {
+        throw new Error(error.message);
+      }
+    }),
+  password: yup
+    .string()
+    .matches(/\w*[a-z]\w*/, 'Password must have a small letter')
+    .matches(/\w*[A-Z]\w*/, 'Password must have a capital letter')
+    .matches(/\d/, 'Password must have a number')
+    .min(5, ({ min }) => `Password must be at least ${min} characters`)
+    .required('Password is required'),
+  /*
+    .matches(
+      /[!@#$%^&*()\-_"=+{}; :,<.>]/,
+      'Password must have a special character'
+    )
+    */
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password')], 'Passwords do not match')
+    .required('Confirm password is required'),
+  email: yup
+    .string()
+    .email('Please enter a valid email')
+    .required('Email is required'),
+  full_name: yup
+    .string()
+    .matches(/(\w.+\s).+/, 'Enter at least 2 names')
+    .required('Full name is required'),
 });
 
-const Signup = () => {
+const Signup = ({ navigation }) => {
   const onSubmit = async (data) => {
     try {
-      console.log(data);
+      delete data.confirmPassword;
+      const userData = await postUser(data);
+      console.log('register onSubmit', userData);
+      if (userData) {
+        Alert.alert('Success', 'User created successfully.');
+        navigation.navigate('Login');
+      }
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const validateUsername = async (value) => {
+    try {
+      const available = await checkUsername(value);
+      if (available) {
+        return true;
+      } else {
+        return 'Username is already taken.';
+      }
+    } catch (error) {
+      throw new Error(error.message);
     }
   };
 
@@ -56,6 +112,7 @@ const Signup = () => {
             values,
             errors,
             touched,
+            isValid,
           }) => (
             <View>
               <TextInput
@@ -129,13 +186,21 @@ const Signup = () => {
                   {errors.full_name}
                 </Text>
               )}
-              <Button onPress={handleSubmit} title="Submit" />
+              <Button
+                disabled={!isValid}
+                onPress={handleSubmit}
+                title="Submit"
+              />
             </View>
           )}
         </Formik>
       </View>
     </SafeAreaView>
   );
+};
+
+Signup.propTypes = {
+  navigation: PropTypes.object,
 };
 
 const styles = StyleSheet.create({
