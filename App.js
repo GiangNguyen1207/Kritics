@@ -6,11 +6,9 @@ import Navigator from './router/Navigator';
 
 export default function App() {
   return (
-    <>
-      <MainProvider>
-        <Navigator />
-        <StatusBar style="auto" />
-      </MainProvider>
-    </>
+    <MainProvider>
+      <Navigator />
+      <StatusBar style="auto" />
+    </MainProvider>
   );
 }
