@@ -1,12 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import {
-  TextInput,
-  SafeAreaView,
-  View,
-  StyleSheet,
-  Button,
-  Text,
-} from 'react-native';
+import { TextInput, SafeAreaView, View, StyleSheet, Text } from 'react-native';
 import Typography from '../components/Typography';
 import { theme } from '../themes';
 import { Formik } from 'formik';
@@ -16,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as yup from 'yup';
 import PropTypes from 'prop-types';
 import { Link } from '@react-navigation/native';
+import Button from '../components/Button';
 
 const LoginSchema = yup.object({
   username: yup.string().required('Username required'),
@@ -105,13 +99,20 @@ const Login = ({ navigation }) => {
                   {errors.password}
                 </Text>
               )}
-              <Button onPress={handleSubmit} title="Submit" />
+              <Button title="Submit" onPress={handleSubmit} variant="primary" />
             </View>
           )}
         </Formik>
-        <Text style={{color: '#ffffff', fontSize: 15, marginTop: 10}}>
+        <Text style={{ color: '#ffffff', fontSize: 15, marginTop: 10 }}>
           Don't have an account yet?
-          <Link to={{ screen: 'Signup', params: {} }} style={{ fontSize: 15, color: theme.colors.primary }}> Signup</Link> now
+          <Link
+            to={{ screen: 'Signup', params: {} }}
+            style={{ fontSize: 15, color: theme.colors.primary }}
+          >
+            {' '}
+            Signup
+          </Link>{' '}
+          now
         </Text>
       </View>
     </SafeAreaView>

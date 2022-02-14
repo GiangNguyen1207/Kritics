@@ -1,14 +1,7 @@
-import React from 'react';
-import {
-  TextInput,
-  SafeAreaView,
-  View,
-  StyleSheet,
-  Button,
-  Text,
-  Alert,
-} from 'react-native';
+import React, { useContext, useEffect } from 'react';
+import { TextInput, SafeAreaView, View, StyleSheet, Text } from 'react-native';
 import Typography from '../components/Typography';
+import Button from '../components/Button';
 import { theme } from '../themes';
 import { Formik } from 'formik';
 import { useUser } from '../hooks/ApiHooks';
@@ -171,9 +164,10 @@ const Signup = ({ navigation }) => {
                 </Text>
               )}
               <Button
-                disabled={!isValid}
-                onPress={handleSubmit}
                 title="Submit"
+                onPress={handleSubmit}
+                variant={isValid ? 'primary' : 'disabled'}
+                isDisable={!isValid}
               />
             </View>
           )}
