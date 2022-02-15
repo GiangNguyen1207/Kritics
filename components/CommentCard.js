@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import React from 'react';
 import { Avatar } from 'react-native-paper';
 import { theme } from '../themes';
@@ -10,11 +10,7 @@ const CommentCard = () => {
     <View style={styles.container}>
       <View style={styles.firstContainer}>
         <View style={styles.secondContainer}>
-          <Avatar.Image
-            style={styles.avatar}
-            size={40}
-            source={require('../assets/icon.png')}
-          />
+          <Avatar.Image size={40} source={require('../assets/icon.png')} />
           <View style={styles.name}>
             <Typography
               variant="h3"
@@ -68,7 +64,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  avatar: {},
   name: { marginLeft: 15 },
   rating: { flexDirection: 'row' },
 });
