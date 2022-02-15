@@ -7,6 +7,7 @@ import { theme } from '../themes';
 import ScreenLayout from '../components/ScreenLayout';
 import ContentLayout from '../components/ContentLayout';
 import { mainTab } from '../router/Maintab';
+import CommentCard from '../components/CommentCard';
 
 const Home = () => {
   const { top } = useSafeAreaInsets();
@@ -23,6 +24,7 @@ const Home = () => {
           onPress={() => {}}
         />
         <Button title="Normal Button" onPress={() => {}} />
+        <CommentCard />
       </ContentLayout>
     </ScreenLayout>
   );
