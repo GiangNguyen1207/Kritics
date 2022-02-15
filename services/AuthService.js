@@ -1,22 +1,5 @@
-import React from 'react';
-import { apiUrl } from '../utils/Variables';
-
-const doFetch = async (url, options = {}) => {
-  try {
-    const response = await fetch(url, options);
-    const json = await response.json();
-    if (response.ok) {
-      return json;
-    } else {
-      const message = json.error
-        ? `${json.message}: ${json.error}`
-        : json.message;
-      throw new Error(message || response.statusText);
-    }
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};
+import { baseUrl } from '../utils/variables';
+import { doFetch } from '../utils/apiDoFetch';
 
 const useLogin = () => {
   const postLogin = async (userCredentials) => {
@@ -25,7 +8,7 @@ const useLogin = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(userCredentials),
     };
-    return await doFetch(apiUrl + 'login', options);
+    return await doFetch(baseUrl + 'login', options);
   };
 
   return { postLogin };
@@ -37,7 +20,7 @@ const useUser = () => {
       method: 'GET',
       headers: { 'x-access-token': token },
     };
-    return await doFetch(apiUrl + 'users/user', options);
+    return await doFetch(baseUrl + 'users/user', options);
   };
 
   const postUser = async (data) => {
@@ -46,11 +29,11 @@ const useUser = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     };
-    return await doFetch(apiUrl + 'users', options);
+    return await doFetch(baseUrl + 'users', options);
   };
 
   const checkUsername = async (username) => {
-    const result = await doFetch(apiUrl + 'users/username/' + username);
+    const result = await doFetch(baseUrl + 'users/username/' + username);
     return result.available;
   };
 

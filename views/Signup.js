@@ -1,12 +1,13 @@
-import React, { useContext, useEffect } from 'react';
-import { TextInput, SafeAreaView, View, StyleSheet, Text } from 'react-native';
+import React from 'react';
+import { TextInput, View, StyleSheet, Text, Alert } from 'react-native';
 import Typography from '../components/Typography';
 import Button from '../components/Button';
 import { theme } from '../themes';
 import { Formik } from 'formik';
-import { useUser } from '../hooks/ApiHooks';
 import * as yup from 'yup';
 import PropTypes from 'prop-types';
+import { useUser } from '../services/AuthService';
+import ScreenLayout from '../components/ScreenLayout';
 
 const { postUser, checkUsername } = useUser();
 
@@ -66,123 +67,119 @@ const Signup = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.signupContainer}>
-        <Typography variant="h2" text="Sign up" color={theme.colors.primary} />
-        <Formik
-          validationSchema={SignupSchema}
-          initialValues={{
-            username: '',
-            password: '',
-            confirmPassword: '',
-            email: '',
-            full_name: '',
-          }}
-          onSubmit={(values) => {
-            onSubmit(values);
-          }}
-        >
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            errors,
-            touched,
-            isValid,
-          }) => (
-            <View>
-              <TextInput
-                name="username"
-                placeholder="Username"
-                autoCapitalize="none"
-                onChangeText={handleChange('username')}
-                onBlur={handleBlur('username')}
-                value={values.username}
-                style={styles.textInput}
-              />
-              {errors.username && touched.username && (
-                <Text style={{ fontSize: 10, color: 'red' }}>
-                  {errors.username}
-                </Text>
-              )}
-              <TextInput
-                type="email"
-                name="email"
-                autoCapitalize="none"
-                placeholder="Email"
-                onChangeText={handleChange('email')}
-                onBlur={handleBlur('email')}
-                value={values.email}
-                style={styles.textInput}
-              />
-              {errors.email && touched.email && (
-                <Text style={{ fontSize: 10, color: 'red' }}>
-                  {errors.email}
-                </Text>
-              )}
-              <TextInput
-                type="password"
-                name="password"
-                placeholder="Password"
-                secureTextEntry
-                onChangeText={handleChange('password')}
-                onBlur={handleBlur('password')}
-                value={values.password}
-                style={styles.textInput}
-              />
-              {errors.password && touched.password && (
-                <Text style={{ fontSize: 10, color: 'red' }}>
-                  {errors.password}
-                </Text>
-              )}
-              <TextInput
-                type="confirmPassword"
-                name="confirmPassword"
-                placeholder="Confirm password"
-                secureTextEntry
-                onChangeText={handleChange('confirmPassword')}
-                onBlur={handleBlur('confirmPassword')}
-                value={values.confirmPassword}
-                style={styles.textInput}
-              />
-              {errors.confirmPassword && touched.confirmPassword && (
-                <Text style={{ fontSize: 10, color: 'red' }}>
-                  {errors.confirmPassword}
-                </Text>
-              )}
-              <TextInput
-                type="full_name"
-                name="full_name"
-                placeholder="Full name"
-                autoCapitalize="words"
-                onChangeText={handleChange('full_name')}
-                onBlur={handleBlur('full_name')}
-                value={values.full_name}
-                style={styles.textInput}
-              />
-              {errors.full_name && touched.full_name && (
-                <Text style={{ fontSize: 10, color: 'red' }}>
-                  {errors.full_name}
-                </Text>
-              )}
-              <Button
-                title="Submit"
-                onPress={handleSubmit}
-                variant={isValid ? 'primary' : 'disabled'}
-                isDisable={!isValid}
-              />
-              <Button
-                buttonStyle={{ marginTop: 15 }}
-                title="Back to login"
-                onPress={() => {}}
-                variant={'secondary'}
-              />
-            </View>
-          )}
-        </Formik>
-      </View>
-    </SafeAreaView>
+    <ScreenLayout style={styles.container}>
+      <Typography variant="h2" text="Sign up" color={theme.colors.primary} />
+      <Formik
+        validationSchema={SignupSchema}
+        initialValues={{
+          username: '',
+          password: '',
+          confirmPassword: '',
+          email: '',
+          full_name: '',
+        }}
+        onSubmit={(values) => {
+          onSubmit(values);
+        }}
+      >
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          errors,
+          touched,
+          isValid,
+        }) => (
+          <View>
+            <TextInput
+              name="username"
+              placeholder="Username"
+              autoCapitalize="none"
+              onChangeText={handleChange('username')}
+              onBlur={handleBlur('username')}
+              value={values.username}
+              style={styles.textInput}
+            />
+            {errors.username && touched.username && (
+              <Text style={{ fontSize: 10, color: 'red' }}>
+                {errors.username}
+              </Text>
+            )}
+            <TextInput
+              type="email"
+              name="email"
+              autoCapitalize="none"
+              placeholder="Email"
+              onChangeText={handleChange('email')}
+              onBlur={handleBlur('email')}
+              value={values.email}
+              style={styles.textInput}
+            />
+            {errors.email && touched.email && (
+              <Text style={{ fontSize: 10, color: 'red' }}>{errors.email}</Text>
+            )}
+            <TextInput
+              type="password"
+              name="password"
+              placeholder="Password"
+              secureTextEntry
+              onChangeText={handleChange('password')}
+              onBlur={handleBlur('password')}
+              value={values.password}
+              style={styles.textInput}
+            />
+            {errors.password && touched.password && (
+              <Text style={{ fontSize: 10, color: 'red' }}>
+                {errors.password}
+              </Text>
+            )}
+            <TextInput
+              type="confirmPassword"
+              name="confirmPassword"
+              placeholder="Confirm password"
+              secureTextEntry
+              onChangeText={handleChange('confirmPassword')}
+              onBlur={handleBlur('confirmPassword')}
+              value={values.confirmPassword}
+              style={styles.textInput}
+            />
+            {errors.confirmPassword && touched.confirmPassword && (
+              <Text style={{ fontSize: 10, color: 'red' }}>
+                {errors.confirmPassword}
+              </Text>
+            )}
+            <TextInput
+              type="full_name"
+              name="full_name"
+              placeholder="Full name"
+              autoCapitalize="words"
+              onChangeText={handleChange('full_name')}
+              onBlur={handleBlur('full_name')}
+              value={values.full_name}
+              style={styles.textInput}
+            />
+            {errors.full_name && touched.full_name && (
+              <Text style={{ fontSize: 10, color: 'red' }}>
+                {errors.full_name}
+              </Text>
+            )}
+            <Button
+              title="Submit"
+              onPress={handleSubmit}
+              variant={isValid ? 'primary' : 'disabled'}
+              isDisable={!isValid}
+            />
+            <Button
+              buttonStyle={{ marginTop: 15 }}
+              title="Back to login"
+              onPress={() => navigation.navigate('Login')}
+              variant={'secondary'}
+            />
+          </View>
+        )}
+      </Formik>
+    </ScreenLayout>
   );
 };
 
@@ -192,14 +189,7 @@ Signup.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.colors.appBackground,
-  },
-  signupContainer: {
-    alignItems: 'center',
-    padding: 10,
   },
   textInput: {
     height: 40,
