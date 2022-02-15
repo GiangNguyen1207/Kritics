@@ -4,11 +4,9 @@ import { baseUrl } from '../utils/variables';
 export const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
 
-  const loadMedia = async (start = 0, limit = 15) => {
+  const loadMedia = async () => {
     try {
-      const response = await fetch(
-        `${baseUrl}media?start=${start}&limit=${limit}`
-      );
+      const response = await fetch(`${baseUrl}media`);
       if (!response.ok) {
         throw Error(response.statusText);
       }
@@ -28,7 +26,7 @@ export const useMedia = () => {
   };
 
   useEffect(() => {
-    loadMedia(0, 10);
+    loadMedia();
   }, []);
 
   return mediaArray;
