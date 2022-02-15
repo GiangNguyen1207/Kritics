@@ -95,6 +95,7 @@ const Signup = ({ navigation }) => {
               <TextInput
                 name="username"
                 placeholder="Username"
+                autoCapitalize="none"
                 onChangeText={handleChange('username')}
                 onBlur={handleBlur('username')}
                 value={values.username}
@@ -108,6 +109,7 @@ const Signup = ({ navigation }) => {
               <TextInput
                 type="email"
                 name="email"
+                autoCapitalize="none"
                 placeholder="Email"
                 onChangeText={handleChange('email')}
                 onBlur={handleBlur('email')}
@@ -153,6 +155,7 @@ const Signup = ({ navigation }) => {
                 type="full_name"
                 name="full_name"
                 placeholder="Full name"
+                autoCapitalize="words"
                 onChangeText={handleChange('full_name')}
                 onBlur={handleBlur('full_name')}
                 value={values.full_name}

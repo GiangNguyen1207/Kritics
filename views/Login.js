@@ -74,6 +74,7 @@ const Login = ({ navigation }) => {
               <TextInput
                 name="username"
                 placeholder="Username"
+                autoCapitalize="none"
                 onChangeText={handleChange('username')}
                 onBlur={handleBlur('username')}
                 value={values.username}
