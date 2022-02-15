@@ -172,6 +172,12 @@ const Signup = ({ navigation }) => {
                 variant={isValid ? 'primary' : 'disabled'}
                 isDisable={!isValid}
               />
+              <Button
+                buttonStyle={{ marginTop: 15 }}
+                title="Back to login"
+                onPress={() => {}}
+                variant={'secondary'}
+              />
             </View>
           )}
         </Formik>
