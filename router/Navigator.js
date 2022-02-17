@@ -11,6 +11,7 @@ import Profile from '../views/Profile';
 import BottomNavBar from '../components/BottomNavBar';
 import Login from '../views/Login';
 import Signup from '../views/Signup';
+import MovieDetails from '../views/MovieDetails';
 import { MainContext } from '../context/MainContext';
 
 const Tab = createBottomTabNavigator();
@@ -40,6 +41,11 @@ const StackScreen = () => {
           <Stack.Screen
             name="Main"
             component={TabScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="MovieDetails"
+            component={MovieDetails}
             options={{ headerShown: false }}
           />
         </>
