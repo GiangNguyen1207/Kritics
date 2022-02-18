@@ -5,7 +5,7 @@ import { theme } from '../themes';
 import StarRating from 'react-native-star-rating';
 import Typography from './Typography';
 
-const CommentCard = () => {
+const CommentCard = ({ item, username, userRating, comment }) => {
   return (
     <View style={styles.container}>
       <View style={styles.firstContainer}>
