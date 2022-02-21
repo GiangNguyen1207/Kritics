@@ -41,7 +41,11 @@ const MovieCard = ({
       )}
       <Typography
         variant="h5"
-        text={item.title}
+        text={
+          item.title.length >= 17
+            ? `${item.title.substring(0, 16)}...`
+            : item.title
+        }
         color={theme.colors.primary}
         textStyle={styles.text}
       />
@@ -60,7 +64,7 @@ const MovieCard = ({
 
 const styles = StyleSheet.create({
   card: {
-    height: 200,
+    height: 220,
     width: Dimensions.get('window').width / 3 - theme.spacings.xs,
     justifyContent: 'center',
     alignItems: 'center',
@@ -83,10 +87,7 @@ const styles = StyleSheet.create({
   },
   text: {
     marginVertical: theme.spacings.Xs,
-  },
-  rating: {
-    bottom: 10,
-    left: 10,
+    height: theme.spacings.xs,
   },
 });
 
