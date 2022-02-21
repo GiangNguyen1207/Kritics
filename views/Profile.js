@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MainContext } from '../context/MainContext';
 import ContentLayout from '../components/ContentLayout';
@@ -8,11 +8,29 @@ import ScreenLayout from '../components/ScreenLayout';
 import { theme } from '../themes';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Typography from '../components/Typography';
-import { StyleSheet, Image, View } from 'react-native';
+import { StyleSheet, Image, View, Modal } from 'react-native';
+import { useTag } from '../hooks/useTag';
 
 const Profile = () => {
   const { setIsLoggedIn, user } = useContext(MainContext);
   const { top } = useSafeAreaInsets();
+  const [avatar, setAvatar] = useState('http://placekitten.com/640');
+  const { getMediaByTag } = useTag();
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const fetchAvatar = async () => {
+    try {
+      const avatarArray = await getMediaByTag('avatar_' + user.user_id);
+      const avatar = avatarArray.pop();
+      setAvatar('' + avatar.filename);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchAvatar();
+  }, []);
 
   return (
     <ScreenLayout
@@ -24,10 +42,7 @@ const Profile = () => {
     >
       <ContentLayout hasHeader headerTitle={mainTab.profile} />
       <View style={styles.profileInfo}>
-        <Image
-          style={styles.avatar}
-          source={require('../assets/favicon.png')}
-        />
+        <Image style={styles.avatar} source={{ uri: avatar }} />
         <Typography
           variant="h2"
           text={user.username}
@@ -41,7 +56,44 @@ const Profile = () => {
           variant="h4"
         />
       </View>
-
+      <View
+        style={{
+          borderBottomColor: '#fff',
+          borderBottomWidth: 0.5,
+          alignSelf: 'stretch',
+        }}
+      />
+      <Button
+        buttonStyle={{ margin: 20, width: 300 }}
+        title={'Edit profile'}
+        onPress={() => {
+          setModalVisible(true);
+        }}
+        variant={'secondary'}
+      />
+      <View
+        style={{
+          borderBottomColor: '#fff',
+          borderBottomWidth: 0.5,
+          alignSelf: 'stretch',
+        }}
+      />
+      <Button
+        buttonStyle={{ margin: 20, width: 300 }}
+        title={'Change password'}
+        onPress={async () => {
+          console.log('click');
+        }}
+        variant={'secondary'}
+      />
+      <View
+        style={{
+          borderBottomColor: '#fff',
+          borderBottomWidth: 0.5,
+          alignSelf: 'stretch',
+          marginBottom: 40,
+        }}
+      />
       <Button
         buttonStyle={{ margin: 20, width: 300 }}
         title={'Logout'}
@@ -51,22 +103,47 @@ const Profile = () => {
         }}
         variant={'primary'}
       />
+
+      <Modal visible={modalVisible}>
+        <View style={styles.modalContent}>
+          <Typography
+            text={'Modal'}
+            color={theme.colors.primary}
+            textStyle={styles.header}
+            variant="h4"
+          />
+          <Button
+            buttonStyle={{ margin: 20, width: 300 }}
+            title={'Close'}
+            onPress={() => {
+              setModalVisible(false);
+            }}
+            variant={'secondary'}
+          />
+        </View>
+      </Modal>
     </ScreenLayout>
   );
 };
 
 const styles = StyleSheet.create({
   profileInfo: {
-    flex: 1,
-    justifyContent: 'center',
+    flex: 4,
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   header: {
-    textAlign: 'center',
+    margin: 3,
   },
   avatar: {
-    width: 50,
-    height: 50,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
