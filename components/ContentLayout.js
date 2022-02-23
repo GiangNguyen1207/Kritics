@@ -5,9 +5,15 @@ import { ViewPropTypes, View, StyleSheet } from 'react-native';
 import Typography from './Typography';
 import BackButton from './BackButton';
 
-const ContentLayout = ({ children, hasHeader, headerTitle, onPressBack }) => {
+const ContentLayout = ({
+  children,
+  hasHeader,
+  headerTitle,
+  onPressBack,
+  style,
+}) => {
   return (
-    <View style={styles.contentLayout}>
+    <View style={[styles.contentLayout, style]}>
       <View>
         {hasHeader && (
           <View style={styles.row}>

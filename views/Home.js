@@ -10,7 +10,7 @@ import { theme } from '../themes';
 import { useFavourite } from '../hooks/useFavourite';
 
 const Home = () => {
-  const mediaArray = useMedia();
+  const { mediaArray } = useMedia();
   const [renderedMediaArray, setRenderedMediaArray] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const { addToFavourite, favouriteList, deleteFavourite } = useFavourite();
