@@ -1,68 +1,68 @@
-import { View, StyleSheet, Pressable } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Avatar } from 'react-native-paper';
 import { theme } from '../themes';
+import StarRating from 'react-native-star-rating';
 import Typography from './Typography';
 import PropTypes from 'prop-types';
-import { auth } from '../utils/auth';
 import { useUser } from '../services/AuthService';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { auth } from '../utils/auth';
 import { format } from 'date-fns';
 
-const CommentCard = ({ route, item, handleDeleteComment }) => {
+const ReviewCard = ({ route }) => {
   const { file } = route.params;
-  const { getUserById, getUserByToken } = useUser();
-  const [user, setUser] = useState();
-  const [isOwner, setIsOwner] = useState(false);
+  const { getUserById } = useUser();
+  const [reviewOwner, setReviewOwner] = useState({ username: 'fetching...' });
 
-  const getUser = async () => {
+  const fetchReviewOwner = async () => {
     try {
-      if (item) {
-        const token = await auth.getUserTokenFromStorage();
-        const logginUser = await getUserByToken(token);
-        const user = await getUserById(item.user_id, token);
-        if (logginUser.user_id === item.user_id) setIsOwner(true);
-        setUser(user);
-      }
+      const token = await auth.getUserTokenFromStorage();
+      const userData = await getUserById(file.user_id, token);
+      setReviewOwner(userData);
     } catch (error) {
-      console.log('get user error', error);
+      console.error('fetch review owner', error);
+      setReviewOwner({ username: '[not available]' });
     }
   };
+  console.log('******** file', file);
+
   useEffect(() => {
-    getUser();
+    fetchReviewOwner();
   }, []);
 
   return (
     <View style={styles.container}>
       <View style={styles.firstContainer}>
         <View style={styles.secondContainer}>
-          <Avatar.Image size={40} source={require('../assets/icon.png')} />
+          <Avatar.Image size={60} source={require('../assets/icon.png')} />
           <View style={styles.name}>
             <Typography
-              variant="h3"
+              variant="h2"
               fontWeight="500"
-              text={user?.username}
+              text={reviewOwner.username}
               color={theme.colors.white}
             />
           </View>
         </View>
-        {isOwner && (
-          <Pressable onPress={() => handleDeleteComment(item.comment_id)}>
-            <Icon
-              style={styles.rating}
-              name={'trash'}
-              size={18}
-              color={theme.colors.white}
-            />
-          </Pressable>
-        )}
+        <View>
+          <StarRating
+            style={styles.rating}
+            disabled
+            maxStars={5}
+            starSize={14}
+            containerStyle={{ width: '17%' }}
+            rating={4}
+            emptyStarColor={theme.colors.white}
+            fullStarColor={theme.colors.white}
+          />
+        </View>
       </View>
       <View>
         <Typography
-          style={styles.comment}
+          style={styles.review}
           variant="h4"
           fontWeight="500"
-          text={item?.comment}
+          text={file.description}
           color={theme.colors.white}
         />
       </View>
@@ -80,10 +80,8 @@ const CommentCard = ({ route, item, handleDeleteComment }) => {
   );
 };
 
-CommentCard.propTypes = {
+ReviewCard.propTypes = {
   route: PropTypes.object,
-  item: PropTypes.object,
-  handleDeleteComment: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
@@ -105,7 +103,7 @@ const styles = StyleSheet.create({
   },
   name: { marginLeft: 15 },
   rating: { flexDirection: 'row' },
-  comment: { marginBottom: 20 },
+  review: { marginBottom: 20 },
   date: { marginTop: 30 },
 });
-export default CommentCard;
+export default ReviewCard;

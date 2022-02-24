@@ -66,7 +66,7 @@ const Home = ({ navigation }) => {
 };
 
 Home.propTypes = {
-  navigation: PropTypes.object,
+  navigation: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({
