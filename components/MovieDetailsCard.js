@@ -7,7 +7,12 @@ import Typography from './Typography';
 import { theme } from '../themes';
 import HorizontalLine from './HorizontalLine';
 
-const MovieDetailsCard = ({ movieDetails, hasDetails, hasBottomLine }) => {
+const MovieDetailsCard = ({
+  movieDetails,
+  hasDetails,
+  hasBottomLine,
+  bottomLineColor,
+}) => {
   const [selected, setSelected] = useState(false);
 
   return (
@@ -49,7 +54,9 @@ const MovieDetailsCard = ({ movieDetails, hasDetails, hasBottomLine }) => {
           )}
         </View>
       </View>
-      {hasBottomLine && <HorizontalLine color={theme.colors.lightGrey} />}
+      {hasBottomLine && (
+        <HorizontalLine color={bottomLineColor ?? theme.colors.lightGrey} />
+      )}
     </>
   );
 };
@@ -85,6 +92,7 @@ MovieDetailsCard.propTypes = {
   movieDetails: PropTypes.object,
   hasDetails: PropTypes.bool,
   hasBottomLine: PropTypes.bool,
+  bottomLineColor: PropTypes.string,
 };
 
 export default MovieDetailsCard;
