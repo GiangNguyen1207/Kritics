@@ -168,7 +168,7 @@ const Signup = ({ navigation }) => {
               title="Submit"
               onPress={handleSubmit}
               variant={isValid ? 'primary' : 'disabled'}
-              isDisable={!isValid}
+              isDisabled={!isValid}
             />
             <Button
               buttonStyle={{ marginTop: 15 }}

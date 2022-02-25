@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 
-import { baseUrl } from '../utils/variables';
+import { baseUrl, appID } from '../utils/variables';
 import { auth } from '../utils/auth';
 import { doFetch } from '../utils/apiDoFetch';
+import { tagService } from '../services/TagService';
 
 export const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const loadMedia = async () => {
     try {
-      const response = await fetch(`${baseUrl}media`);
+      const response = await fetch(`${baseUrl}tags/${appID}`);
       if (!response.ok) {
         throw Error(response.statusText);
       }
@@ -30,6 +33,7 @@ export const useMedia = () => {
 
   const postMedia = async (title, description, image, type) => {
     if (image) {
+      setLoading(true);
       const formData = new FormData();
       formData.append('title', title);
       formData.append('description', description);
@@ -54,10 +58,20 @@ export const useMedia = () => {
         };
 
         const response = await doFetch(baseUrl + 'media', options);
-        if (response.message === 'File uploaded') return true;
-        else return false;
+        const tagResponse = await tagService.postTag(
+          {
+            file_id: response.file_id,
+            tag: appID,
+          },
+          token
+        );
+        if (response.message === 'File uploaded' && tagResponse) {
+          setLoading(false);
+          return true;
+        } else return false;
       } catch (error) {
-        console.log(error);
+        setLoading(false);
+        Alert.alert(error.message);
       }
     }
   };
@@ -66,5 +80,5 @@ export const useMedia = () => {
     loadMedia();
   }, []);
 
-  return { mediaArray, postMedia };
+  return { mediaArray, postMedia, loading };
 };
