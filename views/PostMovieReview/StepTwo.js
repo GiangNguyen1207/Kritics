@@ -68,10 +68,10 @@ export default function StepTwo({ navigation, route }) {
       return;
     }
 
-    const description = {
+    const description = JSON.stringify({
       comment: review,
       movieDetails,
-    };
+    });
     const isSuccessful = await postMedia(movieName, description, image, type);
 
     if (isSuccessful) {
