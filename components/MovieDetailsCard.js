@@ -49,7 +49,7 @@ const MovieDetailsCard = ({ movieDetails, hasDetails, hasBottomLine }) => {
           )}
         </View>
       </View>
-      {hasBottomLine && <HorizontalLine />}
+      {hasBottomLine && <HorizontalLine color={theme.colors.lightGrey} />}
     </>
   );
 };
