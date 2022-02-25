@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { TextInput, View, StyleSheet, Pressable, FlatList } from 'react-native';
+import {
+  TextInput,
+  View,
+  StyleSheet,
+  Pressable,
+  FlatList,
+  Alert,
+} from 'react-native';
 import * as Progress from 'react-native-progress';
 
 import ScreenLayout from '../../components/ScreenLayout';
@@ -11,25 +17,39 @@ import { theme } from '../../themes';
 import Typography from '../../components/Typography';
 import Button from '../../components/Button';
 import { PostReviewScreen } from '../../router/Maintab';
+import { useMovieDetails } from '../../hooks/useMovieDetails';
+import { useMedia } from '../../hooks/useMedia';
 
 export default function StepOne({ navigation }) {
   const { top } = useSafeAreaInsets();
+  const { suggestedMovies } = useMovieDetails();
+  const { mediaArray } = useMedia();
   const [movieName, setMovieName] = useState('');
-  const [suggestedMovies, setSuggestedMovies] = useState([]);
+  const [renderedMovies, setRenderedMovies] = useState([]);
   const [isFinished, setIsFinished] = useState(false);
 
   const handleSearchMovieName = async (searhedName) => {
     setMovieName(searhedName);
-    const response = await axios.get(
-      `https://api.themoviedb.org/3/search/movie?api_key=${process.env.apiKey}&query=${searhedName}&page=1`
-    );
-    setSuggestedMovies(response.data.results.slice(0, 10));
+    setRenderedMovies(suggestedMovies);
   };
 
   const handleChooseMovieName = (selectedMovieName) => {
     setMovieName(selectedMovieName);
-    setSuggestedMovies([]);
+    setRenderedMovies([]);
     setIsFinished(true);
+  };
+
+  const handleButtonSubmit = () => {
+    const existingMovie = mediaArray.find((movie) => movie.title === movieName);
+    if (existingMovie) {
+      Alert.alert(
+        'This movie exists in the database. Please choose another one'
+      );
+      return;
+    }
+    navigation.navigate(PostReviewScreen.stepTwo, {
+      movieName,
+    });
   };
 
   return (
@@ -59,30 +79,34 @@ export default function StepOne({ navigation }) {
             }
             style={styles.input}
           />
-          <FlatList
-            data={suggestedMovies}
-            renderItem={({ item }) => (
-              <Pressable
-                onPress={() =>
-                  handleChooseMovieName(item.original_title + '-' + item.id)
-                }
-              >
-                <Typography
-                  style={styles.item}
-                  text={item.original_title}
-                  variant="h3"
-                />
-              </Pressable>
-            )}
-          />
+          {renderedMovies.length > 0 ? (
+            <FlatList
+              data={renderedMovies}
+              renderItem={({ item }) => (
+                <Pressable
+                  onPress={() =>
+                    handleChooseMovieName(item.original_title + '-' + item.id)
+                  }
+                >
+                  <Typography
+                    style={styles.item}
+                    text={item.original_title}
+                    variant="h3"
+                  />
+                </Pressable>
+              )}
+            />
+          ) : (
+            <Typography
+              style={styles.item}
+              text={'No results found'}
+              variant="h3"
+            />
+          )}
           <Button
             title="Go to Step 2"
             variant={isFinished ? 'primary' : 'disabled'}
-            onPress={() =>
-              navigation.navigate(PostReviewScreen.stepTwo, {
-                movieName,
-              })
-            }
+            onPress={handleButtonSubmit}
             isDisable={!isFinished}
           />
         </View>
