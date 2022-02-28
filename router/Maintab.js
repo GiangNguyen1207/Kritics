@@ -4,3 +4,8 @@ export const mainTab = {
   favourite: 'Favourite',
   profile: 'Profile',
 };
+
+export const PostReviewScreen = {
+  stepOne: 'Step One',
+  stepTwo: 'Step Two',
+};

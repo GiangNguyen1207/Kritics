@@ -3,9 +3,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { mainTab } from './Maintab';
+import { mainTab, PostReviewScreen } from './Maintab';
 import Home from '../views/Home';
-import PostMovieReview from '../views/PostMovieReview';
 import Favourite from '../views/Favourite';
 import Profile from '../views/Profile';
 import BottomNavBar from '../components/BottomNavBar';
@@ -13,9 +12,22 @@ import Login from '../views/Login';
 import Signup from '../views/Signup';
 import MovieDetails from '../views/MovieDetails';
 import { MainContext } from '../context/MainContext';
+import StepOne from '../views/PostMovieReview/StepOne';
+import StepTwo from '../views/PostMovieReview/StepTwo';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+
+const PostScreenStack = () => (
+  <Stack.Navigator
+    screenOptions={{
+      headerShown: false,
+    }}
+  >
+    <Stack.Screen name={PostReviewScreen.stepOne} component={StepOne} />
+    <Stack.Screen name={PostReviewScreen.stepTwo} component={StepTwo} />
+  </Stack.Navigator>
+);
 
 const TabScreen = () => {
   return (
@@ -24,7 +36,7 @@ const TabScreen = () => {
       tabBar={(props) => <BottomNavBar {...props} />}
     >
       <Tab.Screen name={mainTab.home} component={Home} />
-      <Tab.Screen name={mainTab.post} component={PostMovieReview} />
+      <Tab.Screen name={mainTab.post} component={PostScreenStack} />
       <Tab.Screen name={mainTab.favourite} component={Favourite} />
       <Tab.Screen name={mainTab.profile} component={Profile} />
     </Tab.Navigator>

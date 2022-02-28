@@ -48,8 +48,8 @@ const MovieCard = ({
       <Typography
         variant="h5"
         text={
-          item.title.length >= 17
-            ? `${item.title.substring(0, 16)}...`
+          item.title.length > 12
+            ? `${item.title.substring(0, 12)}...`
             : item.title
         }
         color={theme.colors.primary}

@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { StyleSheet, Animated, Image } from 'react-native';
 import { useCollapsibleHeader } from 'react-navigation-collapsible';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useFocusEffect } from '@react-navigation/native';
 
 import ScreenLayout from '../components/ScreenLayout';
 import { useMedia } from '../hooks/useMedia';
@@ -10,10 +11,8 @@ import { theme } from '../themes';
 import { useFavourite } from '../hooks/useFavourite';
 import PropTypes from 'prop-types';
 
-
 const Home = ({ navigation }) => {
-  const { top } = useSafeAreaInsets();
-  const mediaArray = useMedia();
+  const { mediaArray } = useMedia();
   const [renderedMediaArray, setRenderedMediaArray] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const { addToFavourite, favouriteList, deleteFavourite } = useFavourite();
@@ -57,22 +56,24 @@ const Home = ({ navigation }) => {
     else addToFavourite(fileId);
   };
 
-  useEffect(() => {
-    if (mediaArray && favouriteList) {
-      const favouriteFileIdList = favouriteList.map(
-        (favourite) => favourite.file_id
-      );
-      for (const media of mediaArray) {
-        if (favouriteFileIdList.includes(media.file_id)) {
-          Object.assign(media, { isFavourite: true });
-        } else {
-          delete media.isFavourite;
+  useFocusEffect(
+    useCallback(() => {
+      if (mediaArray && favouriteList) {
+        const favouriteFileIdList = favouriteList.map(
+          (favourite) => favourite.file_id
+        );
+        for (const media of mediaArray) {
+          if (favouriteFileIdList.includes(media.file_id)) {
+            Object.assign(media, { isFavourite: true });
+          } else {
+            delete media.isFavourite;
+          }
         }
+        setRenderedMediaArray(mediaArray);
+        setRefresh(!refresh);
       }
-      setRenderedMediaArray(mediaArray);
-      setRefresh(!refresh);
-    }
-  }, [mediaArray, favouriteList]);
+    }, [mediaArray, favouriteList])
+  );
 
   return (
     <ScreenLayout>
@@ -81,7 +82,9 @@ const Home = ({ navigation }) => {
           numColumns={3}
           data={renderedMediaArray}
           onScroll={onScroll}
-          contentContainerStyle={{ paddingTop: containerPaddingTop }}
+          contentContainerStyle={{
+            paddingTop: renderedMediaArray.length > 3 ? containerPaddingTop : 0,
+          }}
           scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
           keyExtractor={(item) => item.file_id.toString()}
           extraData={refresh}
@@ -108,7 +111,6 @@ Home.propTypes = {
 const styles = StyleSheet.create({
   list: {
     marginBottom: theme.spacings.l,
-    alignItems: 'center',
   },
   overlay: {
     width: '100%',

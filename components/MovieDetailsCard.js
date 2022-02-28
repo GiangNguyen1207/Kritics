@@ -18,9 +18,14 @@ const MovieDetailsCard = ({
   return (
     <>
       <View style={styles.row}>
-        <Image source={{ uri: movieDetails.image }} style={styles.image} />
-        <View>
-          <Typography text={movieDetails.name} variant="h2" />
+        <Image
+          source={{
+            uri: `https://image.tmdb.org/t/p/w500/${movieDetails.poster_path}`,
+          }}
+          style={styles.image}
+        />
+        <View style={{ flex: 1 }}>
+          <Typography text={movieDetails.title} variant="h2" />
           {hasDetails && (
             <>
               <Typography
@@ -63,12 +68,12 @@ const MovieDetailsCard = ({
 
 const styles = StyleSheet.create({
   row: {
-    height: 200,
+    height: 150,
     flexDirection: 'row',
     alignItems: 'center',
   },
   image: {
-    width: '45%',
+    width: '40%',
     height: '100%',
     resizeMode: 'contain',
   },

@@ -10,7 +10,7 @@ const HorizontalLine = ({ color }) => {
       style={{
         borderBottomColor: color,
         borderBottomWidth: 1,
-        marginTop: theme.spacings.s,
+        marginVertical: theme.spacings.s,
       }}
     />
   );
