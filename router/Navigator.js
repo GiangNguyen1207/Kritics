@@ -11,6 +11,7 @@ import BottomNavBar from '../components/BottomNavBar';
 import Login from '../views/Login';
 import Signup from '../views/Signup';
 import MovieDetails from '../views/MovieDetails';
+import Search from '../views/Search';
 import { MainContext } from '../context/MainContext';
 import StepOne from '../views/PostMovieReview/StepOne';
 import StepTwo from '../views/PostMovieReview/StepTwo';
@@ -71,6 +72,7 @@ const StackScreen = () => {
           />
         </>
       )}
+      <Stack.Screen name="Search" component={Search} />
     </Stack.Navigator>
   );
 };

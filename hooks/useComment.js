@@ -47,8 +47,6 @@ export const useComment = () => {
           'x-access-token': token,
         },
       };
-      console.log('DELETE COMMENT HERE********');
-      console.log('******* url', baseUrl + 'comments/' + commentId);
       await doFetch(baseUrl + 'comments/' + commentId, options);
     } catch (error) {
       console.error('delete comment error', error);
