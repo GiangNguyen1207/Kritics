@@ -9,8 +9,9 @@ import { useMedia } from '../hooks/useMedia';
 import MovieCard from '../components/MovieCard';
 import { theme } from '../themes';
 import { useFavourite } from '../hooks/useFavourite';
+import PropTypes from 'prop-types';
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const { mediaArray } = useMedia();
   const [renderedMediaArray, setRenderedMediaArray] = useState([]);
   const [refresh, setRefresh] = useState(false);
@@ -94,12 +95,17 @@ const Home = () => {
               item={item}
               handleFavouritePress={handleFavourite}
               cardStyle={{ marginVertical: theme.spacings.xxs }}
+              navigation={navigation}
             />
           )}
         />
       </Animated.View>
     </ScreenLayout>
   );
+};
+
+Home.propTypes = {
+  navigation: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({
