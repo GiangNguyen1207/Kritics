@@ -51,7 +51,7 @@ const Typography = ({ variant, color, fontWeight, text, textStyle }) => {
 
 Typography.propTypes = {
   variant: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
+  text: PropTypes.string,
   color: PropTypes.string,
   fontWeight: PropTypes.string,
   textStyle: ViewPropTypes.style,

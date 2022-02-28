@@ -20,9 +20,15 @@ const MovieCard = ({
   rating,
   handleFavouritePress,
   cardStyle,
+  navigation,
 }) => {
   return (
-    <Pressable style={[styles.card, cardStyle]}>
+    <Pressable
+      style={[styles.card, cardStyle]}
+      onPress={() => {
+        navigation.navigate('MovieDetails', { file: item });
+      }}
+    >
       <Image
         source={{ uri: uploadsUrl + item.thumbnails.w160 }}
         style={styles.image}
@@ -97,5 +103,6 @@ MovieCard.propTypes = {
   showTagIcon: PropTypes.bool.isRequired,
   handleFavouritePress: PropTypes.func,
   cardStyle: ViewPropTypes.style,
+  navigation: PropTypes.object.isRequired,
 };
 export default MovieCard;
