@@ -14,8 +14,8 @@ import StarRating from 'react-native-star-rating';
 import PropTypes from 'prop-types';
 import * as Progress from 'react-native-progress';
 import { PacmanIndicator } from 'react-native-indicators';
-import { KeyboardAwareView } from 'react-native-keyboard-aware-view';
 
+import ScreenLayout from '../../components/ScreenLayout';
 import ContentLayout from '../../components/ContentLayout';
 import { theme } from '../../themes';
 import Typography from '../../components/Typography';
@@ -26,7 +26,7 @@ import { useMovieDetails } from '../../hooks/useMovieDetails';
 
 export default function StepTwo({ navigation, route }) {
   const { movieName } = route.params;
-  const { top } = useSafeAreaInsets();
+  const { top, bottom } = useSafeAreaInsets();
   const { postMedia, loading } = useMedia();
   const { movieDetails } = useMovieDetails(movieName.split('-')[1]);
   const [rating, setRating] = useState(0);
@@ -83,84 +83,86 @@ export default function StepTwo({ navigation, route }) {
   };
 
   return (
-    <View style={[styles.layout, { paddingTop: top }]}>
-      <KeyboardAwareView animated={true}>
-        <ContentLayout
-          hasHeader
-          headerTitle={'Write a review'}
-          style={{ paddingHorizontal: theme.spacings.s }}
-          onPressBack={() => navigation.goBack()}
-        >
-          <View style={styles.container}>
-            <View>
-              <Typography variant="h4" text="Step 2" />
-              <Progress.Bar
-                progress={1}
-                width={null}
-                height={10}
-                color={theme.colors.primary}
-                borderColor={theme.colors.primary}
-                style={styles.progressBar}
-              />
-            </View>
-            <Typography
-              variant="h4"
-              text={`Chosen movie: ${movieName.split('-')[0]}`}
-            />
-            <Pressable onPress={pickImage}>
-              <Image source={{ uri: image }} style={styles.image} />
-            </Pressable>
-            <View style={styles.row}>
-              <Typography text="Your rating" variant="h4" />
-              <StarRating
-                maxStars={5}
-                starSize={35}
-                rating={rating}
-                selectedStar={(rating) => setRating(rating)}
-                emptyStarColor={theme.colors.white}
-                fullStarColor={theme.colors.white}
-              />
-            </View>
-            <View>
-              <Typography text="Your review" variant="h4" />
-              <TextInput
-                multiline
-                style={[styles.input, { height: 100 }]}
-                value={review}
-                onChangeText={(review) => setReview(review)}
-                autoCapitalize="none"
-              />
-            </View>
-            <View style={styles.row}>
-              <Button
-                title="Back"
-                variant="secondary"
-                buttonStyle={{ flex: 1, marginRight: theme.spacings.xs }}
-                onPress={() => navigation.goBack()}
-              />
-              <Button
-                title="Submit"
-                variant={
-                  imageSelected && rating > 0 && review ? 'primary' : 'disabled'
-                }
-                buttonStyle={{ flex: 1 }}
-                onPress={handleSubmit}
-                isDisabled={!imageSelected || rating === 0 || !review}
-                rightIcon={
-                  loading && (
-                    <PacmanIndicator
-                      color={theme.colors.white}
-                      size={25}
-                      style={styles.icon}
-                    />
-                  )
-                }
-              />
-            </View>
-          </View>
-        </ContentLayout>
-      </KeyboardAwareView>
-    </View>
+    <ScreenLayout
+      style={[{ paddingTop: top, paddingBottom: bottom, flex: 1 }]}
+      type="scroll"
+    >
+      <ContentLayout
+        hasHeader
+        headerTitle={'Write a review'}
+        style={{
+          paddingHorizontal: theme.spacings.s,
+          justifyContent: 'space-between',
+        }}
+        onPressBack={() => navigation.goBack()}
+      >
+        <View>
+          <Typography variant="h4" text="Step 2" />
+          <Progress.Bar
+            progress={1}
+            width={null}
+            height={10}
+            color={theme.colors.primary}
+            borderColor={theme.colors.primary}
+            style={styles.progressBar}
+          />
+        </View>
+        <Typography
+          variant="h4"
+          text={`Chosen movie: ${movieName.split('-')[0]}`}
+        />
+        <Pressable onPress={pickImage}>
+          <Image source={{ uri: image }} style={styles.image} />
+        </Pressable>
+        <View style={styles.row}>
+          <Typography text="Your rating" variant="h4" />
+          <StarRating
+            maxStars={5}
+            starSize={35}
+            rating={rating}
+            selectedStar={(rating) => setRating(rating)}
+            emptyStarColor={theme.colors.white}
+            fullStarColor={theme.colors.white}
+          />
+        </View>
+        <View>
+          <Typography text="Your review" variant="h4" />
+          <TextInput
+            multiline
+            style={[styles.input, { height: 100 }]}
+            value={review}
+            onChangeText={(review) => setReview(review)}
+            autoCapitalize="none"
+          />
+        </View>
+        <View style={styles.row}>
+          <Button
+            title="Back"
+            variant="secondary"
+            buttonStyle={{ flex: 1, marginRight: theme.spacings.xs }}
+            onPress={() => navigation.goBack()}
+          />
+          <Button
+            title="Submit"
+            variant={
+              imageSelected && rating > 0 && review ? 'primary' : 'disabled'
+            }
+            buttonStyle={{ flex: 1 }}
+            onPress={handleSubmit}
+            isDisabled={!imageSelected || rating === 0 || !review}
+            rightIcon={
+              loading && (
+                <PacmanIndicator
+                  color={theme.colors.white}
+                  size={25}
+                  style={styles.icon}
+                />
+              )
+            }
+          />
+        </View>
+      </ContentLayout>
+    </ScreenLayout>
   );
 }
 
@@ -170,15 +172,6 @@ StepTwo.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  layout: {
-    flex: 1,
-    backgroundColor: theme.colors.appBackground,
-  },
-  container: {
-    marginVertical: theme.spacings.xs,
-    flex: 1,
-    justifyContent: 'space-between',
-  },
   image: {
     width: '100%',
     height: 150,
