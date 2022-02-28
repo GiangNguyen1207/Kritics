@@ -11,6 +11,7 @@ import { format } from 'date-fns';
 
 const ReviewCard = ({ route }) => {
   const { file } = route.params;
+  const fileDetails = JSON.parse(file.description);
   const { getUserById } = useUser();
   const [reviewOwner, setReviewOwner] = useState({ username: 'fetching...' });
 
@@ -24,7 +25,8 @@ const ReviewCard = ({ route }) => {
       setReviewOwner({ username: '[not available]' });
     }
   };
-  console.log('******** file', file);
+
+  console.log(fileDetails);
 
   useEffect(() => {
     fetchReviewOwner();
@@ -62,18 +64,17 @@ const ReviewCard = ({ route }) => {
           style={styles.review}
           variant="h4"
           fontWeight="500"
-          text={file.description}
+          text={fileDetails.comment}
           color={theme.colors.white}
         />
       </View>
-
       <View>
         <Typography
           style={styles.date}
           variant="h6"
           fontWeight="400"
           text={format(new Date(file.time_added), 'dd-MM-yyyy')}
-          color={theme.colors.white}
+          color={theme.colors.lightGrey}
         />
       </View>
     </View>

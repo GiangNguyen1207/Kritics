@@ -55,7 +55,11 @@ const StackScreen = () => {
             component={TabScreen}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="MovieDetails" component={MovieDetails} />
+          <Stack.Screen
+            name="MovieDetails"
+            component={MovieDetails}
+            options={{ headerShown: false }}
+          />
         </>
       ) : (
         <>
