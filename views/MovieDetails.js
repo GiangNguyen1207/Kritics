@@ -43,7 +43,7 @@ const MovieDetails = ({ navigation, route }) => {
       <View>
         <FlatList
           data={renderedCommentList}
-          keyExtractor={(item) => item.comment_id}
+          keyExtractor={(item) => item.comment_id.toString()}
           extraData={refresh}
           renderItem={({ item }) => (
             <CommentCard

@@ -72,7 +72,11 @@ const StackScreen = () => {
           />
         </>
       )}
-      <Stack.Screen name="Search" component={Search} />
+      <Stack.Screen
+        name="Search"
+        component={Search}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };

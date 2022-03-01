@@ -8,6 +8,7 @@ import { tagService } from '../services/TagService';
 
 export const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const loadMedia = async () => {
@@ -30,6 +31,21 @@ export const useMedia = () => {
       console.log(error);
     }
   };
+
+  // const getMediaSearch = async (title) => {
+  //   console.log('title', title);
+  //   const token = await auth.getUserTokenFromStorage();
+  //   const options = {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'x-access-token': token,
+  //     },
+  //     body: JSON.stringify({ title: title }),
+  //   };
+  //   const response = await doFetch(`${baseUrl}media/search`, options);
+  //   console.log('res', response);
+  // };
 
   const postMedia = async (title, description, image, type) => {
     if (image) {
@@ -76,9 +92,16 @@ export const useMedia = () => {
     }
   };
 
+  const searchMedia = (searchTerm) => {
+    const searchResults = mediaArray.filter((media) =>
+      media.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setSearchResults(searchResults);
+  };
+
   useEffect(() => {
     loadMedia();
   }, []);
 
-  return { mediaArray, postMedia, loading };
+  return { mediaArray, postMedia, loading, searchResults, searchMedia };
 };

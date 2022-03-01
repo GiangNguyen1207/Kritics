@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { theme } from '../themes';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const SearchBar = ({ search, onSearchChange, onSearchSubmit }) => {
+const SearchBar = ({ searchTerm, onSearchTermChange, onSearchSubmit }) => {
   return (
     <View style={styles.backgroundStyle}>
       <TextInput
@@ -12,8 +12,8 @@ const SearchBar = ({ search, onSearchChange, onSearchSubmit }) => {
         autoCorrect={false}
         style={styles.inputStyle}
         placeholder="Search movie name"
-        value={search}
-        onChangeText={onSearchChange}
+        value={searchTerm}
+        onChangeText={onSearchTermChange}
       />
       <Pressable
         style={styles.pressStyle}
@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.lightGrey,
     height: 40,
     borderRadius: 7,
-    marginHorizontal: 10,
     flexDirection: 'row',
     marginBottom: 10,
   },
@@ -62,8 +61,8 @@ const styles = StyleSheet.create({
 });
 
 SearchBar.propTypes = {
-  search: PropTypes.string.isRequired,
-  onSearchChange: PropTypes.func,
+  searchTerm: PropTypes.string,
+  onSearchTermChange: PropTypes.func,
   onSearchSubmit: PropTypes.func,
 };
 

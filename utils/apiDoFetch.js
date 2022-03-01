@@ -1,9 +1,8 @@
 export const doFetch = async (url, options = {}) => {
   try {
-    console.log('url', url);
-    console.log('options', options);
     const response = await fetch(url, options);
     const json = await response.json();
+    console.log(json);
     if (response.ok) {
       return json;
     } else {
@@ -13,6 +12,7 @@ export const doFetch = async (url, options = {}) => {
       throw new Error(message || response.statusText);
     }
   } catch (error) {
+    console.log('error', error);
     throw new Error(error.message);
   }
 };
