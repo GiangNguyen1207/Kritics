@@ -11,57 +11,40 @@ import Typography from '../components/Typography';
 import {
   StyleSheet,
   View,
-  Modal,
-  TextInput,
-  Text,
   ImageBackground,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
-import { useTag } from '../hooks/useTag';
-import { Formik } from 'formik';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import EditProfileModal from '../components/EditProfileModal';
 import ChangePasswordModal from '../components/ChangePasswordModal';
 import DividerLine from '../components/DividerLine';
+import AddAvatarModal from '../components/AddAvatarModal';
+import { tagService } from '../services/TagService';
+import { uploadsUrl } from '../utils/variables';
 
 const Profile = () => {
-  const { setIsLoggedIn, user } = useContext(MainContext);
+  const { setIsLoggedIn, user, update } = useContext(MainContext);
   const { top } = useSafeAreaInsets();
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
-  const { getMediaByTag } = useTag();
-  const [modal1Visible, setModal1Visible] = useState(false);
-  const [modal2Visible, setModal2Visible] = useState(false);
+  const [editProfileVisible, setEditProfileVisible] = useState(false);
+  const [changePasswordVisible, setChangePasswordVisible] = useState(false);
+  const [addAvatarVisible, setAddAvatarVisible] = useState(false);
 
   const fetchAvatar = async () => {
     try {
-      const avatarArray = await getMediaByTag('avatar_' + user.user_id);
+      const avatarArray = await tagService.getMediaByTag(
+        'avatar_' + user.user_id
+      );
       const avatar = avatarArray.pop();
-      setAvatar('' + avatar.filename);
+      setAvatar(uploadsUrl + avatar.filename);
     } catch (error) {
       console.log(error.message);
     }
   };
 
-  const addAvatar = async () => {
-    Alert.alert('Add avatar', 'Avatar');
-  };
-
-  const onSubmit = async (data, modal) => {
-    try {
-      if (modal === 'edit-profile') {
-        console.log('edit profile');
-      } else {
-        console.log('change password');
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
     fetchAvatar();
-  }, []);
+  }, [update]);
 
   return (
     <ScreenLayout
@@ -82,7 +65,7 @@ const Profile = () => {
           >
             <TouchableOpacity
               onPress={() => {
-                addAvatar();
+                setAddAvatarVisible();
               }}
               style={{ flex: 1 }}
             >
@@ -120,7 +103,7 @@ const Profile = () => {
           buttonStyle={{ margin: 20, width: 300 }}
           title={'Edit profile'}
           onPress={() => {
-            setModal1Visible(true);
+            setEditProfileVisible(true);
           }}
           variant={'secondary'}
         />
@@ -136,7 +119,7 @@ const Profile = () => {
           buttonStyle={{ margin: 20, width: 300 }}
           title={'Change password'}
           onPress={async () => {
-            setModal2Visible(true);
+            setChangePasswordVisible(true);
           }}
           variant={'secondary'}
         />
@@ -152,12 +135,16 @@ const Profile = () => {
         variant={'primary'}
       />
       <EditProfileModal
-        modalVisible={modal1Visible}
-        setModalVisible={setModal1Visible}
+        modalVisible={editProfileVisible}
+        setModalVisible={setEditProfileVisible}
       />
       <ChangePasswordModal
-        modalVisible={modal2Visible}
-        setModalVisible={setModal2Visible}
+        modalVisible={changePasswordVisible}
+        setModalVisible={setChangePasswordVisible}
+      />
+      <AddAvatarModal
+        modalVisible={addAvatarVisible}
+        setModalVisible={setAddAvatarVisible}
       />
     </ScreenLayout>
   );

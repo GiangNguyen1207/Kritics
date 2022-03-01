@@ -1,7 +1,7 @@
 import { baseUrl } from '../utils/variables';
 import { doFetch } from '../utils/apiDoFetch';
 
-export const useTag = () => {
+const service = () => {
   const postTag = async (tagData, token) => {
     const options = {
       method: 'POST',
@@ -11,7 +11,7 @@ export const useTag = () => {
       },
       body: JSON.stringify(tagData),
     };
-    return await doFetch(baseUrl + 'tags', options);
+    return await doFetch(baseUrl + 'tags/', options);
   };
 
   const getMediaByTag = async (tag) => {
@@ -20,3 +20,5 @@ export const useTag = () => {
 
   return { postTag, getMediaByTag };
 };
+
+export const tagService = service();

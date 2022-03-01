@@ -37,7 +37,19 @@ const useUser = () => {
     return result.available;
   };
 
-  return { checkUsername, getUserByToken, postUser };
+  const putUser = async (data, token) => {
+    const options = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+      body: JSON.stringify(data),
+    };
+    return await doFetch(baseUrl + 'users', options);
+  };
+
+  return { checkUsername, getUserByToken, postUser, putUser };
 };
 
 export { useLogin, useUser };

@@ -1,51 +1,91 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, FlatList, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, { useCallback, useState } from 'react';
+import { StyleSheet, Animated, Image } from 'react-native';
+import { useCollapsibleHeader } from 'react-navigation-collapsible';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { useFocusEffect } from '@react-navigation/native';
 
 import ScreenLayout from '../components/ScreenLayout';
-import ContentLayout from '../components/ContentLayout';
-import { mainTab } from '../router/Maintab';
 import { useMedia } from '../hooks/useMedia';
 import MovieCard from '../components/MovieCard';
 import { theme } from '../themes';
 import { useFavourite } from '../hooks/useFavourite';
+import PropTypes from 'prop-types';
 
-const Home = () => {
-  const { top } = useSafeAreaInsets();
-  const mediaArray = useMedia();
+const Home = ({ navigation }) => {
+  const { mediaArray } = useMedia();
   const [renderedMediaArray, setRenderedMediaArray] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const { addToFavourite, favouriteList, deleteFavourite } = useFavourite();
+
+  const { onScroll, containerPaddingTop, scrollIndicatorInsetTop } =
+    useCollapsibleHeader({
+      navigationOptions: {
+        headerStyle: {
+          height: 250,
+        },
+        headerShown: true,
+        headerBackground: (
+          <Image
+            source={require('../assets/ironman.jpeg')}
+            style={styles.overlay}
+          />
+        ),
+        headerTitle: '',
+        headerLeft: () => (
+          <Icon
+            name="search"
+            color={theme.colors.white}
+            size={20}
+            style={styles.search}
+          />
+        ),
+        headerRight: () => (
+          <Icon
+            name="filter"
+            color={theme.colors.white}
+            size={20}
+            style={styles.filter}
+          />
+        ),
+      },
+      config: { collapsedColor: theme.colors.appBackground },
+    });
 
   const handleFavourite = (fileId, isFavourite) => {
     if (isFavourite) deleteFavourite(fileId);
     else addToFavourite(fileId);
   };
 
-  useEffect(() => {
-    if (mediaArray && favouriteList) {
-      const favouriteFileIdList = favouriteList.map(
-        (favourite) => favourite.file_id
-      );
-      for (const media of mediaArray) {
-        if (favouriteFileIdList.includes(media.file_id)) {
-          Object.assign(media, { isFavourite: true });
-        } else {
-          delete media.isFavourite;
+  useFocusEffect(
+    useCallback(() => {
+      if (mediaArray && favouriteList) {
+        const favouriteFileIdList = favouriteList.map(
+          (favourite) => favourite.file_id
+        );
+        for (const media of mediaArray) {
+          if (favouriteFileIdList.includes(media.file_id)) {
+            Object.assign(media, { isFavourite: true });
+          } else {
+            delete media.isFavourite;
+          }
         }
+        setRenderedMediaArray(mediaArray);
+        setRefresh(!refresh);
       }
-      setRenderedMediaArray(mediaArray);
-      setRefresh(!refresh);
-    }
-  }, [mediaArray, favouriteList]);
+    }, [mediaArray, favouriteList])
+  );
 
   return (
-    <ScreenLayout style={{ paddingTop: top }}>
-      <ContentLayout hasHeader headerTitle={mainTab.home} />
-      <View style={styles.list}>
-        <FlatList
+    <ScreenLayout>
+      <Animated.View style={styles.list}>
+        <Animated.FlatList
           numColumns={3}
           data={renderedMediaArray}
+          onScroll={onScroll}
+          contentContainerStyle={{
+            paddingTop: renderedMediaArray.length > 3 ? containerPaddingTop : 0,
+          }}
+          scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
           keyExtractor={(item) => item.file_id.toString()}
           extraData={refresh}
           renderItem={({ item }) => (
@@ -55,19 +95,43 @@ const Home = () => {
               item={item}
               handleFavouritePress={handleFavourite}
               cardStyle={{ marginVertical: theme.spacings.xxs }}
+              navigation={navigation}
             />
           )}
         />
-      </View>
+      </Animated.View>
     </ScreenLayout>
   );
+};
+
+Home.propTypes = {
+  navigation: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({
   list: {
     marginBottom: theme.spacings.l,
-    marginTop: theme.spacings.xs,
-    alignItems: 'center',
+  },
+  overlay: {
+    width: '100%',
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    right: 0,
+    opacity: 0.7,
+    backgroundColor: 'black',
+    height: 250,
+  },
+  search: {
+    position: 'absolute',
+    top: theme.spacings.xxs,
+    left: theme.spacings.l,
+  },
+  filter: {
+    position: 'absolute',
+    top: theme.spacings.xxs,
+    right: theme.spacings.l,
   },
 });
 export default Home;
