@@ -5,10 +5,9 @@ import { useState } from 'react';
 
 export const useRating = () => {
   const [ratingsList, setRatingsList] = useState([]);
-  const [ratingAverage, setRatingAverage] = useState([]);
+  const [ratingAverage, setRatingAverage] = useState(0);
 
   const getRatingsByFileId = async (fileId) => {
-    console.log('fileId', fileId);
     const token = await auth.getUserTokenFromStorage();
     const options = {
       method: 'GET',
@@ -19,10 +18,10 @@ export const useRating = () => {
 
     const json = await doFetch(baseUrl + 'ratings/file/' + fileId, options);
     setRatingsList(json);
-    return json;
+    return getAverageRating();
   };
 
-  const postRating = async (fileId) => {
+  const postRating = async (fileId, rating) => {
     try {
       const token = await auth.getUserTokenFromStorage();
       const options = {
@@ -31,9 +30,9 @@ export const useRating = () => {
           'x-access-token': token,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ file_id: fileId }),
+        body: JSON.stringify({ file_id: fileId, rating: rating }),
       };
-      await doFetch(baseUrl + 'ratings', options);
+      return await doFetch(baseUrl + 'ratings', options);
     } catch (error) {
       console.error('post rating error', error);
     }
@@ -56,12 +55,10 @@ export const useRating = () => {
   };
 
   const getAverageRating = () => {
-    const ratingAverage = Math.round(
-      (ratingsList) =>
-        ratingsList.reduce((a, b) => a + b, 0) / ratingsList.length
-    );
-    setRatingAverage(ratingAverage);
-    return ratingAverage;
+    const sum = ratingsList.reduce((a, b) => (a || 0) + (b.rating || 0), 0);
+    const average = +(sum / ratingsList.length).toFixed(1);
+    setRatingAverage(average);
+    return average;
   };
 
   return {

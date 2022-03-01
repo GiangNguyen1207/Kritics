@@ -25,17 +25,20 @@ export default function StepOne({ navigation }) {
   const { suggestedMovies, searchMovies } = useMovieDetails();
   const { mediaArray } = useMedia();
   const [movieName, setMovieName] = useState('');
+  const [isMovieNameSelected, setIsMovieNameSelected] = useState(false);
   const [renderedMovies, setRenderedMovies] = useState([]);
 
   const handleSearchMovieName = async (searhedName) => {
     setMovieName(searhedName);
     searchMovies(searhedName);
     setRenderedMovies(suggestedMovies);
+    setIsMovieNameSelected(false);
   };
 
   const handleChooseMovieName = (selectedMovieName) => {
     setMovieName(selectedMovieName);
     setRenderedMovies([]);
+    setIsMovieNameSelected(true);
   };
 
   const handleButtonSubmit = () => {
@@ -87,9 +90,7 @@ export default function StepOne({ navigation }) {
           data={renderedMovies}
           renderItem={({ item }) => (
             <Pressable
-              onPress={() =>
-                handleChooseMovieName(item.original_title + '-' + item.id)
-              }
+              onPress={() => handleChooseMovieName(item.title + '-' + item.id)}
             >
               <MovieDetailsCard movieDetails={item} hasBottomLine />
             </Pressable>
@@ -97,9 +98,9 @@ export default function StepOne({ navigation }) {
         />
         <Button
           title="Go to Step 2"
-          variant={movieName ? 'primary' : 'disabled'}
+          variant={isMovieNameSelected ? 'primary' : 'disabled'}
           onPress={handleButtonSubmit}
-          isDisabled={!movieName}
+          isDisabled={!isMovieNameSelected}
         />
       </ContentLayout>
     </ScreenLayout>
@@ -127,10 +128,5 @@ const styles = StyleSheet.create({
     borderRadius: theme.spacings.Xs,
     padding: theme.spacings.xxs,
     color: theme.colors.white,
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
   },
 });

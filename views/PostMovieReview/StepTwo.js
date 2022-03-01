@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
-  TextInput,
   View,
   StyleSheet,
   Image,
@@ -29,8 +28,8 @@ export default function StepTwo({ navigation, route }) {
   const { top, bottom } = useSafeAreaInsets();
   const { postMedia, loading } = useMedia();
   const { movieDetails } = useMovieDetails(movieName.split('-')[1]);
+
   const [rating, setRating] = useState(0);
-  const [review, setReview] = useState('');
   const [imageSelected, setImageSelected] = useState(false);
   const [type, setType] = useState('image');
   const [image, setImage] = useState(
@@ -63,16 +62,14 @@ export default function StepTwo({ navigation, route }) {
       return;
     }
 
-    if (!review) {
-      Alert.alert('Please write your review');
-      return;
-    }
-
-    const description = JSON.stringify({
-      comment: review,
-      movieDetails,
-    });
-    const isSuccessful = await postMedia(movieName, description, image, type);
+    const description = JSON.stringify(movieDetails);
+    const isSuccessful = await postMedia(
+      movieName,
+      description,
+      image,
+      type,
+      rating
+    );
 
     if (isSuccessful) {
       navigation.reset({
@@ -125,16 +122,7 @@ export default function StepTwo({ navigation, route }) {
             fullStarColor={theme.colors.white}
           />
         </View>
-        <View>
-          <Typography text="Your review" variant="h4" />
-          <TextInput
-            multiline
-            style={[styles.input, { height: 100 }]}
-            value={review}
-            onChangeText={(review) => setReview(review)}
-            autoCapitalize="none"
-          />
-        </View>
+
         <View style={styles.row}>
           <Button
             title="Back"
@@ -144,12 +132,10 @@ export default function StepTwo({ navigation, route }) {
           />
           <Button
             title="Submit"
-            variant={
-              imageSelected && rating > 0 && review ? 'primary' : 'disabled'
-            }
+            variant={imageSelected && rating > 0 ? 'primary' : 'disabled'}
             buttonStyle={{ flex: 1 }}
             onPress={handleSubmit}
-            isDisabled={!imageSelected || rating === 0 || !review}
+            isDisabled={!imageSelected || rating === 0}
             rightIcon={
               loading && (
                 <PacmanIndicator

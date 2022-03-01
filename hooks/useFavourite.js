@@ -4,7 +4,7 @@ import { doFetch } from '../utils/apiDoFetch';
 import { baseUrl } from '../utils/variables';
 import { auth } from '../utils/auth';
 
-export const useFavourite = () => {
+export const useFavourite = (isFocused) => {
   const [favouriteList, setFavouriteList] = useState([]);
 
   const getFavouriteList = async () => {
@@ -73,7 +73,7 @@ export const useFavourite = () => {
 
   useEffect(() => {
     getFavouriteList();
-  }, []);
+  }, [isFocused]);
 
   return { favouriteList, addToFavourite, deleteFavourite };
 };

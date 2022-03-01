@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { StyleSheet, Animated, Image } from 'react-native';
 import { useCollapsibleHeader } from 'react-navigation-collapsible';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 
 import ScreenLayout from '../components/ScreenLayout';
 import { useMedia } from '../hooks/useMedia';
@@ -13,9 +13,11 @@ import PropTypes from 'prop-types';
 
 const Home = ({ navigation }) => {
   const { mediaArray } = useMedia();
+  const isFocused = useIsFocused();
   const [renderedMediaArray, setRenderedMediaArray] = useState([]);
   const [refresh, setRefresh] = useState(false);
-  const { addToFavourite, favouriteList, deleteFavourite } = useFavourite();
+  const { addToFavourite, favouriteList, deleteFavourite } =
+    useFavourite(isFocused);
 
   const { onScroll, containerPaddingTop, scrollIndicatorInsetTop } =
     useCollapsibleHeader({
