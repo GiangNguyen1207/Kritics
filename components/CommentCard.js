@@ -8,8 +8,9 @@ import { auth } from '../utils/auth';
 import { useUser } from '../services/AuthService';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { format } from 'date-fns';
+import HorizontalLine from './HorizontalLine';
 
-const CommentCard = ({ route, item, handleDeleteComment }) => {
+const CommentCard = ({ route, item, handleDeleteComment, hasBottomLine }) => {
   const { file } = route.params;
   const { getUserById, getUserByToken } = useUser();
   const [user, setUser] = useState();
@@ -66,7 +67,6 @@ const CommentCard = ({ route, item, handleDeleteComment }) => {
           color={theme.colors.white}
         />
       </View>
-
       <View>
         <Typography
           style={styles.date}
@@ -76,6 +76,7 @@ const CommentCard = ({ route, item, handleDeleteComment }) => {
           color={theme.colors.white}
         />
       </View>
+      {hasBottomLine && <HorizontalLine color={theme.colors.lightGrey} />}
     </View>
   );
 };
@@ -84,18 +85,17 @@ CommentCard.propTypes = {
   route: PropTypes.object,
   item: PropTypes.object,
   handleDeleteComment: PropTypes.func,
+  hasBottomLine: PropTypes.bool,
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginLeft: 15,
-    marginRight: 15,
-    marginTop: 10,
+    marginHorizontal: theme.spacings.xs,
   },
   firstContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: theme.spacings.xxs,
     justifyContent: 'space-between',
   },
   secondContainer: {
@@ -103,9 +103,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  name: { marginLeft: 15 },
+  name: { marginLeft: theme.spacings.xs },
   rating: { flexDirection: 'row' },
-  comment: { marginBottom: 20 },
-  date: { marginTop: 30 },
+  comment: { marginBottom: theme.spacings.s },
+  date: { marginTop: theme.spacings.l },
 });
 export default CommentCard;
