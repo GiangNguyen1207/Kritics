@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 export const useMovieDetails = (movieId) => {
-  const [suggestedMovies, setSuggestedMovies] = useState([]);
   const [movieDetails, setMovieDetails] = useState({});
   const apiKey = process.env.apiKey;
 
@@ -11,7 +10,7 @@ export const useMovieDetails = (movieId) => {
       const response = await axios.get(
         `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${searchedName}&page=1`
       );
-      setSuggestedMovies(response.data.results.slice(0, 10));
+      return response.data.results.slice(0, 10);
     } catch (error) {
       console.log(error);
     }
@@ -32,5 +31,5 @@ export const useMovieDetails = (movieId) => {
     getMovieDetails();
   }, []);
 
-  return { suggestedMovies, movieDetails, searchMovies };
+  return { movieDetails, searchMovies };
 };

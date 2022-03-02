@@ -17,14 +17,14 @@ import SearchBar from '../../components/SearchBar';
 
 export default function StepOne({ navigation }) {
   const { top, bottom } = useSafeAreaInsets();
-  const { suggestedMovies, searchMovies } = useMovieDetails();
+  const { searchMovies } = useMovieDetails();
   const { mediaArray } = useMedia();
   const [movieName, setMovieName] = useState('');
   const [isMovieNameSelected, setIsMovieNameSelected] = useState(false);
   const [renderedMovies, setRenderedMovies] = useState([]);
 
   const handleSearchMovieName = async () => {
-    searchMovies(movieName);
+    const suggestedMovies = await searchMovies(movieName);
     setRenderedMovies(suggestedMovies);
   };
 
