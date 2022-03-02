@@ -1,4 +1,4 @@
-import { StyleSheet, FlatList, Pressable } from 'react-native';
+import { FlatList, Pressable } from 'react-native';
 import React, { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import SearchBar from '../components/SearchBar';
@@ -8,12 +8,11 @@ import MovieDetailsCard from '../components/MovieDetailsCard';
 import ScreenLayout from '../components/ScreenLayout';
 import ContentLayout from '../components/ContentLayout';
 import { theme } from '../themes';
+import Typography from '../components/Typography';
 
 const Search = ({ navigation }) => {
   const { top } = useSafeAreaInsets();
   const [search, setSearch] = useState('');
-  const [results, setResults] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('');
   const { searchMedia, searchResults } = useMedia();
 
   return (
@@ -30,29 +29,31 @@ const Search = ({ navigation }) => {
           onSearchSubmit={() => searchMedia(search)}
         />
 
-        {/* {errorMessage ? <Text>{errorMessage}</Text> : null} */}
-
-        <FlatList
-          data={searchResults}
-          keyExtractor={(item) => item.file_id.toString()}
-          renderItem={({ item }) => {
-            const details = JSON.parse(item.description);
-            return (
-              <Pressable
-                onPress={() => {
-                  navigation.navigate('MovieDetails', { file: item });
-                }}
-              >
-                <MovieDetailsCard
-                  movieDetails={details.movieDetails}
-                  hasBottomLine
-                  bottomLineColor={theme.colors.primary}
-                  hasReleaseYear
-                />
-              </Pressable>
-            );
-          }}
-        />
+        {searchResults.length > 0 ? (
+          <FlatList
+            data={searchResults}
+            keyExtractor={(item) => item.file_id.toString()}
+            renderItem={({ item }) => {
+              const details = JSON.parse(item.description);
+              return (
+                <Pressable
+                  onPress={() => {
+                    navigation.navigate('MovieDetails', { file: item });
+                  }}
+                >
+                  <MovieDetailsCard
+                    movieDetails={details.movieDetails}
+                    hasBottomLine
+                    bottomLineColor={theme.colors.primary}
+                    hasReleaseYear
+                  />
+                </Pressable>
+              );
+            }}
+          />
+        ) : (
+          <Typography text="No results found" variant="h4" />
+        )}
       </ContentLayout>
     </ScreenLayout>
   );
@@ -61,5 +62,4 @@ const Search = ({ navigation }) => {
 Search.propTypes = {
   navigation: PropTypes.object.isRequired,
 };
-const styles = StyleSheet.create({});
 export default Search;
