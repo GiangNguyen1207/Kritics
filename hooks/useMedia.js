@@ -5,12 +5,12 @@ import { baseUrl, appID } from '../utils/variables';
 import { auth } from '../utils/auth';
 import { doFetch } from '../utils/apiDoFetch';
 import { tagService } from '../services/TagService';
-import { useRating } from '../hooks/useRating';
+import { useCommentRating } from './useCommentRating';
 
 export const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { postRating } = useRating();
+  const { postRating } = useCommentRating();
 
   const loadMedia = async () => {
     try {

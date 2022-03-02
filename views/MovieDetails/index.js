@@ -6,7 +6,7 @@ import LottieView from 'lottie-react-native';
 
 import ScreenLayout from '../../components/ScreenLayout';
 import { theme } from '../../themes';
-import { useCommentRating } from '../../hooks/useComment';
+import { useCommentRating } from '../../hooks/useCommentRating';
 import ContentLayout from '../../components/ContentLayout';
 import NavBar from './NavBar';
 import MovieDetailsCard from '../../components/MovieDetailsCard';
@@ -33,10 +33,13 @@ const MovieDetails = ({ navigation, route }) => {
 
   useEffect(() => {
     getComments(file.file_id);
+  }, []);
+
+  useEffect(() => {
     const favouriteIdList = favouriteList.map((favourite) => favourite.file_id);
     if (favouriteIdList.includes(file.file_id)) setIsFavourte(true);
     else setIsFavourte(false);
-  }, [favouriteList, ratingAverage]);
+  }, [favouriteList]);
 
   return (
     <ScreenLayout style={{ paddingTop: top, paddingBottom: bottom }}>
@@ -64,7 +67,6 @@ const MovieDetails = ({ navigation, route }) => {
               deleteFavourite={() => deleteFavourite(file.file_id)}
               isFavourite={isFavourite}
             />
-
             <NavBar selected={selected} setSelected={setSelected} />
             {selected === MovieDetailsNavBar.Reviews ? (
               <FlatList
