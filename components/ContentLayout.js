@@ -10,13 +10,14 @@ const ContentLayout = ({
   hasHeader,
   headerTitle,
   onPressBack,
+  headerStyle,
   style,
 }) => {
   return (
     <View style={[styles.contentLayout, style]}>
       <View>
         {hasHeader && (
-          <View style={styles.row}>
+          <View style={[styles.row, headerStyle]}>
             <View style={styles.flex}>
               {onPressBack && <BackButton onPressBack={onPressBack} />}
             </View>
@@ -52,6 +53,7 @@ ContentLayout.propTypes = {
   hasHeader: PropTypes.bool.isRequired,
   headerTitle: PropTypes.string,
   onPressBack: PropTypes.func,
+  headerStyle: ViewPropTypes.style,
   style: ViewPropTypes.style,
 };
 

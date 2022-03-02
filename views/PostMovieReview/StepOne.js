@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import {
-  TextInput,
-  StyleSheet,
-  Pressable,
-  FlatList,
-  Alert,
-} from 'react-native';
+import { StyleSheet, Pressable, FlatList, Alert } from 'react-native';
 import * as Progress from 'react-native-progress';
 
 import ScreenLayout from '../../components/ScreenLayout';
@@ -19,23 +13,30 @@ import MovieDetailsCard from '../../components/MovieDetailsCard';
 import { PostReviewScreen } from '../../router/Maintab';
 import { useMovieDetails } from '../../hooks/useMovieDetails';
 import { useMedia } from '../../hooks/useMedia';
+import SearchBar from '../../components/SearchBar';
 
 export default function StepOne({ navigation }) {
   const { top, bottom } = useSafeAreaInsets();
   const { suggestedMovies, searchMovies } = useMovieDetails();
   const { mediaArray } = useMedia();
   const [movieName, setMovieName] = useState('');
+  const [isMovieNameSelected, setIsMovieNameSelected] = useState(false);
   const [renderedMovies, setRenderedMovies] = useState([]);
 
-  const handleSearchMovieName = async (searhedName) => {
-    setMovieName(searhedName);
-    searchMovies(searhedName);
+  const handleSearchMovieName = async () => {
+    searchMovies(movieName);
     setRenderedMovies(suggestedMovies);
   };
 
   const handleChooseMovieName = (selectedMovieName) => {
     setMovieName(selectedMovieName);
     setRenderedMovies([]);
+    setIsMovieNameSelected(true);
+  };
+
+  const handleSearchInputChange = (searchedName) => {
+    setIsMovieNameSelected(false);
+    setMovieName(searchedName);
   };
 
   const handleButtonSubmit = () => {
@@ -75,21 +76,20 @@ export default function StepOne({ navigation }) {
           borderColor={theme.colors.primary}
           style={styles.progressBar}
         />
-        <TextInput
-          autoCapitalize="none"
-          placeholder="Movie name"
-          placeholderTextColor="rgba(255, 255, 255, 0.5)"
-          onChangeText={(movieName) => handleSearchMovieName(movieName)}
-          value={movieName.includes('-') ? movieName.split('-')[0] : movieName}
-          style={styles.input}
+        <SearchBar
+          searchTerm={
+            movieName.includes('-') ? movieName.split('-')[0] : movieName
+          }
+          onSearchTermChange={(searchedName) =>
+            handleSearchInputChange(searchedName)
+          }
+          onSearchSubmit={handleSearchMovieName}
         />
         <FlatList
           data={renderedMovies}
           renderItem={({ item }) => (
             <Pressable
-              onPress={() =>
-                handleChooseMovieName(item.original_title + '-' + item.id)
-              }
+              onPress={() => handleChooseMovieName(item.title + '-' + item.id)}
             >
               <MovieDetailsCard movieDetails={item} hasBottomLine />
             </Pressable>
@@ -97,9 +97,9 @@ export default function StepOne({ navigation }) {
         />
         <Button
           title="Go to Step 2"
-          variant={movieName ? 'primary' : 'disabled'}
+          variant={isMovieNameSelected ? 'primary' : 'disabled'}
           onPress={handleButtonSubmit}
-          isDisabled={!movieName}
+          isDisabled={!isMovieNameSelected}
         />
       </ContentLayout>
     </ScreenLayout>
@@ -119,18 +119,13 @@ const styles = StyleSheet.create({
     marginTop: theme.spacings.Xs,
     marginBottom: theme.spacings.l,
   },
-  input: {
-    height: theme.spacings.xxl,
-    marginVertical: theme.spacings.xs,
-    borderWidth: 1,
-    borderColor: theme.colors.primary,
-    borderRadius: theme.spacings.Xs,
-    padding: theme.spacings.xxs,
-    color: theme.colors.white,
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-  },
+  // input: {
+  //   height: theme.spacings.xxl,
+  //   marginVertical: theme.spacings.xs,
+  //   borderWidth: 1,
+  //   borderColor: theme.colors.primary,
+  //   borderRadius: theme.spacings.Xs,
+  //   padding: theme.spacings.xxs,
+  //   color: theme.colors.white,
+  // },
 });

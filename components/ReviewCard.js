@@ -1,15 +1,16 @@
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Avatar } from 'react-native-paper';
+import { format } from 'date-fns';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 import { theme } from '../themes';
-import StarRating from 'react-native-star-rating';
 import Typography from './Typography';
 import PropTypes from 'prop-types';
 import { useUser } from '../services/AuthService';
 import { auth } from '../utils/auth';
-import { format } from 'date-fns';
 
-const ReviewCard = ({ route }) => {
+const ReviewCard = ({ route, handleDeleteComment }) => {
   const { file } = route.params;
   const fileDetails = JSON.parse(file.description);
   const { getUserById } = useUser();
@@ -26,8 +27,6 @@ const ReviewCard = ({ route }) => {
     }
   };
 
-  console.log(fileDetails);
-
   useEffect(() => {
     fetchReviewOwner();
   }, []);
@@ -36,28 +35,24 @@ const ReviewCard = ({ route }) => {
     <View style={styles.container}>
       <View style={styles.firstContainer}>
         <View style={styles.secondContainer}>
-          <Avatar.Image size={60} source={require('../assets/icon.png')} />
+          <Avatar.Image size={40} source={require('../assets/icon.png')} />
           <View style={styles.name}>
             <Typography
-              variant="h2"
+              variant="h3"
               fontWeight="500"
               text={reviewOwner.username}
               color={theme.colors.white}
             />
           </View>
         </View>
-        <View>
-          <StarRating
+        <Pressable onPress={() => handleDeleteComment(item.comment_id)}>
+          <Icon
             style={styles.rating}
-            disabled
-            maxStars={5}
-            starSize={14}
-            containerStyle={{ width: '17%' }}
-            rating={4}
-            emptyStarColor={theme.colors.white}
-            fullStarColor={theme.colors.white}
+            name={'trash'}
+            size={18}
+            color={theme.colors.white}
           />
-        </View>
+        </Pressable>
       </View>
       <View>
         <Typography
@@ -83,6 +78,7 @@ const ReviewCard = ({ route }) => {
 
 ReviewCard.propTypes = {
   route: PropTypes.object,
+  handleDeleteComment: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
