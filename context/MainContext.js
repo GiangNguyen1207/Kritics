@@ -6,9 +6,12 @@ const MainContext = React.createContext({});
 const MainProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
+  const [update, setUpdate] = useState(0);
 
   return (
-    <MainContext.Provider value={{ isLoggedIn, setIsLoggedIn, user, setUser }}>
+    <MainContext.Provider
+      value={{ update, setUpdate, isLoggedIn, setIsLoggedIn, user, setUser }}
+    >
       {children}
     </MainContext.Provider>
   );

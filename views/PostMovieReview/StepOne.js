@@ -14,7 +14,7 @@ import { PostReviewScreen } from '../../router/Maintab';
 import { useMovieDetails } from '../../hooks/useMovieDetails';
 import { useMedia } from '../../hooks/useMedia';
 import SearchBar from '../../components/SearchBar';
-import { useToastHandler } from '../../components/Toast';
+import { useToastHandler } from '../../context/ToastContext';
 
 export default function StepOne({ navigation }) {
   const { top, bottom } = useSafeAreaInsets();

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { doFetch } from '../utils/apiDoFetch';
 import { baseUrl } from '../utils/variables';
 import { auth } from '../utils/auth';
-import { useToastHandler } from '../components/Toast';
+import { useToastHandler } from '../context/ToastContext';
 
 export const useCommentRating = () => {
   const [comments, setComments] = useState([]);

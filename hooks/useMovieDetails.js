@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-import { useToastHandler } from '../components/Toast';
+import { useToastHandler } from '../context/ToastContext';
 
 export const useMovieDetails = (movieId) => {
   const [movieDetails, setMovieDetails] = useState({});

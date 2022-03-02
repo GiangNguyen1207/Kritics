@@ -15,7 +15,7 @@ import Button from '../../components/Button';
 import { useMedia } from '../../hooks/useMedia';
 import { mainTab } from '../../router/Maintab';
 import { useMovieDetails } from '../../hooks/useMovieDetails';
-import { useToastHandler } from '../../components/Toast';
+import { useToastHandler } from '../../context/ToastContext';
 
 export default function StepTwo({ navigation, route }) {
   const { movieName } = route.params;

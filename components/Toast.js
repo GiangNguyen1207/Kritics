@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useMemo } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -6,16 +6,6 @@ import PropTypes from 'prop-types';
 
 import Typography from '../components/Typography';
 import { theme } from '../themes';
-
-const ToastContext = React.createContext(undefined);
-
-export function useToastHandler() {
-  const value = useContext(ToastContext);
-  if (!value) {
-    throw new Error('Toast Provider is not in the render tree');
-  }
-  return value;
-}
 
 const Toast = ({ visible, message, type }) => {
   const { top } = useSafeAreaInsets();
@@ -55,43 +45,6 @@ const Toast = ({ visible, message, type }) => {
   );
 };
 
-export default function ToastProvider({ children }) {
-  const [visible, setVisible] = useState(false);
-  const [message, setMessage] = useState('');
-  const [type, setType] = useState('');
-
-  useEffect(() => {
-    let timeout;
-    if (visible) {
-      timeout = setTimeout(() => {
-        setVisible(false);
-      }, 2000);
-    }
-    return () => {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
-    };
-  }, [visible]);
-
-  const contextValue = useMemo(() => {
-    return {
-      show: (newMessage, type) => {
-        setVisible(true);
-        setMessage(newMessage);
-        setType(type);
-      },
-    };
-  }, []);
-
-  return (
-    <ToastContext.Provider value={contextValue}>
-      {children}
-      <Toast visible={visible} message={message} type={type} />
-    </ToastContext.Provider>
-  );
-}
-
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
@@ -115,6 +68,4 @@ Toast.propTypes = {
   type: PropTypes.string,
 };
 
-ToastProvider.propTypes = {
-  children: PropTypes.node,
-};
+export default Toast;

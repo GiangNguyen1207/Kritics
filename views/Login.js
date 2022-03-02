@@ -12,7 +12,7 @@ import Button from '../components/Button';
 import { useUser, useLogin } from '../services/AuthService';
 import ScreenLayout from '../components/ScreenLayout';
 import { auth } from '../utils/auth';
-import { useToastHandler } from '../components/Toast';
+import { useToastHandler } from '../context/ToastContext';
 
 const LoginSchema = yup.object({
   username: yup.string().required('Username required'),

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput, View, StyleSheet, Text, Alert } from 'react-native';
+import { TextInput, View, StyleSheet, Text } from 'react-native';
 import Typography from '../components/Typography';
 import Button from '../components/Button';
 import { theme } from '../themes';
@@ -8,7 +8,7 @@ import * as yup from 'yup';
 import PropTypes from 'prop-types';
 import { useUser } from '../services/AuthService';
 import ScreenLayout from '../components/ScreenLayout';
-import { useToastHandler } from '../components/Toast';
+import { useToastHandler } from '../context/ToastContext';
 
 const { postUser, checkUsername } = useUser();
 

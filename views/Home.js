@@ -3,7 +3,6 @@ import { StyleSheet, Animated, Image, Pressable } from 'react-native';
 import { useCollapsibleHeader } from 'react-navigation-collapsible';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
-
 import ScreenLayout from '../components/ScreenLayout';
 import { useMedia } from '../hooks/useMedia';
 import MovieCard from '../components/MovieCard';
