@@ -5,10 +5,14 @@ import { baseUrl, appID } from '../utils/variables';
 import { auth } from '../utils/auth';
 import { doFetch } from '../utils/apiDoFetch';
 import { tagService } from '../services/TagService';
+import { useCommentRating } from './useCommentRating';
 
 export const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { postRating } = useCommentRating();
+  const [searchStatus, setSearchStatus] = useState(false);
 
   const loadMedia = async () => {
     try {
@@ -31,7 +35,8 @@ export const useMedia = () => {
     }
   };
 
-  const postMedia = async (title, description, image, type) => {
+
+  const postMedia = async (title, description, image, type, rating) => {
     if (image) {
       setLoading(true);
       const formData = new FormData();
@@ -65,7 +70,9 @@ export const useMedia = () => {
           },
           token
         );
-        if (response.message === 'File uploaded' && tagResponse) {
+
+        const ratingResponse = await postRating(response.file_id, rating);
+        if (response && tagResponse && ratingResponse) {
           setLoading(false);
           return true;
         } else return false;
@@ -121,9 +128,25 @@ export const useMedia = () => {
     }
   };
 
+  const searchMedia = (searchTerm) => {
+    const searchResults = mediaArray.filter((media) =>
+      media.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setSearchResults(searchResults);
+    setSearchStatus(true);
+  };
+
   useEffect(() => {
     loadMedia();
   }, []);
 
-  return { mediaArray, postMedia, postAvatar, loading };
+  return {
+    mediaArray,
+    postMedia,
+    loading,
+    searchResults,
+    searchMedia,
+    searchStatus,
+    postAvatar,
+  };
 };

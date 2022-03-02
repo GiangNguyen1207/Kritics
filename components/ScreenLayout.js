@@ -24,7 +24,7 @@ const ScreenLayout = ({ type = 'view', children, style, ...rest }) => {
 
   if (type === 'scroll') {
     return (
-      <View style={{ backgroundColor: theme.colors.appBackground }}>
+      <View style={styles.container}>
         <KeyboardAwareScrollView
           enableAutomaticScroll
           extraHeight={100}
@@ -48,6 +48,10 @@ const ScreenLayout = ({ type = 'view', children, style, ...rest }) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.appBackground,
+  },
   viewLayout: {
     flex: 1,
     justifyContent: 'center',

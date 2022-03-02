@@ -53,7 +53,7 @@ const Login = ({ navigation }) => {
   }, []);
 
   return (
-    <ScreenLayout style={styles.container}>
+    <ScreenLayout style={styles.container} type="scroll">
       <Typography variant="h2" text="Login" color={theme.colors.primary} />
       <Formik
         validationSchema={LoginSchema}
@@ -125,6 +125,7 @@ Login.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: 'center',
   },
   textInput: {

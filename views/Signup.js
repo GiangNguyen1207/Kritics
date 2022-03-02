@@ -67,7 +67,7 @@ const Signup = ({ navigation }) => {
   };
 
   return (
-    <ScreenLayout style={styles.container}>
+    <ScreenLayout style={styles.container} type="scroll">
       <Typography variant="h2" text="Sign up" color={theme.colors.primary} />
       <Formik
         validationSchema={SignupSchema}
@@ -168,7 +168,7 @@ const Signup = ({ navigation }) => {
               title="Submit"
               onPress={handleSubmit}
               variant={isValid ? 'primary' : 'disabled'}
-              isDisable={!isValid}
+              isDisabled={!isValid}
             />
             <Button
               buttonStyle={{ marginTop: 15 }}
@@ -189,6 +189,7 @@ Signup.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: 'center',
   },
   textInput: {

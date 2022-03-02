@@ -20,9 +20,16 @@ const MovieCard = ({
   rating,
   handleFavouritePress,
   cardStyle,
+  navigation,
 }) => {
+  const title = item.title.split('-')[0];
   return (
-    <Pressable style={[styles.card, cardStyle]}>
+    <Pressable
+      style={[styles.card, cardStyle]}
+      onPress={() => {
+        navigation.navigate('MovieDetails', { file: item });
+      }}
+    >
       <Image
         source={{ uri: uploadsUrl + item.thumbnails.w160 }}
         style={styles.image}
@@ -41,7 +48,7 @@ const MovieCard = ({
       )}
       <Typography
         variant="h5"
-        text={item.title}
+        text={title.length > 12 ? `${title.substring(0, 12)}...` : title}
         color={theme.colors.primary}
         textStyle={styles.text}
       />
@@ -60,7 +67,7 @@ const MovieCard = ({
 
 const styles = StyleSheet.create({
   card: {
-    height: 200,
+    height: 220,
     width: Dimensions.get('window').width / 3 - theme.spacings.xs,
     justifyContent: 'center',
     alignItems: 'center',
@@ -83,10 +90,7 @@ const styles = StyleSheet.create({
   },
   text: {
     marginVertical: theme.spacings.Xs,
-  },
-  rating: {
-    bottom: 10,
-    left: 10,
+    height: theme.spacings.xs,
   },
 });
 
@@ -96,5 +100,6 @@ MovieCard.propTypes = {
   showTagIcon: PropTypes.bool.isRequired,
   handleFavouritePress: PropTypes.func,
   cardStyle: ViewPropTypes.style,
+  navigation: PropTypes.object.isRequired,
 };
 export default MovieCard;
