@@ -3,7 +3,6 @@ import { StyleSheet, Animated, Image, Pressable } from 'react-native';
 import { useCollapsibleHeader } from 'react-navigation-collapsible';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
-
 import ScreenLayout from '../components/ScreenLayout';
 import { useMedia } from '../hooks/useMedia';
 import MovieCard from '../components/MovieCard';
@@ -43,6 +42,40 @@ const Home = ({ navigation }) => {
           >
             <Icon name="search" color={theme.colors.white} size={20} />
           </Pressable>
+        ),
+        headerRight: () => (
+          <Icon
+            name="filter"
+            color={theme.colors.white}
+            size={20}
+            style={styles.filter}
+          />
+        ),
+      },
+      config: { collapsedColor: theme.colors.appBackground },
+    });
+
+  const { onScroll, containerPaddingTop, scrollIndicatorInsetTop } =
+    useCollapsibleHeader({
+      navigationOptions: {
+        headerStyle: {
+          height: 250,
+        },
+        headerShown: true,
+        headerBackground: (
+          <Image
+            source={require('../assets/ironman.jpeg')}
+            style={styles.overlay}
+          />
+        ),
+        headerTitle: '',
+        headerLeft: () => (
+          <Icon
+            name="search"
+            color={theme.colors.white}
+            size={20}
+            style={styles.search}
+          />
         ),
         headerRight: () => (
           <Icon

@@ -14,7 +14,11 @@ const service = () => {
     return await doFetch(baseUrl + 'tags/', options);
   };
 
-  return { postTag };
+  const getMediaByTag = async (tag) => {
+    return await doFetch(baseUrl + 'tags/' + tag);
+  };
+
+  return { postTag, getMediaByTag };
 };
 
 export const tagService = service();

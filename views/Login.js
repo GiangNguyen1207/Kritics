@@ -33,7 +33,7 @@ const Login = ({ navigation }) => {
       setUser(userData);
       setIsLoggedIn(true);
     } catch (e) {
-      console.error(e);
+      console.log(e);
     }
   };
 
