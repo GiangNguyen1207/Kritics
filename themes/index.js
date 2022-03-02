@@ -7,7 +7,10 @@ export const theme = {
     black: '#000000',
     darkGrey: '#474747',
     lightGrey: '#C4C4C4',
-    textHint: 'A8A6A6',
+    textHint: '#A8A6A6',
+    error: '#CC3300',
+    success: '#339900',
+    warning: '#FF9966',
   },
 
   spacings: {

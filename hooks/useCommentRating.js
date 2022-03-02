@@ -3,11 +3,13 @@ import { useState } from 'react';
 import { doFetch } from '../utils/apiDoFetch';
 import { baseUrl } from '../utils/variables';
 import { auth } from '../utils/auth';
+import { useToastHandler } from '../components/Toast';
 
 export const useCommentRating = () => {
   const [comments, setComments] = useState([]);
   const [ratingAverage, setRatingAverage] = useState(0);
   const [loading, setLoading] = useState(false);
+  const { show } = useToastHandler();
 
   const getComments = async (fileId) => {
     setLoading(true);
@@ -34,7 +36,7 @@ export const useCommentRating = () => {
       getAverageRating(ratings);
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      show(error.message, 'error');
     }
   };
 
@@ -51,7 +53,7 @@ export const useCommentRating = () => {
       };
       await doFetch(baseUrl + 'comments', options);
     } catch (error) {
-      console.error('post comment error', error);
+      show(error.message, 'error');
     }
   };
 
@@ -66,7 +68,7 @@ export const useCommentRating = () => {
       };
       await doFetch(baseUrl + 'comments/' + commentId, options);
     } catch (error) {
-      console.error('delete comment error', error);
+      show(error.message, 'error');
     }
   };
 
@@ -83,7 +85,7 @@ export const useCommentRating = () => {
       };
       return await doFetch(baseUrl + 'ratings', options);
     } catch (error) {
-      console.error('post rating error', error);
+      show(error.message, 'error');
     }
   };
 
@@ -99,7 +101,7 @@ export const useCommentRating = () => {
       };
       await doFetch(baseUrl + 'ratings/file/' + fileId, options);
     } catch (error) {
-      console.error('deleta rating error', error);
+      show(error.message, 'error');
     }
   };
 

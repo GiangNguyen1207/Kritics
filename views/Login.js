@@ -12,6 +12,7 @@ import Button from '../components/Button';
 import { useUser, useLogin } from '../services/AuthService';
 import ScreenLayout from '../components/ScreenLayout';
 import { auth } from '../utils/auth';
+import { useToastHandler } from '../components/Toast';
 
 const LoginSchema = yup.object({
   username: yup.string().required('Username required'),
@@ -22,6 +23,7 @@ const Login = ({ navigation }) => {
   const { getUserByToken } = useUser();
   const { setIsLoggedIn, setUser } = useContext(MainContext);
   const { postLogin } = useLogin();
+  const { show } = useToastHandler();
 
   const checkToken = async () => {
     const userToken = await auth.getUserTokenFromStorage();
@@ -33,18 +35,19 @@ const Login = ({ navigation }) => {
       setUser(userData);
       setIsLoggedIn(true);
     } catch (e) {
-      console.error(e);
+      show(e.message, 'error');
     }
   };
 
   const onSubmit = async (data) => {
     try {
       const userData = await postLogin(data);
+
       await auth.setUserTokenToStorage(userData.token);
       setUser(userData.user);
       setIsLoggedIn(true);
     } catch (error) {
-      console.error(error);
+      show(error.message, 'error');
     }
   };
 

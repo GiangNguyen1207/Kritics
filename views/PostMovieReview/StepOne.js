@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { StyleSheet, Pressable, FlatList, Alert } from 'react-native';
+import { StyleSheet, Pressable, FlatList } from 'react-native';
 import * as Progress from 'react-native-progress';
 
 import ScreenLayout from '../../components/ScreenLayout';
@@ -14,11 +14,13 @@ import { PostReviewScreen } from '../../router/Maintab';
 import { useMovieDetails } from '../../hooks/useMovieDetails';
 import { useMedia } from '../../hooks/useMedia';
 import SearchBar from '../../components/SearchBar';
+import { useToastHandler } from '../../components/Toast';
 
 export default function StepOne({ navigation }) {
   const { top, bottom } = useSafeAreaInsets();
   const { searchMovies } = useMovieDetails();
   const { mediaArray } = useMedia();
+  const { show } = useToastHandler();
   const [movieName, setMovieName] = useState('');
   const [isMovieNameSelected, setIsMovieNameSelected] = useState(false);
   const [renderedMovies, setRenderedMovies] = useState([]);
@@ -42,13 +44,14 @@ export default function StepOne({ navigation }) {
   const handleButtonSubmit = () => {
     const existingMovie = mediaArray.find((movie) => movie.title === movieName);
     if (!movieName) {
-      Alert.alert('Please choose a movie');
+      show('Please choose a movie', 'warning');
       return;
     }
 
     if (existingMovie) {
-      Alert.alert(
-        'This movie exists in the database. Please choose another one'
+      show(
+        'This movie exists in the database. Please choose another one',
+        'warning'
       );
       return;
     }
@@ -119,13 +122,4 @@ const styles = StyleSheet.create({
     marginTop: theme.spacings.Xs,
     marginBottom: theme.spacings.l,
   },
-  // input: {
-  //   height: theme.spacings.xxl,
-  //   marginVertical: theme.spacings.xs,
-  //   borderWidth: 1,
-  //   borderColor: theme.colors.primary,
-  //   borderRadius: theme.spacings.Xs,
-  //   padding: theme.spacings.xxs,
-  //   color: theme.colors.white,
-  // },
 });

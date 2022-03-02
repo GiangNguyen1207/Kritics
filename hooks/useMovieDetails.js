@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
+import { useToastHandler } from '../components/Toast';
+
 export const useMovieDetails = (movieId) => {
   const [movieDetails, setMovieDetails] = useState({});
+  const { show } = useToastHandler();
   const apiKey = process.env.apiKey;
 
   const searchMovies = async (searchedName) => {
@@ -12,7 +15,7 @@ export const useMovieDetails = (movieId) => {
       );
       return response.data.results.slice(0, 10);
     } catch (error) {
-      console.log(error);
+      show('Could not find a movie. Please try again later', 'error');
     }
   };
 
@@ -23,7 +26,7 @@ export const useMovieDetails = (movieId) => {
       );
       setMovieDetails(response.data);
     } catch (error) {
-      console.log(error);
+      show('Can not get movie details. Please try again later', 'error');
     }
   };
 

@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import {
-  View,
-  StyleSheet,
-  Image,
-  Pressable,
-  Dimensions,
-  Alert,
-} from 'react-native';
+import { View, StyleSheet, Image, Pressable, Dimensions } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import StarRating from 'react-native-star-rating';
 import PropTypes from 'prop-types';
@@ -22,11 +15,13 @@ import Button from '../../components/Button';
 import { useMedia } from '../../hooks/useMedia';
 import { mainTab } from '../../router/Maintab';
 import { useMovieDetails } from '../../hooks/useMovieDetails';
+import { useToastHandler } from '../../components/Toast';
 
 export default function StepTwo({ navigation, route }) {
   const { movieName } = route.params;
   const { top, bottom } = useSafeAreaInsets();
   const { postMedia, loading } = useMedia();
+  const { show } = useToastHandler();
   const { movieDetails } = useMovieDetails(movieName.split('-')[1]);
 
   const [rating, setRating] = useState(0);
@@ -53,12 +48,12 @@ export default function StepTwo({ navigation, route }) {
 
   const handleSubmit = async () => {
     if (!imageSelected) {
-      Alert.alert('Please select a file');
+      show('Please select a file', 'warning');
       return;
     }
 
     if (rating === 0) {
-      Alert.alert('Please rate the movie');
+      show('Please rate the movie', 'warning');
       return;
     }
 
@@ -72,6 +67,7 @@ export default function StepTwo({ navigation, route }) {
     );
 
     if (isSuccessful) {
+      show('Successfully uploading movie', 'success');
       navigation.reset({
         index: 0,
         routes: [{ name: mainTab.home }],
