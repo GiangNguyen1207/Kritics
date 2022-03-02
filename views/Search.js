@@ -33,23 +33,20 @@ const Search = ({ navigation }) => {
           <FlatList
             data={searchResults}
             keyExtractor={(item) => item.file_id.toString()}
-            renderItem={({ item }) => {
-              const details = JSON.parse(item.description);
-              return (
-                <Pressable
-                  onPress={() => {
-                    navigation.navigate('MovieDetails', { file: item });
-                  }}
-                >
-                  <MovieDetailsCard
-                    movieDetails={details.movieDetails}
-                    hasBottomLine
-                    bottomLineColor={theme.colors.primary}
-                    hasReleaseYear
-                  />
-                </Pressable>
-              );
-            }}
+            renderItem={({ item }) => (
+              <Pressable
+                onPress={() => {
+                  navigation.navigate('MovieDetails', { file: item });
+                }}
+              >
+                <MovieDetailsCard
+                  movieDetails={JSON.parse(item.description)}
+                  hasBottomLine
+                  bottomLineColor={theme.colors.primary}
+                  hasReleaseYear
+                />
+              </Pressable>
+            )}
           />
         ) : (
           <Typography text="No results found" variant="h4" />
