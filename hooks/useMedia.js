@@ -12,6 +12,7 @@ export const useMedia = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const { postRating } = useCommentRating();
+  const [searchStatus, setSearchStatus] = useState(false);
 
   const loadMedia = async () => {
     try {
@@ -85,11 +86,19 @@ export const useMedia = () => {
       media.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setSearchResults(searchResults);
+    setSearchStatus(true);
   };
 
   useEffect(() => {
     loadMedia();
   }, []);
 
-  return { mediaArray, postMedia, loading, searchResults, searchMedia };
+  return {
+    mediaArray,
+    postMedia,
+    loading,
+    searchResults,
+    searchMedia,
+    searchStatus,
+  };
 };

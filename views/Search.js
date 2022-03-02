@@ -13,7 +13,9 @@ import Typography from '../components/Typography';
 const Search = ({ navigation }) => {
   const { top } = useSafeAreaInsets();
   const [search, setSearch] = useState('');
-  const { searchMedia, searchResults } = useMedia();
+  const { searchMedia, searchResults, searchStatus } = useMedia();
+
+  console.log('search', searchStatus);
 
   return (
     <ScreenLayout style={{ paddingTop: top }}>
@@ -28,8 +30,7 @@ const Search = ({ navigation }) => {
           onSearchTermChange={setSearch}
           onSearchSubmit={() => searchMedia(search)}
         />
-
-        {searchResults.length > 0 ? (
+        {searchStatus && searchResults.length > 0 && (
           <FlatList
             data={searchResults}
             keyExtractor={(item) => item.file_id.toString()}
@@ -48,7 +49,8 @@ const Search = ({ navigation }) => {
               </Pressable>
             )}
           />
-        ) : (
+        )}
+        {searchStatus && searchResults.length === 0 && (
           <Typography text="No results found" variant="h4" />
         )}
       </ContentLayout>
