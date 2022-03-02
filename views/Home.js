@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, Animated, Image } from 'react-native';
+import { StyleSheet, Animated, Image, Pressable } from 'react-native';
 import { useCollapsibleHeader } from 'react-navigation-collapsible';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useFocusEffect } from '@react-navigation/native';
@@ -32,12 +32,15 @@ const Home = ({ navigation }) => {
         ),
         headerTitle: '',
         headerLeft: () => (
-          <Icon
-            name="search"
-            color={theme.colors.white}
-            size={20}
+          <Pressable
             style={styles.search}
-          />
+            navigation={navigation}
+            onPress={() => {
+              navigation.navigate('Search');
+            }}
+          >
+            <Icon name="search" color={theme.colors.white} size={20} />
+          </Pressable>
         ),
         headerRight: () => (
           <Icon

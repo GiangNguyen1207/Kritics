@@ -12,8 +12,12 @@ const MovieDetailsCard = ({
   hasDetails,
   hasBottomLine,
   bottomLineColor,
+  hasReleaseYear,
 }) => {
   const [selected, setSelected] = useState(false);
+  console.log(movieDetails);
+  const date = movieDetails.release_date;
+  const releaseYear = date.split('-')[0];
 
   return (
     <>
@@ -26,6 +30,8 @@ const MovieDetailsCard = ({
         />
         <View style={{ flex: 1 }}>
           <Typography text={movieDetails.title} variant="h2" />
+          {hasReleaseYear && <Typography text={releaseYear} variant="h2" />}
+
           {hasDetails && (
             <>
               <Typography
