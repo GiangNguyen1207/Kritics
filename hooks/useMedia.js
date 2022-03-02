@@ -32,21 +32,6 @@ export const useMedia = () => {
     }
   };
 
-  // const getMediaSearch = async (title) => {
-  //   console.log('title', title);
-  //   const token = await auth.getUserTokenFromStorage();
-  //   const options = {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'x-access-token': token,
-  //     },
-  //     body: JSON.stringify({ title: title }),
-  //   };
-  //   const response = await doFetch(`${baseUrl}media/search`, options);
-  //   console.log('res', response);
-  // };
-
   const postMedia = async (title, description, image, type) => {
     if (image) {
       setLoading(true);

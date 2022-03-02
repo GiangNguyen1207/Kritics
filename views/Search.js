@@ -16,17 +16,6 @@ const Search = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const { searchMedia, searchResults } = useMedia();
 
-  // const searchApi = async (search) => {
-  //   try {
-  //     const results = await getMediaSearch(search);
-  //     console.log('results', results);
-  //     setResults(results);
-  //     console.log('results', results);
-  //   } catch (error) {
-  //     setErrorMessage('Something went wrong!');
-  //   }
-  // };
-
   return (
     <ScreenLayout style={{ paddingTop: top }}>
       <ContentLayout
