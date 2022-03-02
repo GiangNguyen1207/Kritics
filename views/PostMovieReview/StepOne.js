@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import {
-  TextInput,
-  StyleSheet,
-  Pressable,
-  FlatList,
-  Alert,
-} from 'react-native';
+import { StyleSheet, Pressable, FlatList, Alert } from 'react-native';
 import * as Progress from 'react-native-progress';
 
 import ScreenLayout from '../../components/ScreenLayout';
@@ -19,6 +13,7 @@ import MovieDetailsCard from '../../components/MovieDetailsCard';
 import { PostReviewScreen } from '../../router/Maintab';
 import { useMovieDetails } from '../../hooks/useMovieDetails';
 import { useMedia } from '../../hooks/useMedia';
+import SearchBar from '../../components/SearchBar';
 
 export default function StepOne({ navigation }) {
   const { top, bottom } = useSafeAreaInsets();
@@ -28,17 +23,20 @@ export default function StepOne({ navigation }) {
   const [isMovieNameSelected, setIsMovieNameSelected] = useState(false);
   const [renderedMovies, setRenderedMovies] = useState([]);
 
-  const handleSearchMovieName = async (searhedName) => {
-    setMovieName(searhedName);
-    searchMovies(searhedName);
+  const handleSearchMovieName = async () => {
+    searchMovies(movieName);
     setRenderedMovies(suggestedMovies);
-    setIsMovieNameSelected(false);
   };
 
   const handleChooseMovieName = (selectedMovieName) => {
     setMovieName(selectedMovieName);
     setRenderedMovies([]);
     setIsMovieNameSelected(true);
+  };
+
+  const handleSearchInputChange = (searchedName) => {
+    setIsMovieNameSelected(false);
+    setMovieName(searchedName);
   };
 
   const handleButtonSubmit = () => {
@@ -78,13 +76,14 @@ export default function StepOne({ navigation }) {
           borderColor={theme.colors.primary}
           style={styles.progressBar}
         />
-        <TextInput
-          autoCapitalize="none"
-          placeholder="Movie name"
-          placeholderTextColor="rgba(255, 255, 255, 0.5)"
-          onChangeText={(movieName) => handleSearchMovieName(movieName)}
-          value={movieName.includes('-') ? movieName.split('-')[0] : movieName}
-          style={styles.input}
+        <SearchBar
+          searchTerm={
+            movieName.includes('-') ? movieName.split('-')[0] : movieName
+          }
+          onSearchTermChange={(searchedName) =>
+            handleSearchInputChange(searchedName)
+          }
+          onSearchSubmit={handleSearchMovieName}
         />
         <FlatList
           data={renderedMovies}
@@ -120,13 +119,13 @@ const styles = StyleSheet.create({
     marginTop: theme.spacings.Xs,
     marginBottom: theme.spacings.l,
   },
-  input: {
-    height: theme.spacings.xxl,
-    marginVertical: theme.spacings.xs,
-    borderWidth: 1,
-    borderColor: theme.colors.primary,
-    borderRadius: theme.spacings.Xs,
-    padding: theme.spacings.xxs,
-    color: theme.colors.white,
-  },
+  // input: {
+  //   height: theme.spacings.xxl,
+  //   marginVertical: theme.spacings.xs,
+  //   borderWidth: 1,
+  //   borderColor: theme.colors.primary,
+  //   borderRadius: theme.spacings.Xs,
+  //   padding: theme.spacings.xxs,
+  //   color: theme.colors.white,
+  // },
 });

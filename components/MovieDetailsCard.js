@@ -30,11 +30,9 @@ const MovieDetailsCard = ({
   style,
 }) => {
   const date = movieDetails.release_date;
+  const formattedReleaseDate =
+    date && format(new Date(movieDetails.release_date), 'dd-MM-yyyy');
   const releaseYear = date.split('-')[0];
-  const formattedReleaseDate = format(
-    new Date(movieDetails.release_date),
-    'dd-MM-yyyy'
-  );
 
   const handleFavouritePress = () => {
     if (isFavourite) deleteFavourite();
