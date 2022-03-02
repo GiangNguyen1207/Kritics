@@ -26,8 +26,11 @@ const MovieDetailsCard = ({
   addToFavourite,
   deleteFavourite,
   isFavourite,
+  hasReleaseYear,
   style,
 }) => {
+  const date = movieDetails.release_date;
+  const releaseYear = date.split('-')[0];
   const formattedReleaseDate = format(
     new Date(movieDetails.release_date),
     'dd-MM-yyyy'
@@ -53,11 +56,8 @@ const MovieDetailsCard = ({
           ]}
         />
         <View style={{ flex: 1 }}>
-          <Typography
-            text={movieDetails.title}
-            variant="h2"
-            fontWeight="bold"
-          />
+          <Typography text={movieDetails.title} variant="h2" />
+          {hasReleaseYear && <Typography text={releaseYear} variant="h2" />}
           {hasDetails && (
             <>
               <Typography
@@ -140,6 +140,7 @@ MovieDetailsCard.propTypes = {
   hasBottomLine: PropTypes.bool,
   bottomLineColor: PropTypes.string,
   uploadImageUrl: PropTypes.string,
+  hasReleaseYear: PropTypes.bool,
   addToFavourite: PropTypes.func,
   deleteFavourite: PropTypes.func,
   isFavourite: PropTypes.bool,
