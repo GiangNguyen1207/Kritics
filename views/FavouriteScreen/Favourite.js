@@ -1,24 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FlatList } from 'react-native';
-import MovieCard from '../components/MovieCard';
 import PropTypes from 'prop-types';
 import { useIsFocused } from '@react-navigation/native';
 
-import ScreenLayout from '../components/ScreenLayout';
-import ContentLayout from '../components/ContentLayout';
-import { mainTab } from '../router/Maintab';
-import { useFavourite } from '../hooks/useFavourite';
-import { theme } from '../themes';
-import { useMedia } from '../hooks/useMedia';
-import { useCommentRating } from '../hooks/useCommentRating';
+import MovieCard from '../../components/MovieCard';
+import { theme } from '../../themes';
+import { useMedia } from '../../hooks/useMedia';
+import { useCommentRating } from '../../hooks/useCommentRating';
 
-const Favourite = ({ navigation }) => {
-  const { top } = useSafeAreaInsets();
-  const isFocused = useIsFocused();
+const Favourite = ({ navigation, favouriteList }) => {
   const { mediaArray } = useMedia();
   const { getRating, getAverageRating } = useCommentRating();
-  const { favouriteList } = useFavourite(isFocused);
   const [refresh, setRefresh] = useState(false);
   const [renderedFavouriteList, setRenderedFavouriteList] = useState([]);
 
@@ -38,7 +30,6 @@ const Favourite = ({ navigation }) => {
             delete media.isFavourite;
           }
         }
-
         const filteredFavouriteMovies = mediaArray.filter(
           (movie) => movie.isFavourite
         );
@@ -48,33 +39,30 @@ const Favourite = ({ navigation }) => {
     }
 
     getFavouriteAndRating();
-  }, [mediaArray, favouriteList, isFocused]);
+  }, [mediaArray, favouriteList]);
 
   return (
-    <ScreenLayout style={{ paddingTop: top }}>
-      <ContentLayout hasHeader headerTitle={mainTab.favourite}>
-        <FlatList
-          numColumns={3}
-          extraData={refresh}
-          data={renderedFavouriteList}
-          keyExtractor={(item) => item.file_id.toString()}
-          renderItem={({ item }) => (
-            <MovieCard
-              rating={4}
-              item={item}
-              cardStyle={{ marginVertical: theme.spacings.xxs }}
-              navigation={navigation}
-              showTagIcon={false}
-            />
-          )}
+    <FlatList
+      numColumns={3}
+      extraData={refresh}
+      data={renderedFavouriteList}
+      keyExtractor={(item) => item.file_id.toString()}
+      renderItem={({ item }) => (
+        <MovieCard
+          rating={4}
+          item={item}
+          cardStyle={{ marginVertical: theme.spacings.xxs }}
+          navigation={navigation}
+          showTagIcon={false}
         />
-      </ContentLayout>
-    </ScreenLayout>
+      )}
+    />
   );
 };
 
 Favourite.propTypes = {
   navigation: PropTypes.object,
+  favouriteList: PropTypes.array,
 };
 
 export default Favourite;
