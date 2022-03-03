@@ -27,10 +27,7 @@ export const useCommentRating = () => {
         baseUrl + 'comments/file/' + fileId,
         options
       );
-      const ratings = await doFetch(
-        baseUrl + 'ratings/file/' + fileId,
-        options
-      );
+      const ratings = await getRating(fileId);
 
       setComments(comments);
       getAverageRating(ratings);
@@ -40,7 +37,7 @@ export const useCommentRating = () => {
     }
   };
 
-  const postComment = async (fileId) => {
+  const postComment = async (fileId, comment) => {
     try {
       const token = await auth.getUserTokenFromStorage();
       const options = {
@@ -49,7 +46,7 @@ export const useCommentRating = () => {
           'x-access-token': token,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ file_id: fileId }),
+        body: JSON.stringify({ file_id: fileId, comment }),
       };
       await doFetch(baseUrl + 'comments', options);
     } catch (error) {
@@ -72,6 +69,18 @@ export const useCommentRating = () => {
     }
   };
 
+  const getRating = async (fileId) => {
+    const token = await auth.getUserTokenFromStorage();
+    const options = {
+      method: 'GET',
+      headers: {
+        'x-access-token': token,
+        'Content-Type': 'application/json',
+      },
+    };
+    return await doFetch(baseUrl + 'ratings/file/' + fileId, options);
+  };
+
   const postRating = async (fileId, rating) => {
     try {
       const token = await auth.getUserTokenFromStorage();
@@ -85,6 +94,7 @@ export const useCommentRating = () => {
       };
       return await doFetch(baseUrl + 'ratings', options);
     } catch (error) {
+      console.log(error);
       show(error.message, 'error');
     }
   };
@@ -118,6 +128,7 @@ export const useCommentRating = () => {
     postComment,
     deleteComment,
     loading,
+    getRating,
     postRating,
     deleteRating,
   };
