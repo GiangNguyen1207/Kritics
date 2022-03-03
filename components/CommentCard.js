@@ -1,6 +1,5 @@
-import { View, StyleSheet, Pressable } from 'react-native';
+import { View, StyleSheet, Pressable, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Avatar } from 'react-native-paper';
 import { theme } from '../themes';
 import Typography from './Typography';
 import PropTypes from 'prop-types';
@@ -9,19 +8,29 @@ import { useUser } from '../services/AuthService';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { format } from 'date-fns';
 import HorizontalLine from './HorizontalLine';
+import { tagService } from '../services/TagService';
+import { uploadsUrl } from '../utils/variables';
 
 const CommentCard = ({ route, item, handleDeleteComment, hasBottomLine }) => {
   const { file } = route.params;
   const { getUserById, getUserByToken } = useUser();
   const [user, setUser] = useState();
   const [isOwner, setIsOwner] = useState(false);
+  const [avatar, setAvatar] = useState('http://placekitten.com/640');
 
-  const getUser = async () => {
+  const getUserAndAvatar = async () => {
     try {
       if (item) {
         const token = await auth.getUserTokenFromStorage();
         const logginUser = await getUserByToken(token);
         const user = await getUserById(item.user_id, token);
+        const avatarArray = await tagService.getMediaByTag(
+          'avatar_' + user.user_id
+        );
+        const avatar = avatarArray.pop();
+        if (avatar) {
+          setAvatar(uploadsUrl + avatar.filename);
+        }
         if (logginUser.user_id === item.user_id) setIsOwner(true);
         setUser(user);
       }
@@ -29,15 +38,16 @@ const CommentCard = ({ route, item, handleDeleteComment, hasBottomLine }) => {
       console.log('get user error', error);
     }
   };
+
   useEffect(() => {
-    getUser();
+    getUserAndAvatar();
   }, []);
 
   return (
     <View style={styles.container}>
       <View style={styles.firstContainer}>
         <View style={styles.secondContainer}>
-          <Avatar.Image size={40} source={require('../assets/icon.png')} />
+          <Image style={styles.avatar} source={{ uri: avatar }} />
           <View style={styles.name}>
             <Typography
               variant="h3"
@@ -107,5 +117,10 @@ const styles = StyleSheet.create({
   rating: { flexDirection: 'row' },
   comment: { marginBottom: theme.spacings.s },
   date: { marginTop: theme.spacings.l },
+  avatar: {
+    width: theme.spacings.xxxl,
+    height: theme.spacings.xxxl,
+    borderRadius: 50,
+  },
 });
 export default CommentCard;
