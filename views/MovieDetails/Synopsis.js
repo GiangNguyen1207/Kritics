@@ -51,6 +51,7 @@ Synopsis.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: theme.spacings.xs,
     paddingHorizontal: theme.spacings.s,
   },
   text: {

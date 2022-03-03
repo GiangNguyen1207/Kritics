@@ -55,7 +55,6 @@ const NavBar = ({ selected, setSelected }) => {
 
 const styles = StyleSheet.create({
   bar: {
-    marginVertical: theme.spacings.xs,
     backgroundColor: theme.colors.darkGrey,
     flexDirection: 'row',
     justifyContent: 'space-around',

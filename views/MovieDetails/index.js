@@ -1,13 +1,11 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { StyleSheet, FlatList, Pressable } from 'react-native';
+import { StyleSheet, FlatList, Pressable, ImageBackground } from 'react-native';
 import PropTypes from 'prop-types';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import LottieView from 'lottie-react-native';
 
 import ScreenLayout from '../../components/ScreenLayout';
 import { theme } from '../../themes';
 import { useCommentRating } from '../../hooks/useCommentRating';
-import ContentLayout from '../../components/ContentLayout';
 import NavBar from './NavBar';
 import MovieDetailsCard from '../../components/MovieDetailsCard';
 import { MovieDetailsNavBar } from './NavBar';
@@ -16,9 +14,10 @@ import CommentCard from '../../components/CommentCard';
 import { useFavourite } from '../../hooks/useFavourite';
 import Typography from '../../components/Typography';
 import WriteReview from './WriteReview';
+import MovieDetailsHeader from './MovieDetailsHeader';
+import { View } from 'react-native-animatable';
 
 const MovieDetails = ({ navigation, route }) => {
-  const { top } = useSafeAreaInsets();
   const { file } = route.params;
   const fileDetails = JSON.parse(file.description);
   const { getComments, deleteComment, loading, comments, ratingAverage } =
@@ -49,21 +48,25 @@ const MovieDetails = ({ navigation, route }) => {
   }, []);
 
   return (
-    <ScreenLayout style={{ paddingTop: top }}>
-      <ContentLayout
-        hasHeader
-        headerTitle="Details"
-        onPressBack={() => navigation.goBack()}
-        headerStyle={styles.headerStyle}
-      >
-        {loading ? (
-          <LottieView
-            source={require('../../assets/lottie/loading.json')}
-            autoPlay
-            loop
-          />
-        ) : (
-          <>
+    <>
+      {loading ? (
+        <LottieView
+          source={require('../../assets/lottie/loading.json')}
+          autoPlay
+          loop
+        />
+      ) : (
+        <>
+          <ImageBackground
+            source={{
+              uri:
+                'https://image.tmdb.org/t/p/w500' + fileDetails.backdrop_path,
+            }}
+            resizeMode="cover"
+            style={{ flex: 0.5 }}
+          >
+            <MovieDetailsHeader navigation={navigation} />
+            <View style={styles.overlay} />
             <MovieDetailsCard
               movieDetails={fileDetails}
               hasDetails
@@ -74,6 +77,8 @@ const MovieDetails = ({ navigation, route }) => {
               deleteFavourite={() => deleteFavourite(file.file_id)}
               isFavourite={isFavourite}
             />
+          </ImageBackground>
+          <ScreenLayout style={{ flex: 1 }}>
             <NavBar selected={selected} setSelected={setSelected} />
             {selected === MovieDetailsNavBar.Reviews ? (
               <FlatList
@@ -93,24 +98,24 @@ const MovieDetails = ({ navigation, route }) => {
             ) : (
               <Synopsis movieDetails={fileDetails} />
             )}
-          </>
-        )}
-        <Pressable style={styles.box} onPress={handlePresentModalPress}>
-          <Typography
-            text="Write a quick review"
-            variant="h3"
-            color={theme.colors.primary}
-            fontWeight="500"
-          />
-        </Pressable>
-        <WriteReview
-          ref={bottomSheetModalRef}
-          file={file}
-          refresh={refresh}
-          setRefresh={setRefresh}
-        />
-      </ContentLayout>
-    </ScreenLayout>
+            <Pressable style={styles.box} onPress={handlePresentModalPress}>
+              <Typography
+                text="Write a quick review"
+                variant="h3"
+                color={theme.colors.primary}
+                fontWeight="500"
+              />
+            </Pressable>
+          </ScreenLayout>
+        </>
+      )}
+      <WriteReview
+        ref={bottomSheetModalRef}
+        file={file}
+        refresh={refresh}
+        setRefresh={setRefresh}
+      />
+    </>
   );
 };
 
@@ -120,21 +125,31 @@ MovieDetails.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  headerStyle: {
-    paddingHorizontal: theme.spacings.s,
-  },
   container: {
     marginHorizontal: theme.spacings.s,
-    marginTop: theme.spacings.m,
+    marginTop: theme.spacings.xs,
   },
   list: {
     height: 200,
+    paddingTop: theme.spacings.xs,
   },
   box: {
     height: 60,
     backgroundColor: theme.colors.darkGrey,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flex: 1,
+    backgroundColor: theme.colors.black,
+    opacity: 0.85,
+    elevation: 1,
   },
 });
 
