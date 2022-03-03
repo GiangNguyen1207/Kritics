@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 import PropTypes from 'prop-types';
-import { useIsFocused } from '@react-navigation/native';
 
 import MovieCard from '../../components/MovieCard';
 import { theme } from '../../themes';
