@@ -17,7 +17,6 @@ import { uploadsUrl } from '../utils/variables';
 const MovieCard = ({
   item,
   showTagIcon,
-  rating,
   handleFavouritePress,
   cardStyle,
   navigation,
@@ -57,7 +56,7 @@ const MovieCard = ({
         maxStars={5}
         starSize={12}
         containerStyle={{ width: '50%' }}
-        rating={rating}
+        rating={item.averageRating}
         emptyStarColor={theme.colors.white}
         fullStarColor={theme.colors.white}
       />
@@ -96,7 +95,6 @@ const styles = StyleSheet.create({
 
 MovieCard.propTypes = {
   item: PropTypes.object.isRequired,
-  rating: PropTypes.number.isRequired,
   showTagIcon: PropTypes.bool.isRequired,
   handleFavouritePress: PropTypes.func,
   cardStyle: ViewPropTypes.style,

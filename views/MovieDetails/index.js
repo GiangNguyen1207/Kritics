@@ -34,8 +34,8 @@ const MovieDetails = ({ navigation, route }) => {
     setRefresh(!refresh);
   };
 
-  useEffect(async () => {
-    await getComments(file.file_id);
+  useEffect(() => {
+    getComments(file.file_id);
   }, [refresh]);
 
   useEffect(() => {
