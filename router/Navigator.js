@@ -5,7 +5,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { mainTab, PostReviewScreen } from './Maintab';
 import Home from '../views/Home';
-import Favourite from '../views/Favourite';
+import Favourite from '../views/Favourite/Favourite';
+
 import Profile from '../views/Profile';
 import BottomNavBar from '../components/BottomNavBar';
 import Login from '../views/Login';

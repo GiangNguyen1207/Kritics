@@ -1,16 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FlatList } from 'react-native';
-import MovieCard from '../components/MovieCard';
+import MovieCard from '../../components/MovieCard';
 import PropTypes from 'prop-types';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 
-import ScreenLayout from '../components/ScreenLayout';
-import ContentLayout from '../components/ContentLayout';
-import { mainTab } from '../router/Maintab';
-import { useFavourite } from '../hooks/useFavourite';
-import { theme } from '../themes';
-import { useMedia } from '../hooks/useMedia';
+import ScreenLayout from '../../components/ScreenLayout';
+import ContentLayout from '../../components/ContentLayout';
+import { mainTab } from '../../router/Maintab';
+import { useFavourite } from '../../hooks/useFavourite';
+import { theme } from '../../themes';
+import { useMedia } from '../../hooks/useMedia';
 
 const Favourite = ({ navigation }) => {
   const { top } = useSafeAreaInsets();
