@@ -10,6 +10,7 @@ import * as yup from 'yup';
 import { useUser } from '../services/AuthService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MainContext } from '../context/MainContext';
+import { useToastHandler } from '../context/ToastContext';
 
 const { putUser, checkUsername } = useUser();
 
@@ -34,19 +35,18 @@ const EditSchema = yup.object({
 
 const EditProfileModal = ({ modalVisible, setModalVisible }) => {
   const { user, setUser } = useContext(MainContext);
+  const { show } = useToastHandler();
 
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       const userData = await putUser(data, userToken);
-      console.log('edit profile onSubmit', userData);
       if (userData) {
         setUser(data);
         setModalVisible(false);
       }
     } catch (error) {
-      console.error(error);
+      show(error.message, 'error');
     }
   };
 

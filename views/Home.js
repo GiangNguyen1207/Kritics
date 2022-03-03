@@ -55,40 +55,6 @@ const Home = ({ navigation }) => {
       config: { collapsedColor: theme.colors.appBackground },
     });
 
-  const { onScroll, containerPaddingTop, scrollIndicatorInsetTop } =
-    useCollapsibleHeader({
-      navigationOptions: {
-        headerStyle: {
-          height: 250,
-        },
-        headerShown: true,
-        headerBackground: (
-          <Image
-            source={require('../assets/ironman.jpeg')}
-            style={styles.overlay}
-          />
-        ),
-        headerTitle: '',
-        headerLeft: () => (
-          <Icon
-            name="search"
-            color={theme.colors.white}
-            size={20}
-            style={styles.search}
-          />
-        ),
-        headerRight: () => (
-          <Icon
-            name="filter"
-            color={theme.colors.white}
-            size={20}
-            style={styles.filter}
-          />
-        ),
-      },
-      config: { collapsedColor: theme.colors.appBackground },
-    });
-
   const handleFavourite = (fileId, isFavourite) => {
     if (isFavourite) deleteFavourite(fileId);
     else addToFavourite(fileId);

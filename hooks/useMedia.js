@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Alert } from 'react-native';
 
 import { baseUrl, appID } from '../utils/variables';
 import { auth } from '../utils/auth';
 import { doFetch } from '../utils/apiDoFetch';
 import { tagService } from '../services/TagService';
 import { useCommentRating } from './useCommentRating';
+import { useToastHandler } from '../context/ToastContext';
 
 export const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
@@ -13,12 +13,13 @@ export const useMedia = () => {
   const [loading, setLoading] = useState(false);
   const { postRating } = useCommentRating();
   const [searchStatus, setSearchStatus] = useState(false);
+  const { show } = useToastHandler();
 
   const loadMedia = async () => {
     try {
       const response = await fetch(`${baseUrl}tags/${appID}`);
       if (!response.ok) {
-        throw Error(response.statusText);
+        show(response.statusText, 'error');
       }
       const json = await response.json();
       const media = await Promise.all(
@@ -31,10 +32,9 @@ export const useMedia = () => {
 
       setMediaArray(media);
     } catch (error) {
-      console.log(error);
+      show(error.message, 'error');
     }
   };
-
 
   const postMedia = async (title, description, image, type, rating) => {
     if (image) {
@@ -78,7 +78,7 @@ export const useMedia = () => {
         } else return false;
       } catch (error) {
         setLoading(false);
-        Alert.alert(error.message);
+        show(error.message, 'error');
       }
     }
   };

@@ -21,6 +21,7 @@ import DividerLine from '../components/DividerLine';
 import AddAvatarModal from '../components/AddAvatarModal';
 import { tagService } from '../services/TagService';
 import { uploadsUrl } from '../utils/variables';
+import { useToastHandler } from '../context/ToastContext';
 
 const Profile = () => {
   const { setIsLoggedIn, user, update } = useContext(MainContext);
@@ -29,6 +30,7 @@ const Profile = () => {
   const [editProfileVisible, setEditProfileVisible] = useState(false);
   const [changePasswordVisible, setChangePasswordVisible] = useState(false);
   const [addAvatarVisible, setAddAvatarVisible] = useState(false);
+  const { show } = useToastHandler();
 
   const fetchAvatar = async () => {
     try {
@@ -38,7 +40,7 @@ const Profile = () => {
       const avatar = avatarArray.pop();
       setAvatar(uploadsUrl + avatar.filename);
     } catch (error) {
-      console.log(error.message);
+      show(error.message, 'error');
     }
   };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput, View, StyleSheet, Text, Alert } from 'react-native';
+import { TextInput, View, StyleSheet, Text } from 'react-native';
 import Typography from '../components/Typography';
 import Button from '../components/Button';
 import { theme } from '../themes';
@@ -8,6 +8,7 @@ import * as yup from 'yup';
 import PropTypes from 'prop-types';
 import { useUser } from '../services/AuthService';
 import ScreenLayout from '../components/ScreenLayout';
+import { useToastHandler } from '../context/ToastContext';
 
 const { postUser, checkUsername } = useUser();
 
@@ -52,17 +53,17 @@ const SignupSchema = yup.object({
 });
 
 const Signup = ({ navigation }) => {
+  const { show } = useToastHandler();
   const onSubmit = async (data) => {
     try {
       delete data.confirmPassword;
       const userData = await postUser(data);
-      console.log('register onSubmit', userData);
       if (userData) {
-        Alert.alert('Success', 'User created successfully.');
+        show('User created successfully', 'success');
         navigation.navigate('Login');
       }
     } catch (error) {
-      console.error(error);
+      show(error.message, 'error');
     }
   };
 

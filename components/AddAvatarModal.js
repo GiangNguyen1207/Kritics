@@ -8,10 +8,12 @@ import PropTypes from 'prop-types';
 import { useMedia } from '../hooks/useMedia';
 import Button from './Button';
 import { MainContext } from '../context/MainContext';
+import { useToastHandler } from '../context/ToastContext';
 
 const AddAvatarModal = ({ modalVisible, setModalVisible }) => {
   const { user, setUpdate, update } = useContext(MainContext);
   const { postAvatar } = useMedia();
+  const { show } = useToastHandler();
   const [imageSelected, setImageSelected] = useState(false);
   const [type, setType] = useState('image');
   const [image, setImage] = useState(
@@ -35,13 +37,12 @@ const AddAvatarModal = ({ modalVisible, setModalVisible }) => {
 
   const onSubmit = async () => {
     if (!imageSelected) {
-      Alert.alert('Upload failed', 'No image selected.');
+      show('Upload failed. Please select an image', 'error');
       return;
     }
 
     try {
       const response = await postAvatar(image, type, user.user_id);
-      console.log('upload response', response);
       response &&
         Alert.alert('Avatar', 'Avatar uploaded successfully', [
           {

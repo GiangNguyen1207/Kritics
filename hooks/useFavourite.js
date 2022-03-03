@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react';
 import { doFetch } from '../utils/apiDoFetch';
 import { baseUrl } from '../utils/variables';
 import { auth } from '../utils/auth';
+import { useToastHandler } from '../context/ToastContext';
 
 export const useFavourite = (isFocused) => {
   const [favouriteList, setFavouriteList] = useState([]);
+  const { show } = useToastHandler();
 
   const getFavouriteList = async () => {
     try {
@@ -18,8 +20,7 @@ export const useFavourite = (isFocused) => {
       setFavouriteList(json);
       return json;
     } catch (error) {
-      // TODO: alert error
-      console.log(error);
+      show(error.message, 'error');
     }
   };
 
@@ -37,8 +38,7 @@ export const useFavourite = (isFocused) => {
       await doFetch(baseUrl + 'favourites', options);
       await updateFavouriteList();
     } catch (error) {
-      // TODO: alert error
-      console.log(error);
+      show(error.message, 'error');
     }
   };
 
@@ -56,8 +56,7 @@ export const useFavourite = (isFocused) => {
       await doFetch(baseUrl + `favourites/file/${fileId}`, options);
       await updateFavouriteList();
     } catch (error) {
-      // TODO: alert error
-      console.log(error);
+      show(error.message, 'error');
     }
   };
 
@@ -66,8 +65,7 @@ export const useFavourite = (isFocused) => {
       const favouriteList = await getFavouriteList();
       setFavouriteList(favouriteList);
     } catch (error) {
-      // TODO: alert error
-      console.log(error);
+      show(error.message, 'error');
     }
   };
 

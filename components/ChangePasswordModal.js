@@ -9,6 +9,7 @@ import ContentLayout from '../components/ContentLayout';
 import * as yup from 'yup';
 import { useUser } from '../services/AuthService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useToastHandler } from '../context/ToastContext';
 
 const { putUser } = useUser();
 
@@ -27,6 +28,8 @@ const EditSchema = yup.object({
 });
 
 const ChangePasswordModal = ({ modalVisible, setModalVisible }) => {
+  const { show } = useToastHandler();
+
   const onSubmit = async (data) => {
     try {
       delete data.confirmPassword;
@@ -35,18 +38,17 @@ const ChangePasswordModal = ({ modalVisible, setModalVisible }) => {
       }
       const userToken = await AsyncStorage.getItem('userToken');
       const userData = await putUser(data, userToken);
-      console.log('change password onSubmit', userData);
       if (userData) {
         setModalVisible(false);
       }
     } catch (error) {
-      console.error(error);
+      show(error.message, 'error');
     }
   };
 
   return (
-    <Modal visible={modalVisible}>
-      <ScreenLayout style={{}}>
+    <Modal visible={modalVisible} style={{}}>
+      <ScreenLayout>
         <ContentLayout
           hasHeader
           headerTitle="Change password"
