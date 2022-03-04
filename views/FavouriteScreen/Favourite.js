@@ -8,18 +8,18 @@ import { useMedia } from '../../hooks/useMedia';
 import { useCommentRating } from '../../hooks/useCommentRating';
 
 const Favourite = ({ navigation, favouriteList }) => {
-  const { mediaArray } = useMedia();
+  const { sortedMediaByTitle } = useMedia();
   const { getRating, getAverageRating } = useCommentRating();
   const [refresh, setRefresh] = useState(false);
   const [renderedFavouriteList, setRenderedFavouriteList] = useState([]);
 
   useEffect(() => {
     async function getFavouriteAndRating() {
-      if (mediaArray && favouriteList) {
+      if (sortedMediaByTitle && favouriteList) {
         const favouriteFileIdList = favouriteList.map(
           (favourite) => favourite.file_id
         );
-        for (const media of mediaArray) {
+        for (const media of sortedMediaByTitle) {
           const ratings = await getRating(media.file_id);
           const averageRating = getAverageRating(ratings);
           Object.assign(media, { averageRating });
@@ -29,7 +29,7 @@ const Favourite = ({ navigation, favouriteList }) => {
             delete media.isFavourite;
           }
         }
-        const filteredFavouriteMovies = mediaArray.filter(
+        const filteredFavouriteMovies = sortedMediaByTitle.filter(
           (movie) => movie.isFavourite
         );
         setRenderedFavouriteList(filteredFavouriteMovies);
@@ -38,7 +38,7 @@ const Favourite = ({ navigation, favouriteList }) => {
     }
 
     getFavouriteAndRating();
-  }, [mediaArray, favouriteList]);
+  }, [sortedMediaByTitle, favouriteList]);
 
   return (
     <FlatList

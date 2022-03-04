@@ -31,8 +31,10 @@ export const useMovieDetails = (movieId) => {
   };
 
   useEffect(() => {
-    getMovieDetails();
-  }, []);
+    if (movieId) {
+      getMovieDetails();
+    }
+  }, [movieId]);
 
   return { movieDetails, searchMovies };
 };

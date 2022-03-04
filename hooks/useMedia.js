@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import _ from 'lodash';
 
 import { baseUrl, appID } from '../utils/variables';
 import { auth } from '../utils/auth';
@@ -9,6 +10,8 @@ import { useToastHandler } from '../context/ToastContext';
 
 export const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
+  const [sortedMediaByDate, setSortedMediaByDate] = useState([]);
+  const [sortedMediaByTitle, setSortedMediaByTitle] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const { postRating } = useCommentRating();
@@ -30,6 +33,16 @@ export const useMedia = () => {
         })
       );
 
+      const sortedMediaByDate = _.orderBy(
+        media,
+        [(el) => new Date(el.time_added)],
+        ['desc']
+      );
+
+      const sortedMediaByTitle = _.orderBy(media, ['title'], ['asc']);
+
+      setSortedMediaByDate(sortedMediaByDate);
+      setSortedMediaByTitle(sortedMediaByTitle);
       setMediaArray(media);
     } catch (error) {
       show(error.message, 'error');
@@ -123,7 +136,7 @@ export const useMedia = () => {
         } else return false;
       } catch (error) {
         setLoading(false);
-        Alert.alert(error.message);
+        show(error.message, 'error');
       }
     }
   };
@@ -142,6 +155,8 @@ export const useMedia = () => {
 
   return {
     mediaArray,
+    sortedMediaByDate,
+    sortedMediaByTitle,
     postMedia,
     loading,
     searchResults,
