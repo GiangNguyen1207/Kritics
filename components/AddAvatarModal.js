@@ -43,19 +43,13 @@ const AddAvatarModal = ({ modalVisible, setModalVisible }) => {
 
     try {
       const response = await postAvatar(image, type, user.user_id);
-      response &&
-        Alert.alert('Avatar', 'Avatar uploaded successfully', [
-          {
-            text: 'OK',
-            onPress: () => {
-              setUpdate(update + 1);
-              setModalVisible(false);
-            },
-            style: 'default',
-          },
-        ]);
+      if (response) {
+        show('Avatar uploaded successfully', 'success');
+        setUpdate(update + 1);
+        setModalVisible(false);
+      }
     } catch (error) {
-      console.error(error);
+      show(error.message, 'error');
     }
   };
 

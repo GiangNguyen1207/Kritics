@@ -90,7 +90,7 @@ export default function StepOne({ navigation }) {
         />
         <FlatList
           data={renderedMovies}
-          keyExtractor={(item) => item.file_id.toString()}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <Pressable
               onPress={() => handleChooseMovieName(item.title + '-' + item.id)}

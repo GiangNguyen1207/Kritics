@@ -55,7 +55,6 @@ const MovieCard = ({
         disabled
         maxStars={5}
         starSize={12}
-        containerStyle={{ width: '50%' }}
         rating={item.averageRating}
         emptyStarColor={theme.colors.white}
         fullStarColor={theme.colors.white}
@@ -88,8 +87,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   text: {
-    marginVertical: theme.spacings.Xs,
-    height: theme.spacings.xs,
+    marginTop: theme.spacings.Xs,
   },
 });
 
