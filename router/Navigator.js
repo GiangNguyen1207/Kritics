@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { mainTab, PostReviewScreen } from './Maintab';
-import Home from '../views/Home';
+import Home from '../views/Homescreen';
 import Favourite from '../views/FavouriteScreen';
 import Profile from '../views/Profile';
 import BottomNavBar from '../components/BottomNavBar';
@@ -15,6 +15,7 @@ import Search from '../views/Search';
 import { MainContext } from '../context/MainContext';
 import StepOne from '../views/PostMovieReview/StepOne';
 import StepTwo from '../views/PostMovieReview/StepTwo';
+import Filter from '../views/Filter';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -61,6 +62,16 @@ const StackScreen = () => {
             component={MovieDetails}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="Search"
+            component={Search}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Filter"
+            component={Filter}
+            options={{ headerShown: false }}
+          />
         </>
       ) : (
         <>
@@ -76,11 +87,6 @@ const StackScreen = () => {
           />
         </>
       )}
-      <Stack.Screen
-        name="Search"
-        component={Search}
-        options={{ headerShown: false }}
-      />
     </Stack.Navigator>
   );
 };

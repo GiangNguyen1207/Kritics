@@ -15,8 +15,6 @@ const Search = ({ navigation }) => {
   const [search, setSearch] = useState('');
   const { searchMedia, searchResults, searchStatus } = useMedia();
 
-  console.log('search', searchStatus);
-
   return (
     <ScreenLayout style={{ paddingTop: top }}>
       <ContentLayout

@@ -2,14 +2,16 @@ import React, { useCallback, useState } from 'react';
 import { StyleSheet, Animated, Image, Pressable } from 'react-native';
 import { useCollapsibleHeader } from 'react-navigation-collapsible';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useFocusEffect, useIsFocused } from '@react-navigation/native';
-import ScreenLayout from '../components/ScreenLayout';
-import { useMedia } from '../hooks/useMedia';
-import MovieCard from '../components/MovieCard';
-import { theme } from '../themes';
-import { useFavourite } from '../hooks/useFavourite';
 import PropTypes from 'prop-types';
-import { useCommentRating } from '../hooks/useCommentRating';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+
+import ScreenLayout from '../../components/ScreenLayout';
+import MovieCard from '../../components/MovieCard';
+import { useMedia } from '../../hooks/useMedia';
+import { theme } from '../../themes';
+import { useFavourite } from '../../hooks/useFavourite';
+import { useCommentRating } from '../../hooks/useCommentRating';
+import ModalFilter from './ModalFilter';
 
 const Home = ({ navigation }) => {
   const { sortedMediaByDate } = useMedia();
@@ -17,6 +19,7 @@ const Home = ({ navigation }) => {
   const isFocused = useIsFocused();
   const [renderedMediaArray, setRenderedMediaArray] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const { addToFavourite, favouriteList, deleteFavourite } =
     useFavourite(isFocused);
 
@@ -29,7 +32,7 @@ const Home = ({ navigation }) => {
         headerShown: true,
         headerBackground: (
           <Image
-            source={require('../assets/ironman.jpeg')}
+            source={require('../../assets/ironman.jpeg')}
             style={styles.overlay}
           />
         ),
@@ -46,12 +49,12 @@ const Home = ({ navigation }) => {
           </Pressable>
         ),
         headerRight: () => (
-          <Icon
-            name="filter"
-            color={theme.colors.white}
-            size={20}
+          <Pressable
+            onPress={() => setModalVisible(true)}
             style={styles.filter}
-          />
+          >
+            <Icon name="filter" color={theme.colors.white} size={20} />
+          </Pressable>
         ),
       },
       config: { collapsedColor: theme.colors.appBackground },
@@ -112,6 +115,11 @@ const Home = ({ navigation }) => {
           )}
         />
       </Animated.View>
+      <ModalFilter
+        navigation={navigation}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
     </ScreenLayout>
   );
 };
@@ -132,7 +140,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     opacity: 0.7,
-    backgroundColor: 'black',
+    backgroundColor: theme.colors.black,
     height: 250,
   },
   search: {
