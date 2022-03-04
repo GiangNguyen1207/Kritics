@@ -22,7 +22,7 @@ const BottomNavBar = ({ state, navigation }) => {
         iconName = 'pencil-alt';
         break;
       case mainTab.favourite:
-        iconName = 'tag';
+        iconName = 'bookmark';
         break;
       case mainTab.profile:
         iconName = 'user-alt';

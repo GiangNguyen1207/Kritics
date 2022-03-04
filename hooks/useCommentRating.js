@@ -70,15 +70,19 @@ export const useCommentRating = () => {
   };
 
   const getRating = async (fileId) => {
-    const token = await auth.getUserTokenFromStorage();
-    const options = {
-      method: 'GET',
-      headers: {
-        'x-access-token': token,
-        'Content-Type': 'application/json',
-      },
-    };
-    return await doFetch(baseUrl + 'ratings/file/' + fileId, options);
+    try {
+      const token = await auth.getUserTokenFromStorage();
+      const options = {
+        method: 'GET',
+        headers: {
+          'x-access-token': token,
+          'Content-Type': 'application/json',
+        },
+      };
+      return await doFetch(baseUrl + 'ratings/file/' + fileId, options);
+    } catch (error) {
+      show(error.message, 'error');
+    }
   };
 
   const postRating = async (fileId, rating) => {
@@ -119,6 +123,7 @@ export const useCommentRating = () => {
     const sum = ratings.reduce((a, b) => (a || 0) + (b.rating || 0), 0);
     const average = +(sum / ratings.length).toFixed(1);
     setRatingAverage(average);
+    return average;
   };
 
   return {
@@ -131,5 +136,6 @@ export const useCommentRating = () => {
     getRating,
     postRating,
     deleteRating,
+    getAverageRating,
   };
 };

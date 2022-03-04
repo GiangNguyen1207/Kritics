@@ -9,9 +9,11 @@ import MovieCard from '../components/MovieCard';
 import { theme } from '../themes';
 import { useFavourite } from '../hooks/useFavourite';
 import PropTypes from 'prop-types';
+import { useCommentRating } from '../hooks/useCommentRating';
 
 const Home = ({ navigation }) => {
   const { mediaArray } = useMedia();
+  const { getRating, getAverageRating } = useCommentRating();
   const isFocused = useIsFocused();
   const [renderedMediaArray, setRenderedMediaArray] = useState([]);
   const [refresh, setRefresh] = useState(false);
@@ -62,20 +64,27 @@ const Home = ({ navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
-      if (mediaArray && favouriteList) {
-        const favouriteFileIdList = favouriteList.map(
-          (favourite) => favourite.file_id
-        );
-        for (const media of mediaArray) {
-          if (favouriteFileIdList.includes(media.file_id)) {
-            Object.assign(media, { isFavourite: true });
-          } else {
-            delete media.isFavourite;
+      const getFavouriteAndRating = async () => {
+        if (mediaArray && favouriteList) {
+          const favouriteFileIdList = favouriteList.map(
+            (favourite) => favourite.file_id
+          );
+          for (const media of mediaArray) {
+            const ratings = await getRating(media.file_id);
+            const averageRating = getAverageRating(ratings);
+            Object.assign(media, { averageRating });
+            if (favouriteFileIdList.includes(media.file_id)) {
+              Object.assign(media, { isFavourite: true });
+            } else {
+              delete media.isFavourite;
+            }
           }
+          setRenderedMediaArray(mediaArray);
+          setRefresh(!refresh);
         }
-        setRenderedMediaArray(mediaArray);
-        setRefresh(!refresh);
-      }
+      };
+
+      getFavouriteAndRating();
     }, [mediaArray, favouriteList])
   );
 
@@ -95,7 +104,6 @@ const Home = ({ navigation }) => {
           renderItem={({ item }) => (
             <MovieCard
               showTagIcon
-              rating={4}
               item={item}
               handleFavouritePress={handleFavourite}
               cardStyle={{ marginVertical: theme.spacings.xxs }}
