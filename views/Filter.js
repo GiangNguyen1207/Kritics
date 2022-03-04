@@ -14,12 +14,12 @@ import Typography from '../components/Typography';
 export default function Filter({ route, navigation }) {
   const { top, bottom } = useSafeAreaInsets();
   const { selectedGenres } = route.params;
-  const { mediaArray } = useMedia();
+  const { sortedMediaByTitle } = useMedia();
   const [filteredMovies, setFilteredMovies] = useState([]);
 
   useEffect(() => {
     const movies = [];
-    for (const media of mediaArray) {
+    for (const media of sortedMediaByTitle) {
       const description = JSON.parse(media.description);
       const genres = description.genres.map((genre) => genre.name);
       const intersection = genres.filter((genre) =>
@@ -30,7 +30,7 @@ export default function Filter({ route, navigation }) {
         setFilteredMovies(movies);
       }
     }
-  }, [mediaArray, selectedGenres]);
+  }, [sortedMediaByTitle, selectedGenres]);
 
   return (
     <ScreenLayout style={{ paddingTop: top, paddingBottom: bottom }}>

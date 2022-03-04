@@ -14,7 +14,7 @@ import { useCommentRating } from '../../hooks/useCommentRating';
 import ModalFilter from './ModalFilter';
 
 const Home = ({ navigation }) => {
-  const { mediaArray } = useMedia();
+  const { sortedMediaByDate } = useMedia();
   const { getRating, getAverageRating } = useCommentRating();
   const isFocused = useIsFocused();
   const [renderedMediaArray, setRenderedMediaArray] = useState([]);
@@ -68,11 +68,11 @@ const Home = ({ navigation }) => {
   useFocusEffect(
     useCallback(() => {
       const getFavouriteAndRating = async () => {
-        if (mediaArray && favouriteList) {
+        if (sortedMediaByDate && favouriteList) {
           const favouriteFileIdList = favouriteList.map(
             (favourite) => favourite.file_id
           );
-          for (const media of mediaArray) {
+          for (const media of sortedMediaByDate) {
             const ratings = await getRating(media.file_id);
             const averageRating = getAverageRating(ratings);
             Object.assign(media, { averageRating });
@@ -82,13 +82,13 @@ const Home = ({ navigation }) => {
               delete media.isFavourite;
             }
           }
-          setRenderedMediaArray(mediaArray);
+          setRenderedMediaArray(sortedMediaByDate);
           setRefresh(!refresh);
         }
       };
 
       getFavouriteAndRating();
-    }, [mediaArray, favouriteList])
+    }, [sortedMediaByDate, favouriteList])
   );
 
   return (
