@@ -81,7 +81,7 @@ export default function StepOne({ navigation }) {
         />
         <SearchBar
           searchTerm={
-            movieName.includes('-') ? movieName.split('-')[0] : movieName
+            movieName.includes('_id:') ? movieName.split('_id:')[0] : movieName
           }
           onSearchTermChange={(searchedName) =>
             handleSearchInputChange(searchedName)
@@ -93,7 +93,9 @@ export default function StepOne({ navigation }) {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <Pressable
-              onPress={() => handleChooseMovieName(item.title + '-' + item.id)}
+              onPress={() =>
+                handleChooseMovieName(item.title + '_id:' + item.id)
+              }
             >
               <MovieDetailsCard movieDetails={item} hasBottomLine />
             </Pressable>

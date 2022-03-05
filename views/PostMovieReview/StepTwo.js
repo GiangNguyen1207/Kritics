@@ -6,6 +6,7 @@ import StarRating from 'react-native-star-rating';
 import PropTypes from 'prop-types';
 import * as Progress from 'react-native-progress';
 import { PacmanIndicator } from 'react-native-indicators';
+import _ from 'lodash';
 
 import ScreenLayout from '../../components/ScreenLayout';
 import ContentLayout from '../../components/ContentLayout';
@@ -22,7 +23,7 @@ export default function StepTwo({ navigation, route }) {
   const { top, bottom } = useSafeAreaInsets();
   const { postMedia, loading } = useMedia();
   const { show } = useToastHandler();
-  const { movieDetails } = useMovieDetails(movieName.split('-')[1]);
+  const { movieDetails } = useMovieDetails(movieName.split('_id:')[1]);
 
   const [rating, setRating] = useState(0);
   const [imageSelected, setImageSelected] = useState(false);
@@ -54,6 +55,14 @@ export default function StepTwo({ navigation, route }) {
 
     if (rating === 0) {
       show('Please rate the movie', 'warning');
+      return;
+    }
+
+    if (_.isEmpty(movieDetails)) {
+      show(
+        'Error loading movie from database. Please try again later',
+        'error'
+      );
       return;
     }
 
@@ -102,7 +111,7 @@ export default function StepTwo({ navigation, route }) {
         </View>
         <Typography
           variant="h4"
-          text={`Chosen movie: ${movieName.split('-')[0]}`}
+          text={`Chosen movie: ${movieName.split('_')[0]}`}
         />
         <Pressable onPress={pickImage}>
           <Image source={{ uri: image }} style={styles.image} />

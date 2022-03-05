@@ -1,4 +1,4 @@
-import { FlatList, Pressable } from 'react-native';
+import { FlatList, Pressable, View } from 'react-native';
 import React, { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import SearchBar from '../components/SearchBar';
@@ -28,29 +28,31 @@ const Search = ({ navigation }) => {
           onSearchTermChange={setSearch}
           onSearchSubmit={() => searchMedia(search)}
         />
-        {searchStatus && searchResults.length > 0 && (
-          <FlatList
-            data={searchResults}
-            keyExtractor={(item) => item.file_id.toString()}
-            renderItem={({ item }) => (
-              <Pressable
-                onPress={() => {
-                  navigation.navigate('MovieDetails', { file: item });
-                }}
-              >
-                <MovieDetailsCard
-                  movieDetails={JSON.parse(item.description)}
-                  hasBottomLine
-                  bottomLineColor={theme.colors.primary}
-                  hasReleaseYear
-                />
-              </Pressable>
-            )}
-          />
-        )}
-        {searchStatus && searchResults.length === 0 && (
-          <Typography text="No results found" variant="h4" />
-        )}
+        <View style={{ flex: 1 }}>
+          {searchStatus && searchResults.length > 0 && (
+            <FlatList
+              data={searchResults}
+              keyExtractor={(item) => item.file_id.toString()}
+              renderItem={({ item, index }) => (
+                <Pressable
+                  onPress={() => {
+                    navigation.navigate('MovieDetails', { file: item });
+                  }}
+                >
+                  <MovieDetailsCard
+                    movieDetails={JSON.parse(item.description)}
+                    hasBottomLine
+                    bottomLineColor={theme.colors.primary}
+                    hasReleaseYear
+                  />
+                </Pressable>
+              )}
+            />
+          )}
+          {searchStatus && searchResults.length === 0 && (
+            <Typography text="No results found" variant="h4" />
+          )}
+        </View>
       </ContentLayout>
     </ScreenLayout>
   );

@@ -21,7 +21,7 @@ const MovieCard = ({
   cardStyle,
   navigation,
 }) => {
-  const title = item.title.split('-')[0];
+  const title = item.title.split('_id:')[0];
   return (
     <Pressable
       style={[styles.card, cardStyle]}
@@ -47,7 +47,7 @@ const MovieCard = ({
       )}
       <Typography
         variant="h5"
-        text={title.length > 12 ? `${title.substring(0, 12)}...` : title}
+        text={title.length > 9 ? `${title.substring(0, 9)}...` : title}
         color={theme.colors.primary}
         textStyle={styles.text}
       />
