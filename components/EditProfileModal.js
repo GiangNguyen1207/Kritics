@@ -11,6 +11,7 @@ import { useUser } from '../services/AuthService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MainContext } from '../context/MainContext';
 import { useToastHandler } from '../context/ToastContext';
+import Typography from "./Typography";
 
 const { putUser, checkUsername } = useUser();
 
@@ -51,85 +52,98 @@ const EditProfileModal = ({ modalVisible, setModalVisible }) => {
   };
 
   return (
-    <Modal visible={modalVisible}>
-      <ScreenLayout style={{}}>
-        <ContentLayout
-          hasHeader
-          headerTitle="Edit profile"
-          onPressBack={() => {
-            setModalVisible(false);
-          }}
-        >
-          <View style={styles.modalContent}>
-            <Formik
-              validationSchema={EditSchema}
-              initialValues={{
-                username: user.username,
-                email: user.email,
-              }}
-              onSubmit={(values) => {
-                onSubmit(values);
-              }}
-            >
-              {({
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                values,
-                errors,
-                touched,
-                isValid,
-              }) => (
-                <View>
-                  <TextInput
-                    name="username"
-                    placeholder="New username"
-                    autoCapitalize="none"
-                    onChangeText={handleChange('username')}
-                    onBlur={handleBlur('username')}
-                    value={values.username}
-                    style={styles.textInput}
-                  />
-                  {errors.username && touched.username && (
-                    <Text style={{ fontSize: 10, color: 'red' }}>
-                      {errors.username}
-                    </Text>
-                  )}
-                  <TextInput
-                    type="email"
-                    name="email"
-                    autoCapitalize="none"
-                    placeholder="New email"
-                    onChangeText={handleChange('email')}
-                    onBlur={handleBlur('email')}
-                    value={values.email}
-                    style={styles.textInput}
-                  />
-                  {errors.email && touched.email && (
-                    <Text style={{ fontSize: 10, color: 'red' }}>
-                      {errors.email}
-                    </Text>
-                  )}
-                  <Button
-                    title="Submit"
-                    onPress={handleSubmit}
-                    variant={isValid ? 'primary' : 'disabled'}
-                    isDisable={!isValid}
-                    buttonStyle={{ marginTop: 20 }}
-                  />
-                </View>
-              )}
-            </Formik>
-            <Button
-              buttonStyle={{ margin: 20, width: 300 }}
-              title={'Close'}
-              onPress={() => {
-                setModalVisible(false);
-              }}
-              variant={'secondary'}
-            />
-          </View>
-        </ContentLayout>
+    <Modal visible={modalVisible} transparent animationType="fade">
+      <ScreenLayout
+        style={{
+          alignSelf: 'center',
+          width: '95%',
+          marginVertical: 30,
+          elevation: 4,
+          borderColor: theme.colors.darkGrey,
+          borderWidth: 2,
+          borderStyle: 'solid',
+          backgroundColor: theme.colors.appBackground,
+          borderRadius: 4,
+        }}
+      >
+        <View style={styles.modalContent}>
+          <Typography
+            variant="h2"
+            color={theme.colors.white}
+            text="Edit profile information"
+            textStyle={{ marginBottom: 10 }}
+          />
+          <Formik
+            validationSchema={EditSchema}
+            initialValues={{
+              username: user.username,
+              email: user.email,
+              full_name: user.full_name,
+            }}
+            onSubmit={(values) => {
+              onSubmit(values);
+            }}
+          >
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              errors,
+              touched,
+              isValid,
+            }) => (
+              <View>
+                <Typography variant="h4" text="Username:" />
+                <TextInput
+                  name="username"
+                  placeholder="New username"
+                  autoCapitalize="none"
+                  onChangeText={handleChange('username')}
+                  onBlur={handleBlur('username')}
+                  value={values.username}
+                  style={styles.textInput}
+                />
+                {errors.username && touched.username && (
+                  <Text style={{ fontSize: 10, color: 'red' }}>
+                    {errors.username}
+                  </Text>
+                )}
+                <Typography variant="h4" text="Email:" />
+                <TextInput
+                  type="email"
+                  name="email"
+                  autoCapitalize="none"
+                  placeholder="New email"
+                  onChangeText={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  value={values.email}
+                  style={styles.textInput}
+                />
+                {errors.email && touched.email && (
+                  <Text style={{ fontSize: 10, color: 'red' }}>
+                    {errors.email}
+                  </Text>
+                )}
+                <Button
+                  title="Submit"
+                  onPress={handleSubmit}
+                  variant={isValid ? 'primary' : 'disabled'}
+                  isDisable={!isValid}
+                  buttonStyle={{ marginTop: 20 }}
+                />
+              </View>
+            )}
+          </Formik>
+          <Button
+            buttonStyle={{ margin: 20, width: 300 }}
+            title={'Close'}
+            onPress={() => {
+              setModalVisible(false);
+            }}
+            variant={'secondary'}
+          />
+        </View>
       </ScreenLayout>
     </Modal>
   );

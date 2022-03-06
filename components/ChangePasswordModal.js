@@ -10,6 +10,7 @@ import * as yup from 'yup';
 import { useUser } from '../services/AuthService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useToastHandler } from '../context/ToastContext';
+import Typography from './Typography';
 
 const { putUser } = useUser();
 
@@ -47,94 +48,104 @@ const ChangePasswordModal = ({ modalVisible, setModalVisible }) => {
   };
 
   return (
-    <Modal visible={modalVisible} style={{}}>
-      <ScreenLayout>
-        <ContentLayout
-          hasHeader
-          headerTitle="Change password"
-          onPressBack={() => {
-            setModalVisible(false);
-          }}
-        >
-          <View style={styles.modalContent}>
-            <Formik
-              validationSchema={EditSchema}
-              initialValues={{
-                password: '',
-                confirmPassword: '',
-              }}
-              onSubmit={(values) => {
-                onSubmit(values);
-              }}
-            >
-              {({
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                values,
-                errors,
-                touched,
-                isValid,
-              }) => (
-                <View>
-                  <TextInput
-                    type="password"
-                    name="password"
-                    placeholder="New password"
-                    secureTextEntry
-                    onChangeText={handleChange('password')}
-                    onBlur={handleBlur('password')}
-                    value={values.password}
-                    style={styles.textInput}
-                  />
-                  {errors.password && touched.password && (
-                    <Text style={{ fontSize: 10, color: 'red' }}>
-                      {errors.password}
-                    </Text>
-                  )}
-                  <TextInput
-                    type="confirmPassword"
-                    name="confirmPassword"
-                    secureTextEntry
-                    placeholder="Confirm new password"
-                    onChangeText={handleChange('confirmPassword')}
-                    onBlur={handleBlur('confirmPassword')}
-                    value={values.confirmPassword}
-                    style={styles.textInput}
-                  />
-                  {errors.confirmPassword && touched.confirmPassword && (
-                    <Text style={{ fontSize: 10, color: 'red' }}>
-                      {errors.confirmPassword}
-                    </Text>
-                  )}
-                  <Button
-                    title="Submit"
-                    onPress={handleSubmit}
-                    variant={isValid ? 'primary' : 'disabled'}
-                    isDisable={!isValid}
-                    buttonStyle={{ marginTop: 20 }}
-                  />
-                </View>
-              )}
-            </Formik>
-            <Button
-              buttonStyle={{ margin: 20, width: 300 }}
-              title={'Close'}
-              onPress={() => {
-                setModalVisible(false);
-              }}
-              variant={'secondary'}
-            />
-          </View>
-        </ContentLayout>
+    <Modal visible={modalVisible} transparent animationType="fade">
+      <ScreenLayout
+        style={{
+          alignSelf: 'center',
+          width: '95%',
+          marginVertical: 30,
+          elevation: 4,
+          borderColor: theme.colors.darkGrey,
+          borderWidth: 2,
+          borderStyle: 'solid',
+          backgroundColor: theme.colors.appBackground,
+          borderRadius: 4,
+        }}
+      >
+        <View style={styles.modalContent}>
+          <Typography
+            variant="h2"
+            color={theme.colors.white}
+            text="Change password"
+            textStyle={{ marginBottom: 10 }}
+          />
+          <Formik
+            validationSchema={EditSchema}
+            initialValues={{
+              password: '',
+              confirmPassword: '',
+            }}
+            onSubmit={(values) => {
+              onSubmit(values);
+            }}
+          >
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              errors,
+              touched,
+              isValid,
+            }) => (
+              <View>
+                <TextInput
+                  type="password"
+                  name="password"
+                  placeholder="New password"
+                  secureTextEntry
+                  onChangeText={handleChange('password')}
+                  onBlur={handleBlur('password')}
+                  value={values.password}
+                  style={styles.textInput}
+                />
+                {errors.password && touched.password && (
+                  <Text style={{ fontSize: 10, color: 'red' }}>
+                    {errors.password}
+                  </Text>
+                )}
+                <TextInput
+                  type="confirmPassword"
+                  name="confirmPassword"
+                  secureTextEntry
+                  placeholder="Confirm new password"
+                  onChangeText={handleChange('confirmPassword')}
+                  onBlur={handleBlur('confirmPassword')}
+                  value={values.confirmPassword}
+                  style={styles.textInput}
+                />
+                {errors.confirmPassword && touched.confirmPassword && (
+                  <Text style={{ fontSize: 10, color: 'red' }}>
+                    {errors.confirmPassword}
+                  </Text>
+                )}
+                <Button
+                  title="Submit"
+                  onPress={handleSubmit}
+                  variant={isValid ? 'primary' : 'disabled'}
+                  isDisable={!isValid}
+                  buttonStyle={{ marginTop: 20 }}
+                />
+              </View>
+            )}
+          </Formik>
+          <Button
+            buttonStyle={{ margin: 20, width: 300 }}
+            title={'Close'}
+            onPress={() => {
+              setModalVisible(false);
+            }}
+            variant={'secondary'}
+          />
+        </View>
       </ScreenLayout>
     </Modal>
   );
 };
 
 ChangePasswordModal.propTypes = {
-  modalVisible: PropTypes.bool.isRequired,
-  setModalVisible: PropTypes.func.isRequired,
+  modalVisible: PropTypes.bool,
+  setModalVisible: PropTypes.func,
 };
 
 const styles = StyleSheet.create({

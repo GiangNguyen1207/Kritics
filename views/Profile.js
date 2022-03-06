@@ -13,6 +13,7 @@ import {
   View,
   ImageBackground,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import EditProfileModal from '../components/EditProfileModal';
@@ -26,7 +27,13 @@ import { useToastHandler } from '../context/ToastContext';
 const Profile = () => {
   const { setIsLoggedIn, user, update } = useContext(MainContext);
   const { top } = useSafeAreaInsets();
-  const [avatar, setAvatar] = useState('http://placekitten.com/640');
+  const [avatar, setAvatar] = useState(
+    'http://placehold.jp/ff6600/ffffff/150x150.png?text=' +
+      user.full_name
+        .match(/(\b\S)?/g)
+        .join('')
+        .toUpperCase()
+  );
   const [editProfileVisible, setEditProfileVisible] = useState(false);
   const [changePasswordVisible, setChangePasswordVisible] = useState(false);
   const [addAvatarVisible, setAddAvatarVisible] = useState(false);
@@ -57,111 +64,129 @@ const Profile = () => {
       }}
     >
       <ContentLayout hasHeader headerTitle={mainTab.profile} />
-      <View style={styles.profileInfo}>
-        <View style={styles.avatarContainer}>
-          <ImageBackground
-            source={{ uri: avatar }}
-            resizeMode="cover"
-            style={{ height: 150, width: 150 }}
-            imageStyle={{ borderRadius: 75 }}
-          >
-            <TouchableOpacity
-              onPress={() => {
-                setAddAvatarVisible();
-              }}
-              style={{ flex: 1 }}
+      <View style={styles.profileContainer}>
+        <View style={styles.profileTop}>
+          <View style={styles.profileAvatar}>
+            <ImageBackground
+              source={{ uri: avatar }}
+              resizeMode="cover"
+              style={{ height: 150, width: 150 }}
+              imageStyle={{ borderRadius: 75 }}
             >
-              <Icon
-                name="camera"
-                color={theme.colors.secondary}
-                size={30}
-                style={{
-                  borderRadius: 100,
-                  padding: 10,
-                  position: 'absolute',
-                  right: 0,
-                  top: 100,
-                  backgroundColor: '#474747',
+              <TouchableOpacity
+                onPress={() => {
+                  setAddAvatarVisible();
                 }}
-              />
-            </TouchableOpacity>
-          </ImageBackground>
+                style={{ flex: 1 }}
+              >
+                <Icon
+                  name="camera"
+                  color={theme.colors.secondary}
+                  size={30}
+                  style={{
+                    borderRadius: 100,
+                    padding: 10,
+                    position: 'absolute',
+                    right: 0,
+                    top: 100,
+                    backgroundColor: '#474747',
+                  }}
+                />
+              </TouchableOpacity>
+            </ImageBackground>
+          </View>
+          <Typography
+            variant="h2"
+            text={user.username}
+            color={theme.colors.white}
+            textStyle={styles.header}
+          />
+          <Typography
+            variant="h4"
+            text={user.full_name}
+            color={theme.colors.lightGrey}
+            textStyle={styles.header}
+          />
         </View>
-        <Typography
-          variant="h2"
-          text={user.username}
-          color={theme.colors.white}
-          textStyle={styles.header}
-        />
-      </View>
-      <DividerLine />
-      <View style={styles.editProfile}>
-        <Typography
-          textStyle={{ marginTop: 10 }}
-          variant="h3"
-          text="Profile information"
-        />
+        <DividerLine />
+        <View style={styles.profileInfo}>
+          <Typography
+            textStyle={{ margin: 10 }}
+            variant="h3"
+            text="Profile information"
+          />
+          <Button
+            buttonStyle={styles.button}
+            title={'Edit profile'}
+            onPress={() => {
+              setEditProfileVisible(true);
+            }}
+            variant={'secondary'}
+          />
+        </View>
+        <DividerLine />
+        <View style={styles.profilePassword}>
+          <Typography textStyle={{ margin: 10 }} variant="h3" text="Password" />
+          <Button
+            buttonStyle={styles.button}
+            title={'Change password'}
+            onPress={async () => {
+              setChangePasswordVisible(true);
+            }}
+            variant={'secondary'}
+          />
+        </View>
+        <DividerLine />
         <Button
-          buttonStyle={{ margin: 20, width: 300 }}
-          title={'Edit profile'}
-          onPress={() => {
-            setEditProfileVisible(true);
-          }}
-          variant={'secondary'}
-        />
-      </View>
-      <DividerLine />
-      <View style={styles.changePassword}>
-        <Typography
-          textStyle={{ marginTop: 10 }}
-          variant="h3"
-          text="Password"
-        />
-        <Button
-          buttonStyle={{ margin: 20, width: 300 }}
-          title={'Change password'}
+          buttonStyle={styles.logout}
+          title={'Logout'}
           onPress={async () => {
-            setChangePasswordVisible(true);
+            await AsyncStorage.clear();
+            setIsLoggedIn(false);
           }}
-          variant={'secondary'}
+          variant={'primary'}
+        />
+        <EditProfileModal
+          modalVisible={editProfileVisible}
+          setModalVisible={setEditProfileVisible}
+        />
+        <ChangePasswordModal
+          modalVisible={changePasswordVisible}
+          setModalVisible={setChangePasswordVisible}
+        />
+        <AddAvatarModal
+          modalVisible={addAvatarVisible}
+          setModalVisible={setAddAvatarVisible}
         />
       </View>
-      <DividerLine />
-      <Button
-        buttonStyle={{ margin: 20, width: 300 }}
-        title={'Logout'}
-        onPress={async () => {
-          await AsyncStorage.clear();
-          setIsLoggedIn(false);
-        }}
-        variant={'primary'}
-      />
-      <EditProfileModal
-        modalVisible={editProfileVisible}
-        setModalVisible={setEditProfileVisible}
-      />
-      <ChangePasswordModal
-        modalVisible={changePasswordVisible}
-        setModalVisible={setChangePasswordVisible}
-      />
-      <AddAvatarModal
-        modalVisible={addAvatarVisible}
-        setModalVisible={setAddAvatarVisible}
-      />
     </ScreenLayout>
   );
 };
 
 const styles = StyleSheet.create({
-  profileInfo: {
-    flex: 4,
-    justifyContent: 'flex-start',
+  profileContainer: {},
+  profileTop: {
+    marginTop: 25,
+    flex: 1,
     alignItems: 'center',
   },
-  header: {
-    margin: 15,
+  profileAvatar: {},
+  profileInfo: {
+    width: Dimensions.get('window').width,
   },
-  avatarContainer: {},
+  profilePassword: {
+    width: Dimensions.get('window').width,
+  },
+  button: {
+    margin: 20,
+    width: 300,
+    alignSelf: 'center',
+  },
+  logout: {
+    margin: 40,
+    width: 300,
+    alignSelf: 'center',
+  },
 });
 
 export default Profile;
