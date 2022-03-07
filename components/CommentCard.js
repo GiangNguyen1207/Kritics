@@ -82,7 +82,7 @@ const CommentCard = ({ route, item, handleDeleteComment, hasBottomLine }) => {
           style={styles.date}
           variant="h6"
           fontWeight="400"
-          text={format(new Date(file.time_added), 'dd-MM-yyyy')}
+          text={format(new Date(item.time_added), 'dd-MM-yyyy')}
           color={theme.colors.white}
         />
       </View>
