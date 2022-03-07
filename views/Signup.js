@@ -46,10 +46,7 @@ const SignupSchema = yup.object({
     .string()
     .email('Please enter a valid email')
     .required('Email is required'),
-  full_name: yup
-    .string()
-    .matches(/(\w.+\s).+/, 'Enter at least 2 names')
-    .required('Full name is required'),
+  full_name: yup.string().matches(/(\w.+\s).+/, 'Enter at least 2 names'),
 });
 
 const Signup = ({ navigation }) => {

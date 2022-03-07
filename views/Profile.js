@@ -27,13 +27,15 @@ import { useToastHandler } from '../context/ToastContext';
 const Profile = () => {
   const { setIsLoggedIn, user, update } = useContext(MainContext);
   const { top } = useSafeAreaInsets();
+  const avatarUri = user.full_name ? user.full_name : user.username;
   const [avatar, setAvatar] = useState(
     'http://placehold.jp/ff6600/ffffff/150x150.png?text=' +
-      user.full_name
+      avatarUri
         .match(/(\b\S)?/g)
         .join('')
         .toUpperCase()
   );
+
   const [editProfileVisible, setEditProfileVisible] = useState(false);
   const [changePasswordVisible, setChangePasswordVisible] = useState(false);
   const [addAvatarVisible, setAddAvatarVisible] = useState(false);
