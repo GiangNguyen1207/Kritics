@@ -53,9 +53,9 @@ const MovieDetailsCard = ({
             uploadImageUrl ? { marginRight: theme.spacings.xs } : {},
           ]}
         />
-        <View style={{ flex: 1 }}>
-          <Typography text={movieDetails.title} variant="h2" />
-          {hasReleaseYear && <Typography text={releaseYear} variant="h2" />}
+        <View style={{ flex: 1, marginVertical: theme.spacings.xs }}>
+          <Typography text={movieDetails.title} variant="h3" fontWeight="600" />
+          {hasReleaseYear && <Typography text={releaseYear} variant="h3" />}
           {hasDetails && (
             <>
               <Typography
@@ -63,7 +63,7 @@ const MovieDetailsCard = ({
                 variant="h5"
               />
               <View style={styles.rating}>
-                <Typography text="Average rating: " variant="h4" />
+                <Typography text="Average rating: " variant="h5" />
                 <StarRating
                   maxStars={5}
                   starSize={15}
@@ -84,7 +84,7 @@ const MovieDetailsCard = ({
                 />
                 <Typography
                   text={isFavourite ? 'Added to Favourite' : 'Add to Favourite'}
-                  variant="h4"
+                  variant="h5"
                   fontWeight="600"
                 />
               </Pressable>

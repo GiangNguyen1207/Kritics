@@ -12,19 +12,19 @@ const Typography = ({ variant, color, fontWeight, text, textStyle }) => {
         fontSize = 48;
         break;
       case 'h2':
-        fontSize = 24;
-        break;
-      case 'h3':
         fontSize = 18;
         break;
-      case 'h4':
+      case 'h3':
         fontSize = 16;
         break;
-      case 'h5':
+      case 'h4':
         fontSize = 14;
         break;
-      case 'h6':
+      case 'h5':
         fontSize = 12;
+        break;
+      case 'h6':
+        fontSize = 10;
         break;
       default:
         return;
