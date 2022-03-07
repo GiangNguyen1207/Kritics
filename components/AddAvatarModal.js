@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { StyleSheet, Modal, Pressable, Image, View, Alert } from 'react-native';
+import { StyleSheet, Modal, Pressable, Image, View } from 'react-native';
 import { theme } from '../themes';
 import ScreenLayout from '../components/ScreenLayout';
 import ContentLayout from '../components/ContentLayout';
@@ -9,6 +9,7 @@ import { useMedia } from '../hooks/useMedia';
 import Button from './Button';
 import { MainContext } from '../context/MainContext';
 import { useToastHandler } from '../context/ToastContext';
+import Typography from './Typography';
 
 const AddAvatarModal = ({ modalVisible, setModalVisible }) => {
   const { user, setUpdate, update } = useContext(MainContext);
@@ -17,7 +18,7 @@ const AddAvatarModal = ({ modalVisible, setModalVisible }) => {
   const [imageSelected, setImageSelected] = useState(false);
   const [type, setType] = useState('image');
   const [image, setImage] = useState(
-    `https://place-hold.it/300x200&text=ChooseFile`
+    `https://dummyimage.com/600x400/4f4f4f/ffffff.png&text=Choose+file`
   );
 
   const pickImage = async () => {
@@ -54,50 +55,71 @@ const AddAvatarModal = ({ modalVisible, setModalVisible }) => {
   };
 
   return (
-    <Modal visible={modalVisible}>
-      <ScreenLayout style={{}}>
-        <ContentLayout
-          hasHeader
-          headerTitle="Add avatar"
-          onPressBack={() => {
-            setModalVisible(false);
-          }}
-        >
-          <View style={styles.modalContent}>
-            <Pressable onPress={pickImage}>
-              <Image
-                source={{ uri: image }}
-                style={{
-                  alignSelf: 'center',
-                  width: '90%',
-                  height: undefined,
-                  aspectRatio: 1,
-                }}
-                resizeMode="contain"
-              />
-            </Pressable>
-            <Button
-              title="Submit"
-              variant={imageSelected ? 'primary' : 'disabled'}
-              buttonStyle={{ margin: 20, width: 300, alignSelf: 'center' }}
-              onPress={onSubmit}
-              isDisabled={!imageSelected}
+    <Modal visible={modalVisible} transparent animationType="fade">
+      <ScreenLayout
+        style={{
+          alignSelf: 'center',
+          width: '95%',
+          marginVertical: 30,
+          elevation: 4,
+          borderColor: theme.colors.darkGrey,
+          borderWidth: 2,
+          borderStyle: 'solid',
+          backgroundColor: theme.colors.appBackground,
+          borderRadius: 4,
+        }}
+      >
+        <View style={styles.modalContent}>
+          <Typography
+            variant="h2"
+            color={theme.colors.white}
+            text="Add an avatar"
+          />
+          <Pressable onPress={pickImage}>
+            <Image
+              source={{ uri: image }}
+              style={{
+                alignSelf: 'center',
+                width: '90%',
+                height: undefined,
+                aspectRatio: 1,
+                borderRadius: 10,
+              }}
+              resizeMode="contain"
             />
-          </View>
-        </ContentLayout>
+          </Pressable>
+          <Button
+            title="Submit"
+            variant={imageSelected ? 'primary' : 'disabled'}
+            buttonStyle={{ marginTop: 20, width: 300, alignSelf: 'center' }}
+            onPress={onSubmit}
+            isDisabled={!imageSelected}
+          />
+          <Button
+            buttonStyle={{ margin: 20, width: 300, alignSelf: 'center' }}
+            title={'Close'}
+            onPress={() => {
+              setModalVisible(false);
+            }}
+            variant={'secondary'}
+          />
+        </View>
       </ScreenLayout>
     </Modal>
   );
 };
 
 AddAvatarModal.propTypes = {
-  modalVisible: PropTypes.bool.isRequired,
-  setModalVisible: PropTypes.func.isRequired,
+  modalVisible: PropTypes.bool,
+  setModalVisible: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
   modalContent: {
-    backgroundColor: theme.colors.appBackground,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 20,
   },
   image: {
     width: '100%',
