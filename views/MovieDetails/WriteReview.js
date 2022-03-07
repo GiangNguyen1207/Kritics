@@ -12,6 +12,7 @@ import {
   useBottomSheetModal,
 } from '@gorhom/bottom-sheet';
 import PropTypes from 'prop-types';
+import { PacmanIndicator } from 'react-native-indicators';
 
 import { theme } from '../../themes';
 import Typography from '../../components/Typography';
@@ -25,6 +26,7 @@ const WriteReview = forwardRef(({ file, refresh, setRefresh }, ref) => {
   const [review, setReview] = useState('');
   const [isRated, setIsRated] = useState(false);
   const { postRating, postComment, getRating } = useCommentRating();
+  const [postLoading, setPostLoading] = useState(false);
   const { user } = useContext(MainContext);
   const { dismiss } = useBottomSheetModal();
   const snapPoints = useMemo(() => [350, '90%'], []);
@@ -34,6 +36,7 @@ const WriteReview = forwardRef(({ file, refresh, setRefresh }, ref) => {
   };
 
   const handleSubmit = async () => {
+    setPostLoading(true);
     if (!isRated) {
       await postRating(file.file_id, rating);
     }
@@ -42,6 +45,7 @@ const WriteReview = forwardRef(({ file, refresh, setRefresh }, ref) => {
     dismiss();
     setRating(0);
     setReview('');
+    setPostLoading(false);
   };
 
   useEffect(() => {
@@ -108,6 +112,15 @@ const WriteReview = forwardRef(({ file, refresh, setRefresh }, ref) => {
             title="Submit"
             onPress={() => handleSubmit()}
             buttonStyle={styles.button}
+            rightIcon={
+              postLoading && (
+                <PacmanIndicator
+                  color={theme.colors.white}
+                  size={25}
+                  style={{ flex: 0.5 }}
+                />
+              )
+            }
           />
         </View>
       </View>

@@ -19,7 +19,7 @@ export default function FavouriteScreen({ navigation }) {
     <ScreenLayout style={{ paddingTop: top }}>
       <ContentLayout hasHeader headerTitle={mainTab.favourite}>
         {favouriteList.length > 0 ? (
-          <Favourite favouriteList={favouriteList} navigation={navigation} />
+          <Favourite navigation={navigation} />
         ) : (
           <NoFavourite />
         )}

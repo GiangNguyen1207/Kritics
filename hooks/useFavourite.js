@@ -37,6 +37,7 @@ export const useFavourite = (isFocused) => {
       };
       await doFetch(baseUrl + 'favourites', options);
       await updateFavouriteList();
+      show('successfully add to favourite list', 'success');
     } catch (error) {
       show(error.message, 'error');
     }
@@ -55,6 +56,7 @@ export const useFavourite = (isFocused) => {
       };
       await doFetch(baseUrl + `favourites/file/${fileId}`, options);
       await updateFavouriteList();
+      show('successfully delete from favourite list', 'success');
     } catch (error) {
       show(error.message, 'error');
     }

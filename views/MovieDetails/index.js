@@ -20,13 +20,14 @@ import { View } from 'react-native-animatable';
 const MovieDetails = ({ navigation, route }) => {
   const { file } = route.params;
   const fileDetails = JSON.parse(file.description);
-  const { getComments, deleteComment, loading, comments, ratingAverage } =
+  const { getComments, deleteComment, comments, ratingAverage } =
     useCommentRating();
   const { addToFavourite, deleteFavourite, favouriteList } = useFavourite();
   const bottomSheetModalRef = useRef(null);
   const [selected, setSelected] = useState(0);
   const [refresh, setRefresh] = useState(false);
   const [isFavourite, setIsFavourte] = useState(false);
+  const [detailsLoading, setDetailsLoading] = useState(true);
 
   const handleDeleteComment = async (commentId) => {
     await deleteComment(commentId);
@@ -34,7 +35,11 @@ const MovieDetails = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    getComments(file.file_id);
+    async function getAllComments() {
+      await getComments(file.file_id);
+      setDetailsLoading(false);
+    }
+    getAllComments();
   }, [refresh]);
 
   useEffect(() => {
@@ -49,12 +54,14 @@ const MovieDetails = ({ navigation, route }) => {
 
   return (
     <>
-      {loading ? (
-        <LottieView
-          source={require('../../assets/lottie/loading.json')}
-          autoPlay
-          loop
-        />
+      {detailsLoading ? (
+        <View style={{ flex: 1, backgroundColor: theme.colors.appBackground }}>
+          <LottieView
+            source={require('../../assets/lottie/loading.json')}
+            autoPlay
+            loop
+          />
+        </View>
       ) : (
         <>
           <ImageBackground
@@ -93,7 +100,7 @@ const MovieDetails = ({ navigation, route }) => {
                     hasBottomLine={index !== comments.length - 1}
                   />
                 )}
-                style={styles.list}
+                contentContainerStyle={styles.list}
               />
             ) : (
               <Synopsis movieDetails={fileDetails} />
@@ -131,8 +138,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   list: {
-    height: 200,
-    paddingTop: theme.spacings.xs,
+    paddingVertical: theme.spacings.xs,
   },
   box: {
     height: 60,
@@ -140,7 +146,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   overlay: {
     position: 'absolute',
     top: 0,

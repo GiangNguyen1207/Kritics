@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react';
 import { StyleSheet, Modal, Pressable, Image, View } from 'react-native';
 import { theme } from '../themes';
 import ScreenLayout from '../components/ScreenLayout';
-import ContentLayout from '../components/ContentLayout';
 import * as ImagePicker from 'expo-image-picker';
 import PropTypes from 'prop-types';
 import { useMedia } from '../hooks/useMedia';
@@ -10,10 +9,11 @@ import Button from './Button';
 import { MainContext } from '../context/MainContext';
 import { useToastHandler } from '../context/ToastContext';
 import Typography from './Typography';
+import { PacmanIndicator } from 'react-native-indicators';
 
 const AddAvatarModal = ({ modalVisible, setModalVisible }) => {
   const { user, setUpdate, update } = useContext(MainContext);
-  const { postAvatar } = useMedia();
+  const { postAvatar, loading } = useMedia();
   const { show } = useToastHandler();
   const [imageSelected, setImageSelected] = useState(false);
   const [type, setType] = useState('image');
@@ -42,25 +42,22 @@ const AddAvatarModal = ({ modalVisible, setModalVisible }) => {
       return;
     }
 
-    try {
-      const response = await postAvatar(image, type, user.user_id);
-      if (response) {
-        show('Avatar uploaded successfully', 'success');
-        setUpdate(update + 1);
-        setModalVisible(false);
-      }
-    } catch (error) {
-      show(error.message, 'error');
+    const response = await postAvatar(image, type, user.user_id);
+    if (response) {
+      show('Avatar uploaded successfully', 'success');
+      setUpdate(update + 1);
+      setModalVisible(false);
     }
   };
 
   return (
-    <Modal visible={modalVisible} transparent animationType="fade">
+    <Modal visible={modalVisible} transparent animationType="fade" co>
       <ScreenLayout
         style={{
           alignSelf: 'center',
           width: '95%',
-          marginVertical: 30,
+          marginTop: 120,
+          marginBottom: 30,
           elevation: 4,
           borderColor: theme.colors.darkGrey,
           borderWidth: 2,
@@ -94,6 +91,15 @@ const AddAvatarModal = ({ modalVisible, setModalVisible }) => {
             buttonStyle={{ marginTop: 20, width: 300, alignSelf: 'center' }}
             onPress={onSubmit}
             isDisabled={!imageSelected}
+            rightIcon={
+              loading && (
+                <PacmanIndicator
+                  color={theme.colors.white}
+                  size={25}
+                  style={{ flex: 0.2 }}
+                />
+              )
+            }
           />
           <Button
             buttonStyle={{ margin: 20, width: 300, alignSelf: 'center' }}

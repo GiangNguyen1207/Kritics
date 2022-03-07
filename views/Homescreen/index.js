@@ -1,9 +1,10 @@
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, Animated, Image, Pressable } from 'react-native';
+import { StyleSheet, Animated, Image, Pressable, View } from 'react-native';
 import { useCollapsibleHeader } from 'react-navigation-collapsible';
 import Icon from 'react-native-vector-icons/Ionicons';
 import PropTypes from 'prop-types';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import LottieView from 'lottie-react-native';
 
 import ScreenLayout from '../../components/ScreenLayout';
 import MovieCard from '../../components/MovieCard';
@@ -14,14 +15,15 @@ import { useCommentRating } from '../../hooks/useCommentRating';
 import ModalFilter from './ModalFilter';
 
 const Home = ({ navigation }) => {
-  const { mediaArray } = useMedia();
-  const { getRating, getAverageRating } = useCommentRating();
   const isFocused = useIsFocused();
+  const { mediaArray } = useMedia(isFocused);
+  const { getRating, getAverageRating } = useCommentRating();
   const [renderedMediaArray, setRenderedMediaArray] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const { addToFavourite, favouriteList, deleteFavourite } =
     useFavourite(isFocused);
+  const [screenLoading, setScreenLoading] = useState(false);
 
   const { onScroll, containerPaddingTop, scrollIndicatorInsetTop } =
     useCollapsibleHeader({
@@ -68,6 +70,7 @@ const Home = ({ navigation }) => {
   useFocusEffect(
     useCallback(() => {
       const getFavouriteAndRating = async () => {
+        setScreenLoading(true);
         if (mediaArray && favouriteList) {
           const favouriteFileIdList = favouriteList.map(
             (favourite) => favourite.file_id
@@ -84,6 +87,7 @@ const Home = ({ navigation }) => {
           }
           setRenderedMediaArray(mediaArray);
           setRefresh(!refresh);
+          setScreenLoading(false);
         }
       };
 
@@ -93,28 +97,37 @@ const Home = ({ navigation }) => {
 
   return (
     <ScreenLayout>
-      <Animated.View>
-        <Animated.FlatList
-          numColumns={3}
-          data={renderedMediaArray}
-          onScroll={onScroll}
-          contentContainerStyle={{
-            paddingTop: renderedMediaArray.length > 3 ? containerPaddingTop : 0,
-          }}
-          scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
-          keyExtractor={(item) => item.file_id.toString()}
-          extraData={refresh}
-          renderItem={({ item }) => (
-            <MovieCard
-              showTagIcon
-              item={item}
-              handleFavouritePress={handleFavourite}
-              cardStyle={{ marginVertical: theme.spacings.xxs }}
-              navigation={navigation}
-            />
-          )}
+      {screenLoading ? (
+        <LottieView
+          source={require('../../assets/lottie/homescreenLoading.json')}
+          autoPlay
+          loop
         />
-      </Animated.View>
+      ) : (
+        <View>
+          <Animated.FlatList
+            numColumns={3}
+            data={renderedMediaArray}
+            onScroll={onScroll}
+            contentContainerStyle={{
+              paddingTop:
+                renderedMediaArray.length > 3 ? containerPaddingTop : 0,
+            }}
+            scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
+            keyExtractor={(item) => item.file_id.toString()}
+            extraData={refresh}
+            renderItem={({ item }) => (
+              <MovieCard
+                showTagIcon
+                item={item}
+                handleFavouritePress={handleFavourite}
+                cardStyle={{ marginVertical: theme.spacings.xxs }}
+                navigation={navigation}
+              />
+            )}
+          />
+        </View>
+      )}
       <ModalFilter
         navigation={navigation}
         modalVisible={modalVisible}
@@ -149,6 +162,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: theme.spacings.xxs,
     right: theme.spacings.l,
+  },
+  loading: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    right: 0,
   },
 });
 export default Home;

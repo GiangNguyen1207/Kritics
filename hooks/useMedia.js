@@ -8,7 +8,7 @@ import { tagService } from '../services/TagService';
 import { useCommentRating } from './useCommentRating';
 import { useToastHandler } from '../context/ToastContext';
 
-export const useMedia = () => {
+export const useMedia = (isFocused) => {
   const [mediaArray, setMediaArray] = useState([]);
   const [sortedMediaByDate, setSortedMediaByDate] = useState([]);
   const [sortedMediaByTitle, setSortedMediaByTitle] = useState([]);
@@ -50,8 +50,8 @@ export const useMedia = () => {
   };
 
   const postMedia = async (title, description, image, type, rating) => {
+    setLoading(true);
     if (image) {
-      setLoading(true);
       const formData = new FormData();
       formData.append('title', title);
       formData.append('description', description);
@@ -63,7 +63,6 @@ export const useMedia = () => {
         name: filename,
         type: type + '/' + fileExtension,
       });
-
       try {
         const token = await auth.getUserTokenFromStorage();
         const options = {
@@ -74,7 +73,6 @@ export const useMedia = () => {
           },
           body: formData,
         };
-
         const response = await doFetch(baseUrl + 'media', options);
         const tagResponse = await tagService.postTag(
           {
@@ -83,7 +81,6 @@ export const useMedia = () => {
           },
           token
         );
-
         const ratingResponse = await postRating(response.file_id, rating);
         if (response && tagResponse && ratingResponse) {
           setLoading(false);
@@ -97,8 +94,8 @@ export const useMedia = () => {
   };
 
   const postAvatar = async (image, type, userid) => {
+    setLoading(true);
     if (image) {
-      setLoading(true);
       const formData = new FormData();
       formData.append('title', '');
       formData.append('description', '');
@@ -136,6 +133,7 @@ export const useMedia = () => {
         } else return false;
       } catch (error) {
         setLoading(false);
+        console.log(error);
         show(error.message, 'error');
       }
     }
@@ -150,15 +148,17 @@ export const useMedia = () => {
   };
 
   useEffect(() => {
-    loadMedia();
-  }, []);
+    if (isFocused) {
+      loadMedia();
+    }
+  }, [isFocused]);
 
   return {
     mediaArray,
+    loading,
     sortedMediaByDate,
     sortedMediaByTitle,
     postMedia,
-    loading,
     searchResults,
     searchMedia,
     searchStatus,

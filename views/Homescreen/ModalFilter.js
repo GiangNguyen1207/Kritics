@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Pressable, FlatList, Modal } from 'react-native';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 
 import { genres } from '../../data/genres';
 import { theme } from '../../themes';
@@ -12,8 +13,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const ModalFilter = ({ navigation, modalVisible, setModalVisible }) => {
   const { top, bottom } = useSafeAreaInsets();
-
-  const [selectedGenres, setSelectedGenres] = useState('');
+  const [selectedGenres, setSelectedGenres] = useState([]);
 
   const handleSubmit = async () => {
     navigation.navigate('Filter', {
@@ -75,7 +75,12 @@ const ModalFilter = ({ navigation, modalVisible, setModalVisible }) => {
           onPress={onCloseModal}
           buttonStyle={{ marginBottom: theme.spacings.xs }}
         />
-        <Button title="Apply" variant="primary" onPress={handleSubmit} />
+        <Button
+          title="Apply"
+          variant={_.isEmpty(selectedGenres) ? 'disabled' : 'primary'}
+          onPress={handleSubmit}
+          isDisabled={_.isEmpty(selectedGenres)}
+        />
       </ScreenLayout>
     </Modal>
   );

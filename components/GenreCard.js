@@ -6,13 +6,7 @@ import Typography from './Typography';
 
 const GenreCard = ({ genre, selected, style }) => {
   return (
-    <View
-      style={[
-        styles.container,
-        style,
-        selected ? styles.selected : styles.unselected,
-      ]}
-    >
+    <View style={[styles.container, style, selected ? styles.selected : null]}>
       <Typography
         text={genre}
         variant="h5"
@@ -26,8 +20,6 @@ const styles = StyleSheet.create({
   container: {
     padding: theme.spacings.xxs,
     borderRadius: 5,
-  },
-  unselected: {
     borderWidth: 1,
     borderColor: theme.colors.primary,
   },

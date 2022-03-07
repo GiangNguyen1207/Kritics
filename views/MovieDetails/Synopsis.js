@@ -28,7 +28,7 @@ export default function Synopsis({ movieDetails }) {
         />
       </View>
       <HorizontalLine color={theme.colors.lightGrey} />
-      <View style={styles.container}>
+      <View style={{ paddingHorizontal: theme.spacings.s }}>
         <Typography text="Genres" variant="h4" fontWeight="bold" />
         <View style={styles.row}>
           {movieDetails.genres.map((genre) => (

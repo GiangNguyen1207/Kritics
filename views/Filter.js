@@ -16,6 +16,7 @@ export default function Filter({ route, navigation }) {
   const { selectedGenres } = route.params;
   const { sortedMediaByTitle } = useMedia();
   const [filteredMovies, setFilteredMovies] = useState([]);
+  const [screenLoading, setScreenLoading] = useState(true);
 
   useEffect(() => {
     const movies = [];
@@ -28,6 +29,7 @@ export default function Filter({ route, navigation }) {
       if (intersection.length > 0) {
         movies.push(media);
         setFilteredMovies(movies);
+        setScreenLoading(false);
       }
     }
   }, [sortedMediaByTitle, selectedGenres]);
@@ -41,7 +43,7 @@ export default function Filter({ route, navigation }) {
         style={{ paddingHorizontal: theme.spacings.s }}
       >
         <View style={{ flex: 1 }}>
-          {filteredMovies.length > 0 ? (
+          {filteredMovies.length > 0 && !screenLoading && (
             <FlatList
               data={filteredMovies}
               keyExtractor={(item) => item.file_id.toString()}
@@ -59,9 +61,10 @@ export default function Filter({ route, navigation }) {
                   />
                 </Pressable>
               )}
-              contentContainerStyle={{ marginTop: theme.spacings.xs }}
+              contentContainerStyle={{ paddingVertical: theme.spacings.xs }}
             />
-          ) : (
+          )}
+          {!screenLoading && filteredMovies.length === 0 && (
             <View
               style={{
                 alignItems: 'center',
@@ -77,6 +80,13 @@ export default function Filter({ route, navigation }) {
               />
               <Typography variant="h3" text="No movies found..." />
             </View>
+          )}
+          {screenLoading && (
+            <LottieView
+              source={require('../assets/lottie/homescreenLoading.json')}
+              autoPlay
+              loop
+            />
           )}
         </View>
       </ContentLayout>

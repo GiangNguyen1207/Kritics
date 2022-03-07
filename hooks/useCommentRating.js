@@ -8,11 +8,9 @@ import { useToastHandler } from '../context/ToastContext';
 export const useCommentRating = () => {
   const [comments, setComments] = useState([]);
   const [ratingAverage, setRatingAverage] = useState(0);
-  const [loading, setLoading] = useState(false);
   const { show } = useToastHandler();
 
   const getComments = async (fileId) => {
-    setLoading(true);
     try {
       const token = await auth.getUserTokenFromStorage();
       const options = {
@@ -31,7 +29,7 @@ export const useCommentRating = () => {
 
       setComments(comments);
       getAverageRating(ratings);
-      setLoading(false);
+      show('Successfully add rating/comment', 'success');
     } catch (error) {
       show(error.message, 'error');
     }
@@ -132,7 +130,6 @@ export const useCommentRating = () => {
     getComments,
     postComment,
     deleteComment,
-    loading,
     getRating,
     postRating,
     deleteRating,

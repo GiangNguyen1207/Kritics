@@ -11,7 +11,7 @@ const Toast = ({ visible, message, type }) => {
   const { top } = useSafeAreaInsets();
 
   const getBackgroundColor = () => {
-    let color = theme.colors.black;
+    let color = theme.colors.appBackground;
     switch (type) {
       case 'error':
         color = theme.colors.error;
@@ -23,7 +23,7 @@ const Toast = ({ visible, message, type }) => {
         color = theme.colors.warning;
         break;
       default:
-        color = theme.colors.black;
+        color = theme.colors.appBackground;
     }
     return color;
   };
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacings.s,
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 5,
+    elevation: 10,
   },
 });
 
