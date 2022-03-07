@@ -128,6 +128,7 @@ const styles = StyleSheet.create({
   container: {
     marginHorizontal: theme.spacings.s,
     marginTop: theme.spacings.xs,
+    elevation: 5,
   },
   list: {
     height: 200,

@@ -36,7 +36,7 @@ const Typography = ({ variant, color, fontWeight, text, textStyle }) => {
     <Text
       style={[
         {
-          fontFamily: 'Avenir',
+          // fontFamily: 'Avenir',
           fontSize: getTextFontSize(variant),
           color: color ?? theme.colors.white,
           fontWeight: fontWeight ?? '400',

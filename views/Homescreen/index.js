@@ -93,7 +93,7 @@ const Home = ({ navigation }) => {
 
   return (
     <ScreenLayout>
-      <Animated.View style={styles.list}>
+      <Animated.View>
         <Animated.FlatList
           numColumns={3}
           data={renderedMediaArray}
@@ -129,9 +129,6 @@ Home.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  list: {
-    marginBottom: theme.spacings.l,
-  },
   overlay: {
     width: '100%',
     position: 'absolute',
