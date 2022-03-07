@@ -29,7 +29,6 @@ export const useCommentRating = () => {
 
       setComments(comments);
       getAverageRating(ratings);
-      show('Successfully add rating/comment', 'success');
     } catch (error) {
       show(error.message, 'error');
     }
@@ -47,6 +46,7 @@ export const useCommentRating = () => {
         body: JSON.stringify({ file_id: fileId, comment }),
       };
       await doFetch(baseUrl + 'comments', options);
+      show('Successfully add rating/comment', 'success');
     } catch (error) {
       show(error.message, 'error');
     }
