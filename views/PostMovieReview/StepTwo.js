@@ -29,7 +29,9 @@ export default function StepTwo({ navigation, route }) {
   const [imageSelected, setImageSelected] = useState(false);
   const [type, setType] = useState('image');
   const [image, setImage] = useState(
-    `https://place-hold.it/${Dimensions.get('window').width}x150&text=Choose`
+    `https://dummyimage.com/${
+      Dimensions.get('window').width
+    }x400/4f4f4f/ffffff.png&text=Choose+file`
   );
 
   const pickImage = async () => {

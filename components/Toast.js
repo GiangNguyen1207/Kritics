@@ -31,7 +31,7 @@ const Toast = ({ visible, message, type }) => {
   return (
     <View
       pointerEvents="none"
-      style={[styles.container, { top: top + theme.spacings.xxxl }]}
+      style={[styles.container, { top: top + theme.spacings.xs }]}
     >
       <Animatable.View
         useNativeDriver

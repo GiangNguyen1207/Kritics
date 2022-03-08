@@ -62,6 +62,7 @@ export const useCommentRating = () => {
         },
       };
       await doFetch(baseUrl + 'comments/' + commentId, options);
+      show('Successfully delete comment', 'success');
     } catch (error) {
       show(error.message, 'error');
     }
