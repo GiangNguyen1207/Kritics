@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, View, Animated, Image, StyleSheet } from 'react-native';
+import { View, Animated, Image, StyleSheet } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import PropTypes from 'prop-types';
 import LottieView from 'lottie-react-native';
@@ -61,7 +61,6 @@ const Favourite = ({ navigation }) => {
         const filteredFavouriteMovies = mediaArray.filter(
           (movie) => movie.isFavourite
         );
-        console.log(filteredFavouriteMovies);
         setRenderedFavouriteList(filteredFavouriteMovies);
         setRefresh(!refresh);
         setScreenLoading(false);
@@ -94,7 +93,7 @@ const Favourite = ({ navigation }) => {
             keyExtractor={(item) => item.file_id.toString()}
             renderItem={({ item }) => (
               <MovieCard
-                rating={4}
+                rating={item.averageRating}
                 item={item}
                 cardStyle={{ marginVertical: theme.spacings.xxs }}
                 navigation={navigation}
