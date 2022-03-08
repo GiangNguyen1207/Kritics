@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
   animation: {
     height: 500,
     width: 200,
+    marginTop: 50,
   },
 });
 
