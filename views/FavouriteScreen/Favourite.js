@@ -88,7 +88,7 @@ const Favourite = ({ navigation }) => {
             extraData={refresh}
             data={renderedFavouriteList}
             contentContainerStyle={{
-              paddingTop: favouriteList.length > 0 ? containerPaddingTop : 0,
+              paddingTop: favouriteList.length > 3 ? containerPaddingTop : 0,
             }}
             scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
             keyExtractor={(item) => item.file_id.toString()}
