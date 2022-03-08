@@ -1,10 +1,9 @@
 import React, { useContext, useEffect } from 'react';
-import { TextInput, View, StyleSheet, Text } from 'react-native';
-import Typography from '../components/Typography';
+import { TextInput, View, StyleSheet, Text, Image } from 'react-native';
 import { theme } from '../themes';
 import { Formik } from 'formik';
 import { MainContext } from '../context/MainContext';
-
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import * as yup from 'yup';
 import PropTypes from 'prop-types';
 import { Link } from '@react-navigation/native';
@@ -57,7 +56,11 @@ const Login = ({ navigation }) => {
 
   return (
     <ScreenLayout style={styles.container} type="scroll">
-      <Typography variant="h2" text="Login" color={theme.colors.primary} />
+      <Image
+        source={require('../assets/adaptive-icon2.png')}
+        style={{ width: 400, height: 300, marginBottom: 20 }}
+        resizeMode="contain"
+      />
       <Formik
         validationSchema={LoginSchema}
         initialValues={{ username: '', password: '' }}
@@ -103,7 +106,12 @@ const Login = ({ navigation }) => {
                 {errors.password}
               </Text>
             )}
-            <Button title="Submit" onPress={handleSubmit} variant="primary" />
+            <Button
+              title="Login"
+              onPress={handleSubmit}
+              variant="primary"
+              buttonStyle={{ marginTop: 10 }}
+            />
           </View>
         )}
       </Formik>
@@ -133,12 +141,13 @@ const styles = StyleSheet.create({
   },
   textInput: {
     height: 40,
-    width: 200,
+    width: 220,
     backgroundColor: 'white',
     borderColor: 'gray',
     borderWidth: 1,
     marginVertical: 5,
-    padding: 5,
+    padding: 8,
+    borderRadius: 5,
   },
 });
 

@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { useUser } from '../services/AuthService';
 import ScreenLayout from '../components/ScreenLayout';
 import { useToastHandler } from '../context/ToastContext';
+import DividerLine from '../components/DividerLine';
 
 const { postUser, checkUsername } = useUser();
 
@@ -66,7 +67,6 @@ const Signup = ({ navigation }) => {
 
   return (
     <ScreenLayout style={styles.container} type="scroll">
-      <Typography variant="h2" text="Sign up" color={theme.colors.primary} />
       <Formik
         validationSchema={SignupSchema}
         initialValues={{
@@ -163,10 +163,11 @@ const Signup = ({ navigation }) => {
               </Text>
             )}
             <Button
-              title="Submit"
+              title="Signup"
               onPress={handleSubmit}
               variant={isValid ? 'primary' : 'disabled'}
               isDisabled={!isValid}
+              buttonStyle={{ marginTop: 20 }}
             />
             <Button
               buttonStyle={{ marginTop: 15 }}
@@ -192,12 +193,13 @@ const styles = StyleSheet.create({
   },
   textInput: {
     height: 40,
-    width: 200,
+    width: 220,
     backgroundColor: 'white',
     borderColor: 'gray',
     borderWidth: 1,
     marginVertical: 5,
-    padding: 5,
+    padding: 8,
+    borderRadius: 5,
   },
 });
 
