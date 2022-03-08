@@ -3,6 +3,7 @@ import { FlatList, Pressable, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import LottieView from 'lottie-react-native';
+import { useIsFocused } from '@react-navigation/native';
 
 import { theme } from '../themes';
 import ContentLayout from '../components/ContentLayout';
@@ -12,9 +13,10 @@ import { useMedia } from '../hooks/useMedia';
 import Typography from '../components/Typography';
 
 export default function Filter({ route, navigation }) {
+  const isFocused = useIsFocused();
   const { top, bottom } = useSafeAreaInsets();
   const { selectedGenres } = route.params;
-  const { sortedMediaByTitle } = useMedia();
+  const { sortedMediaByTitle } = useMedia(isFocused);
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [screenLoading, setScreenLoading] = useState(true);
 
@@ -58,6 +60,7 @@ export default function Filter({ route, navigation }) {
                     hasBottomLine={filteredMovies.length - 1 !== index}
                     bottomLineColor={theme.colors.lightGrey}
                     hasReleaseYear
+                    uploadImageUrl={item.thumbnails.w160}
                   />
                 </Pressable>
               )}

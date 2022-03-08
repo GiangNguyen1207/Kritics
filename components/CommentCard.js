@@ -11,8 +11,7 @@ import HorizontalLine from './HorizontalLine';
 import { tagService } from '../services/TagService';
 import { uploadsUrl } from '../utils/variables';
 
-const CommentCard = ({ route, item, handleDeleteComment, hasBottomLine }) => {
-  const { file } = route.params;
+const CommentCard = ({ item, handleDeleteComment, hasBottomLine }) => {
   const { getUserById, getUserByToken } = useUser();
   const [user, setUser] = useState();
   const [isOwner, setIsOwner] = useState(false);
@@ -92,7 +91,6 @@ const CommentCard = ({ route, item, handleDeleteComment, hasBottomLine }) => {
 };
 
 CommentCard.propTypes = {
-  route: PropTypes.object,
   item: PropTypes.object,
   handleDeleteComment: PropTypes.func,
   hasBottomLine: PropTypes.bool,

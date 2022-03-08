@@ -9,11 +9,13 @@ import ScreenLayout from '../components/ScreenLayout';
 import ContentLayout from '../components/ContentLayout';
 import { theme } from '../themes';
 import Typography from '../components/Typography';
+import { useIsFocused } from '@react-navigation/native';
 
 const Search = ({ navigation }) => {
   const { top } = useSafeAreaInsets();
   const [search, setSearch] = useState('');
-  const { searchMedia, searchResults, searchStatus } = useMedia();
+  const isFocused = useIsFocused();
+  const { searchMedia, searchResults, searchStatus } = useMedia(isFocused);
 
   return (
     <ScreenLayout style={{ paddingTop: top }}>
@@ -44,6 +46,7 @@ const Search = ({ navigation }) => {
                     hasBottomLine
                     bottomLineColor={theme.colors.primary}
                     hasReleaseYear
+                    uploadImageUrl={item.thumbnails.w160}
                   />
                 </Pressable>
               )}

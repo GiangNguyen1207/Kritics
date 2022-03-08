@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     right: 0,
     flex: 1,
     backgroundColor: theme.colors.black,
-    opacity: 0.85,
+    opacity: 0.8,
     elevation: 1,
   },
 });
