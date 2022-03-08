@@ -16,14 +16,14 @@ export default function FavouriteScreen({ navigation }) {
   const { favouriteList } = useFavourite(isFocused);
 
   return (
-    <ScreenLayout style={{ paddingTop: top }}>
-      <ContentLayout hasHeader headerTitle={mainTab.favourite}>
-        {favouriteList.length > 0 ? (
-          <Favourite navigation={navigation} />
-        ) : (
+    <ScreenLayout>
+      {favouriteList.length > 0 ? (
+        <Favourite navigation={navigation} />
+      ) : (
+        <ContentLayout hasHeader headerTitle={mainTab.favourite}>
           <NoFavourite />
-        )}
-      </ContentLayout>
+        </ContentLayout>
+      )}
     </ScreenLayout>
   );
 }
