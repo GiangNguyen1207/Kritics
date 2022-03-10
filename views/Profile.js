@@ -66,6 +66,7 @@ const Profile = () => {
       }}
     >
       <ContentLayout hasHeader headerTitle={mainTab.profile} />
+
       <View style={styles.profileContainer}>
         <View style={styles.profileTop}>
           <View style={styles.profileAvatar}>
@@ -86,7 +87,7 @@ const Profile = () => {
                   color={theme.colors.secondary}
                   size={30}
                   style={{
-                    borderRadius: 100,
+                    borderRadius: 50,
                     padding: 10,
                     position: 'absolute',
                     right: 0,
@@ -110,8 +111,8 @@ const Profile = () => {
             textStyle={styles.header}
           />
         </View>
-        <DividerLine />
-        <View style={styles.profileInfo}>
+        <View style={styles.profileBottom}>
+          {Dimensions.get('window').height > 550 && <DividerLine />}
           <Typography
             textStyle={{ margin: 10 }}
             variant="h3"
@@ -125,9 +126,7 @@ const Profile = () => {
             }}
             variant={'secondary'}
           />
-        </View>
-        <DividerLine />
-        <View style={styles.profilePassword}>
+          {Dimensions.get('window').height > 550 && <DividerLine />}
           <Typography textStyle={{ margin: 10 }} variant="h3" text="Password" />
           <Button
             buttonStyle={styles.button}
@@ -137,57 +136,54 @@ const Profile = () => {
             }}
             variant={'secondary'}
           />
+
+          {Dimensions.get('window').height > 550 && <DividerLine />}
+          <Button
+            buttonStyle={styles.button}
+            title={'Logout'}
+            onPress={async () => {
+              await AsyncStorage.clear();
+              setIsLoggedIn(false);
+            }}
+            variant={'primary'}
+          />
         </View>
-        <DividerLine />
-        <Button
-          buttonStyle={styles.logout}
-          title={'Logout'}
-          onPress={async () => {
-            await AsyncStorage.clear();
-            setIsLoggedIn(false);
-          }}
-          variant={'primary'}
-        />
-        <EditProfileModal
-          modalVisible={editProfileVisible}
-          setModalVisible={setEditProfileVisible}
-        />
-        <ChangePasswordModal
-          modalVisible={changePasswordVisible}
-          setModalVisible={setChangePasswordVisible}
-        />
-        <AddAvatarModal
-          modalVisible={addAvatarVisible}
-          setModalVisible={setAddAvatarVisible}
-        />
       </View>
+      <EditProfileModal
+        modalVisible={editProfileVisible}
+        setModalVisible={setEditProfileVisible}
+      />
+      <ChangePasswordModal
+        modalVisible={changePasswordVisible}
+        setModalVisible={setChangePasswordVisible}
+      />
+      <AddAvatarModal
+        modalVisible={addAvatarVisible}
+        setModalVisible={setAddAvatarVisible}
+      />
     </ScreenLayout>
   );
 };
 
 const styles = StyleSheet.create({
-  profileContainer: {},
   profileTop: {
-    marginTop: 25,
     flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   profileAvatar: {},
-  profileInfo: {
+  profileBottom: {
+    flex: 1,
     width: Dimensions.get('window').width,
-  },
-  profilePassword: {
-    width: Dimensions.get('window').width,
+    marginBottom: 15,
+    flexDirection: 'column',
+    justifyContent: 'space-around',
   },
   button: {
-    margin: 20,
-    width: 300,
     alignSelf: 'center',
-  },
-  logout: {
-    margin: 40,
-    width: 300,
-    alignSelf: 'center',
+    width: '75%',
+    margin: 5,
   },
 });
 
