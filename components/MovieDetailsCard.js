@@ -10,6 +10,7 @@ import {
 import Icon from 'react-native-vector-icons/Feather';
 import format from 'date-fns/format';
 import StarRating from 'react-native-star-rating';
+import _ from 'lodash';
 
 import Typography from './Typography';
 import { theme } from '../themes';
@@ -27,12 +28,17 @@ const MovieDetailsCard = ({
   deleteFavourite,
   isFavourite,
   hasReleaseYear,
+  hasGenres,
   style,
 }) => {
   const date = movieDetails.release_date;
   const formattedReleaseDate =
     date && format(new Date(movieDetails.release_date), 'dd-MM-yyyy');
   const releaseYear = date && date.split('-')[0];
+  const genres =
+    !_.isEmpty(movieDetails) &&
+    !_.isEmpty(movieDetails.genres) &&
+    movieDetails.genres.map((genre) => genre.name);
 
   const handleFavouritePress = () => {
     if (isFavourite) deleteFavourite();
@@ -56,6 +62,13 @@ const MovieDetailsCard = ({
         <View style={{ flex: 1, marginVertical: theme.spacings.xs }}>
           <Typography text={movieDetails.title} variant="h3" fontWeight="600" />
           {hasReleaseYear && <Typography text={releaseYear} variant="h3" />}
+          {hasGenres && (
+            <Typography
+              text={genres.join(', ')}
+              variant="h4"
+              textStyle={{ marginTop: theme.spacings.xs }}
+            />
+          )}
           {hasDetails && (
             <>
               <Typography
@@ -142,6 +155,7 @@ MovieDetailsCard.propTypes = {
   addToFavourite: PropTypes.func,
   deleteFavourite: PropTypes.func,
   isFavourite: PropTypes.bool,
+  hasGenres: PropTypes.bool,
   style: ViewPropTypes.style,
 };
 

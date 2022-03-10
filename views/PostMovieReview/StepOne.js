@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StyleSheet, Pressable, FlatList } from 'react-native';
 import * as Progress from 'react-native-progress';
+import { useIsFocused } from '@react-navigation/native';
 
 import ScreenLayout from '../../components/ScreenLayout';
 import ContentLayout from '../../components/ContentLayout';
@@ -17,9 +18,10 @@ import SearchBar from '../../components/SearchBar';
 import { useToastHandler } from '../../context/ToastContext';
 
 export default function StepOne({ navigation }) {
+  const isFocused = useIsFocused();
   const { top, bottom } = useSafeAreaInsets();
   const { searchMovies } = useMovieDetails();
-  const { mediaArray } = useMedia();
+  const { mediaArray } = useMedia(isFocused);
   const { show } = useToastHandler();
   const [movieName, setMovieName] = useState('');
   const [isMovieNameSelected, setIsMovieNameSelected] = useState(false);
@@ -106,6 +108,7 @@ export default function StepOne({ navigation }) {
           variant={isMovieNameSelected ? 'primary' : 'disabled'}
           onPress={handleButtonSubmit}
           isDisabled={!isMovieNameSelected}
+          buttonStyle={{ marginBottom: theme.spacings.xs }}
         />
       </ContentLayout>
     </ScreenLayout>
