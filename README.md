@@ -33,7 +33,14 @@ Kritics is a React Native Mobile App where people with same interest of movies, 
   ```
   apiKey=your_API_Key
   ```
-
+## List of fixes before final version: 
+- Add a line of text above the pick-up image on Add a post feature('Choose poster image for your movie').
+- One movie can only be added once to our database.
+- Fix bottom margin on Add a post screen so that the Submit button is not so closed to the bottom navigation.
+- Add genre information to the movie card after filtering.
+- Fix Profile page so that it fits also with small screen devices.
+## Demo of app
+[Kritics](https://www.youtube.com/watch?v=JAGsaupXSJ8)
 ## Contributors of the project:
 - [Giang Nguyen](https://github.com/GiangNguyen1207)
 - [Trang Nguyen](https://github.com/maitrang85)
