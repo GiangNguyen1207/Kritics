@@ -61,6 +61,7 @@ export default function Filter({ route, navigation }) {
                     bottomLineColor={theme.colors.lightGrey}
                     hasReleaseYear
                     uploadImageUrl={item.thumbnails.w160}
+                    hasGenres
                   />
                 </Pressable>
               )}

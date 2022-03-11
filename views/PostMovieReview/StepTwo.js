@@ -6,6 +6,7 @@ import StarRating from 'react-native-star-rating';
 import PropTypes from 'prop-types';
 import * as Progress from 'react-native-progress';
 import { PacmanIndicator } from 'react-native-indicators';
+import { useIsFocused } from '@react-navigation/native';
 import _ from 'lodash';
 
 import ScreenLayout from '../../components/ScreenLayout';
@@ -19,9 +20,10 @@ import { useMovieDetails } from '../../hooks/useMovieDetails';
 import { useToastHandler } from '../../context/ToastContext';
 
 export default function StepTwo({ navigation, route }) {
+  const isFocused = useIsFocused();
   const { movieName } = route.params;
   const { top, bottom } = useSafeAreaInsets();
-  const { postMedia, loading } = useMedia();
+  const { postMedia, loading, mediaArray } = useMedia(isFocused);
   const { show } = useToastHandler();
   const { movieDetails } = useMovieDetails(movieName.split('_id:')[1]);
 
@@ -50,6 +52,7 @@ export default function StepTwo({ navigation, route }) {
   };
 
   const handleSubmit = async () => {
+    const existingMovie = mediaArray.find((movie) => movie.title === movieName);
     if (!imageSelected) {
       show('Please select a file', 'warning');
       return;
@@ -64,6 +67,14 @@ export default function StepTwo({ navigation, route }) {
       show(
         'Error loading movie from database. Please try again later',
         'error'
+      );
+      return;
+    }
+
+    if (existingMovie) {
+      show(
+        'This movie exists in the database. Please choose another one',
+        'warning'
       );
       return;
     }
@@ -112,8 +123,13 @@ export default function StepTwo({ navigation, route }) {
           />
         </View>
         <Typography
-          variant="h4"
-          text={`Chosen movie: ${movieName.split('_')[0]}`}
+          variant="h3"
+          text={`Chosen movie: ${movieName.split('_id:')[0]}`}
+        />
+        <Typography
+          variant="h2"
+          fontWeight="500"
+          text={`Choose a poster image for your chosen movie below`}
         />
         <Pressable onPress={pickImage}>
           <Image source={{ uri: image }} style={styles.image} />
@@ -134,13 +150,17 @@ export default function StepTwo({ navigation, route }) {
           <Button
             title="Back"
             variant="secondary"
-            buttonStyle={{ flex: 1, marginRight: theme.spacings.xs }}
+            buttonStyle={{
+              flex: 1,
+              marginRight: theme.spacings.xs,
+              marginBottom: theme.spacings.xs,
+            }}
             onPress={() => navigation.goBack()}
           />
           <Button
             title="Submit"
             variant={imageSelected && rating > 0 ? 'primary' : 'disabled'}
-            buttonStyle={{ flex: 1 }}
+            buttonStyle={{ flex: 1, marginBottom: theme.spacings.xs }}
             onPress={handleSubmit}
             isDisabled={!imageSelected || rating === 0}
             rightIcon={
