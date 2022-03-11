@@ -49,7 +49,7 @@ const Profile = () => {
       const avatar = avatarArray.pop();
       setAvatar(uploadsUrl + avatar.filename);
     } catch (error) {
-      show(error.message, 'error');
+      console.log(error.message, 'error');
     }
   };
 
